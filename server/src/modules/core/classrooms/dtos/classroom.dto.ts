@@ -14,8 +14,14 @@ export class ClassroomDto {
   startDate: Date;
 
   @Expose()
+  endDate: Date;
+
+  @Expose()
   duration: string;
 
   @Expose()
   capacity: string;
+
+  @Expose()
+  shareableCode;
 }
