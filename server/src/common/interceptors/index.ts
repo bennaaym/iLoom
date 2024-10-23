@@ -1,1 +1,1 @@
-export { RequestResponseInterceptor } from './request-response.interceptor';
+export {RequestResponseInterceptor} from './request-response.interceptor';

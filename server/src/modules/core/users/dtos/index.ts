@@ -1,1 +1,1 @@
-export { BasicUserDto } from './basic-user.dto';
+export {BasicUserDto} from './basic-user.dto';

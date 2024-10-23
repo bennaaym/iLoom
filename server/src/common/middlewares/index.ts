@@ -1,1 +1,1 @@
-export { CurrentUserMiddleware } from './current-user.middleware';
+export {CurrentUserMiddleware} from './current-user.middleware';

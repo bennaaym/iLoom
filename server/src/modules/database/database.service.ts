@@ -1,6 +1,6 @@
-import { Injectable, OnModuleDestroy } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/mongoose';
-import { Connection } from 'mongoose';
+import {Injectable, OnModuleDestroy} from '@nestjs/common';
+import {InjectConnection} from '@nestjs/mongoose';
+import {Connection} from 'mongoose';
 
 @Injectable()
 export class DatabaseService implements OnModuleDestroy {

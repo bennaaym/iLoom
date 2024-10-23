@@ -1,14 +1,14 @@
 export enum Env {
   DEVELOPMENT = 'development',
-  PRODUCTION = 'production',
+  PRODUCTION = 'production'
 }
-
-export type ExplicityAny = any;
 
 export enum EUserRole {
   ADMIN = 'admin',
-  TEACHER = 'teacher',
+  TEACHER = 'teacher'
 }
+
+export type ExplicityAny = any;
 
 export type UserSession = {
   userId: string;

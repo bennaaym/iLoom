@@ -1,13 +1,13 @@
-import { Env, ExplicityAny } from '@common/types';
+import {Env, ExplicityAny} from '@common/types';
 import {
   ExceptionFilter,
   Catch,
   ArgumentsHost,
   HttpException,
   HttpStatus,
-  Logger,
+  Logger
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import {Request, Response} from 'express';
 
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
@@ -47,7 +47,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         (message as ExplicityAny)?.message ||
         message ||
         'Internal server error',
-      stack,
+      stack
     };
 
     response.status(status).json(errorResponse);
