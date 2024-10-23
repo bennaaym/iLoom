@@ -1,7 +1,7 @@
-import { Global, Module } from '@nestjs/common';
-import { ConfigModule as NestConfigModule } from '@nestjs/config';
-import { ConfigService } from './config.service';
-import { configSchema } from './config.schema';
+import {Global, Module} from '@nestjs/common';
+import {ConfigModule as NestConfigModule} from '@nestjs/config';
+import {ConfigService} from './config.service';
+import {configSchema} from './config.schema';
 
 @Global()
 @Module({
@@ -12,12 +12,12 @@ import { configSchema } from './config.schema';
       expandVariables: true,
       validate: (env) => {
         return configSchema.parse(env);
-      },
-    }),
+      }
+    })
   ],
   providers: [ConfigService],
-  exports: [ConfigService],
+  exports: [ConfigService]
 })
 export class ConfigModule {}
 
-export { ConfigService } from './config.service';
+export {ConfigService} from './config.service';

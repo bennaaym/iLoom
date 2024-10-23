@@ -1,5 +1,5 @@
-import { randomBytes, scrypt } from 'crypto';
-import { promisify } from 'util';
+import {randomBytes, scrypt} from 'crypto';
+import {promisify} from 'util';
 
 export class HashingUtil {
   public static async hash(value: string, salt: string = '') {
