@@ -1,8 +1,12 @@
+import {PaginatedResults} from '@common/dtos';
+import {orderBy} from 'lodash';
 import {
   FilterQuery,
   Model,
   ProjectionType,
   QueryOptions,
+  SortOrder,
+  SortValues,
   UpdateQuery
 } from 'mongoose';
 
@@ -71,6 +75,38 @@ export abstract class BaseRepository<T> {
   }
 
   count(filter?: FilterQuery<T>) {
-    return this.baseModel.countDocuments(filter);
+    return this.baseModel.countDocuments(filter).exec();
+  }
+
+  async paginate({
+    filter,
+    orderBy,
+    pageOptions
+  }: {
+    filter?: FilterQuery<T>;
+    orderBy?: Record<string, -1 | 1>;
+    pageOptions?: {
+      page?: number;
+      perPage?: number;
+    };
+  }): Promise<PaginatedResults<T>> {
+    const page = Number(pageOptions?.page || 1);
+    const perPage = Number(pageOptions?.perPage || 10);
+    const skip = page > 0 ? perPage * (page - 1) : 0;
+
+    const [total, data] = await Promise.all([
+      this.count(filter),
+      this.baseModel.find(filter).sort(orderBy).skip(skip).limit(perPage)
+    ]);
+
+    return {
+      data,
+      meta: {
+        perPage,
+        page,
+        total,
+        pages: Math.ceil(total / perPage)
+      }
+    };
   }
 }

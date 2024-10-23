@@ -2,13 +2,13 @@ import {BaseRepository} from '@modules/database';
 import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import {Model} from 'mongoose';
-import {User, UserDocument} from './user.schema';
+import {Classroom, ClassroomDocument} from './classroom.schema';
 
 @Injectable()
-export class UserRepository extends BaseRepository<UserDocument> {
+export class ClassroomRepository extends BaseRepository<ClassroomDocument> {
   constructor(
-    @InjectModel(User.name)
-    readonly modelRef: Model<UserDocument>
+    @InjectModel(Classroom.name)
+    readonly modelRef: Model<ClassroomDocument>
   ) {
     super(modelRef);
   }
