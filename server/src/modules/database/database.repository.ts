@@ -3,7 +3,7 @@ import {
   Model,
   ProjectionType,
   QueryOptions,
-  UpdateQuery,
+  UpdateQuery
 } from 'mongoose';
 
 export abstract class BaseRepository<T> {
@@ -12,15 +12,15 @@ export abstract class BaseRepository<T> {
   findMany(
     filter?: FilterQuery<T>,
     projection?: ProjectionType<T>,
-    options?: QueryOptions<T> & { lean: boolean },
+    options?: QueryOptions<T> & {lean: boolean}
   ) {
-    return this.baseModel.find(filter, projection, { ...options }).exec();
+    return this.baseModel.find(filter, projection, {...options}).exec();
   }
 
   findById(
     id: string,
     projection?: ProjectionType<T>,
-    options?: QueryOptions<T>,
+    options?: QueryOptions<T>
   ): Promise<T | undefined> {
     return this.baseModel.findById(id, projection, options).exec();
   }
@@ -28,13 +28,13 @@ export abstract class BaseRepository<T> {
   findOne(
     filter: FilterQuery<T>,
     projection?: ProjectionType<T>,
-    options?: QueryOptions<T>,
+    options?: QueryOptions<T>
   ): Promise<T> {
     return this.baseModel.findOne(filter, projection, options).exec();
   }
 
   createMany(args: Partial<T>[]) {
-    return this.baseModel.insertMany(args, { ordered: false });
+    return this.baseModel.insertMany(args, {ordered: false});
   }
 
   async create(args: Partial<T>): Promise<T> {
@@ -52,21 +52,21 @@ export abstract class BaseRepository<T> {
     updateDto: UpdateQuery<T>,
     options?: {
       canCreate?: boolean;
-    },
+    }
   ): Promise<T> {
     return this.baseModel
       .findByIdAndUpdate(id, updateDto, {
         new: true,
-        upsert: options?.canCreate,
+        upsert: options?.canCreate
       })
       .exec();
   }
 
-  deleteMany(filter: FilterQuery<T>): Promise<any> {
+  deleteMany(filter: FilterQuery<T>) {
     return this.baseModel.deleteMany(filter).exec();
   }
 
-  delete(filter: FilterQuery<T>): Promise<any> {
+  delete(filter: FilterQuery<T>) {
     return this.baseModel.deleteOne(filter).exec();
   }
 

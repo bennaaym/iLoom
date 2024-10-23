@@ -20,6 +20,8 @@
     "paths": {
       "@common": ["./src/common"],
       "@common/*": ["./src/common/*"],
+      "@libs": ["./src/libs"],
+      "@libs/*": ["./src/libs/*"],
       "@modules": ["./src/modules"],
       "@modules/*": ["./src/modules/*"]
     }

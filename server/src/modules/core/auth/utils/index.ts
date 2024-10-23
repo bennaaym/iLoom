@@ -1,1 +1,1 @@
-export { HashingUtil } from './hash.util';
+export {HashingUtil} from './hash.util';

@@ -1,20 +1,22 @@
-import { EUserRole } from '@common/types';
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
-import { Types } from 'mongoose';
+import {EUserRole} from '@common/types';
+import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
+import {Document} from 'mongoose';
 
-@Schema({ timestamps: true })
+@Schema({timestamps: true})
 export class User {
-  @Prop({ required: true })
+  @Prop({required: true})
   name: string;
 
-  @Prop({ unique: true, required: true })
+  @Prop({unique: true, required: true})
   email: string;
 
-  @Prop({ required: true })
+  @Prop({index: true})
+  googleId: string;
+
+  @Prop({required: true})
   password: string;
 
-  @Prop({ enum: EUserRole, default: EUserRole.TEACHER })
+  @Prop({enum: EUserRole, default: EUserRole.TEACHER})
   role: string;
 }
 

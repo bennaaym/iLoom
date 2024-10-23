@@ -1,25 +1,29 @@
+import {ExplicityAny} from '@common/types';
 import {
   CallHandler,
   ExecutionContext,
   Injectable,
   Logger,
-  NestInterceptor,
+  NestInterceptor
 } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
 
 @Injectable()
 export class RequestResponseInterceptor implements NestInterceptor {
   private readonly logger = new Logger(RequestResponseInterceptor.name);
 
-  intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
+  intercept(
+    context: ExecutionContext,
+    next: CallHandler
+  ): Observable<ExplicityAny> {
     const now = Date.now();
     const request = context.switchToHttp().getRequest();
     const method = request.method;
     const url = request.url;
 
     this.logger.verbose(
-      `[Request] ${method} ${url} - ${new Date().toISOString()}`,
+      `[Request] ${method} ${url} - ${new Date().toISOString()}`
     );
 
     return next.handle().pipe(
@@ -27,9 +31,9 @@ export class RequestResponseInterceptor implements NestInterceptor {
         const response = context.switchToHttp().getResponse();
         const statusCode = response.statusCode;
         this.logger.log(
-          `[Response] ${method} ${url} ${statusCode} - ${Date.now() - now}ms`,
+          `[Response] ${method} ${url} ${statusCode} - ${Date.now() - now}ms`
         );
-      }),
+      })
     );
   }
 }
