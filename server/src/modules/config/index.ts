@@ -7,7 +7,7 @@ import { configSchema } from './config.schema';
 @Module({
   imports: [
     NestConfigModule.forRoot({
-      envFilePath: `env/.env.${process.env.NODE_ENV}`,
+      envFilePath: '.env',
       isGlobal: true,
       expandVariables: true,
       validate: (env) => {
