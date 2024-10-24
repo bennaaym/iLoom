@@ -36,6 +36,14 @@ export class ConfigService {
     } as const;
   }
 
+
+  get agora() {
+    return {
+      appID: this.get('AGORA_APP_ID'),
+      appCertificate: this.get('AGORA_APP_CERTIFICATE'),
+    } as const;
+  }
+
   get clientAppURL() {
     return this.get('CLIENT_APP_URL');
   }
