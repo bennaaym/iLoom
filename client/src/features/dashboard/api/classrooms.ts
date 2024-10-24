@@ -1,12 +1,12 @@
-import axios from 'axios';
+import axios from "axios";
 
 const API = axios.create({
-  baseURL: 'http://localhost:4000',
+  baseURL: "http://localhost:4000",
   withCredentials: true,
 });
 
 export const fetchClassrooms = async (status: string) => {
-  const response = await API.get('/classrooms', {
+  const response = await API.get("/classrooms", {
     params: { status },
   });
   return response.data;
@@ -18,7 +18,7 @@ export const fetchClassroom = async (id: string) => {
 };
 
 export const createClassroom = async (data: any) => {
-  const response = await API.post('/classrooms', data);
+  const response = await API.post("/classrooms", data);
   return response.data;
 };
 

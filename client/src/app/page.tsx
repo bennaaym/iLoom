@@ -1,14 +1,7 @@
 "use client";
-
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { PageLoading } from "@/common/loaders";
+import React from "react";
 
 export default function HomePage() {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push("/sign-in");
-  }, [router]);
-
-  return null;
+  return <PageLoading />;
 }
