@@ -12,7 +12,7 @@ import {
   Select,
 } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createClassroom, updateClassroom } from "@/api/classrooms";
+import { createClassroom, updateClassroom } from "@/features/dashboard/api/classrooms";
 
 interface ClassroomFormProps {
   classroom?: any;

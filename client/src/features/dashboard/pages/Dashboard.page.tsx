@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchClassrooms } from "@/api/classrooms";
+import { fetchClassrooms } from "@/features/dashboard/api/classrooms";
 import ClassroomsList from "../components/ClassromsList";
 import ClassroomForm from "../components/ClassroomForm";
 

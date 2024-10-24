@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteClassroom } from "@/api/classrooms";
+import { deleteClassroom } from "@/features/dashboard/api/classrooms";
 
 interface Classroom {
   id: string;
