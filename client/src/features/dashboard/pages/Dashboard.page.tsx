@@ -1,5 +1,5 @@
 "use client";
-import DashboardLayout from "@/features/dashboard/components/DashboardLayout";
+import Layout from "@/features/dashboard/components/Layout";
 import {
   Typography,
   Box,
@@ -12,8 +12,8 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { fetchClassrooms } from "@/features/dashboard/api/classrooms";
-import ClassroomsList from "../components/ClassromsList";
+import { fetchClassrooms } from "@/features/dashboard/api/classroom.api";
+import ClassroomList from "../components/ClassromsList";
 import ClassroomForm from "../components/ClassroomForm";
 
 export default function DashboardPage() {
@@ -64,7 +64,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <DashboardLayout>
+    <Layout>
       <Typography variant="h4" gutterBottom>
         Classroom Dashboard
       </Typography>
@@ -91,7 +91,7 @@ export default function DashboardPage() {
                   Error loading upcoming classes.
                 </Typography>
               ) : (
-                <ClassroomsList
+                <ClassroomList
                   classrooms={upcomingClassrooms?.data}
                   onEdit={handleEditClassroom}
                 />
@@ -107,7 +107,7 @@ export default function DashboardPage() {
                   Error loading past classes.
                 </Typography>
               ) : (
-                <ClassroomsList
+                <ClassroomList
                   classrooms={pastClassrooms?.data}
                   onEdit={handleEditClassroom}
                 />
@@ -134,6 +134,6 @@ export default function DashboardPage() {
           />
         </Paper>
       </Modal>
-    </DashboardLayout>
+    </Layout>
   );
 }
