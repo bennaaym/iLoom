@@ -1,5 +1,4 @@
 "use client";
-
 import DashboardLayout from "@/features/dashboard/components/DashboardLayout";
 import {
   Typography,
@@ -34,7 +33,7 @@ export default function DashboardPage() {
     queryKey: ["upcomingClassrooms"],
     queryFn: () => fetchClassrooms("upcoming"),
   });
-  
+
   const {
     data: pastClassrooms,
     isLoading: isLoadingPast,
@@ -43,7 +42,6 @@ export default function DashboardPage() {
     queryKey: ["pastClassrooms"],
     queryFn: () => fetchClassrooms("past"),
   });
-  
 
   const handleCreateClassroom = () => {
     setSelectedClassroom(null);
