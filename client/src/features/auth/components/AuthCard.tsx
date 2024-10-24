@@ -12,6 +12,7 @@ import { Formik, FormikValues } from "formik";
 import { Alert } from "@mui/material";
 import { ReactNode } from "react";
 import Link from "next/link";
+import { useGoogleAuth } from "../hooks";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -44,6 +45,8 @@ export const AuthCard = <Values extends FormikValues>({
   error,
   onSubmit,
 }: Props<Values>) => {
+  const { redirect: googleAuthRedirect } = useGoogleAuth();
+
   const isSignIn = variant === "sign-in";
   const title = isSignIn ? "Sign in" : "Sign up";
 
@@ -159,6 +162,7 @@ export const AuthCard = <Values extends FormikValues>({
                   fullWidth
                   variant="outlined"
                   startIcon={<GoogleIcon />}
+                  onClick={googleAuthRedirect}
                 >
                   {title} with Google
                 </Button>

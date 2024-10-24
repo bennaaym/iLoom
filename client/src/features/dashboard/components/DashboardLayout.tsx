@@ -8,6 +8,8 @@ import {
   Box,
   CssBaseline,
   IconButton,
+  Stack,
+  Avatar,
 } from "@mui/material";
 import { IoMdExit } from "react-icons/io";
 import { useAuth } from "@/common/providers/AuthProvider";
@@ -17,7 +19,7 @@ interface DashboardLayoutProps {
 }
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
-  const { signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh", bgColor: "red" }}>
@@ -36,15 +38,38 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           >
             iLoom.ai
           </Typography>
-          <IconButton
-            size="small"
-            edge="start"
-            color="inherit"
-            aria-label="sign out"
-            onClick={signOut}
+          <Stack
+            direction="row"
+            justifyContent="center"
+            alignItems="center"
+            gap={1}
           >
-            <IoMdExit size={28} />
-          </IconButton>
+            {user && (
+              <Avatar
+                sx={{
+                  width: 30,
+                  height: 30,
+                  fontSize: 16,
+                  fontWeight: "800",
+                  bgcolor: "white",
+                  color: "primary.main",
+                }}
+              >
+                {user.name
+                  .split(" ")
+                  .map((value) => value.at(0)?.toUpperCase())}
+              </Avatar>
+            )}
+            <IconButton
+              size="small"
+              edge="start"
+              color="inherit"
+              aria-label="sign out"
+              onClick={signOut}
+            >
+              <IoMdExit size={28} />
+            </IconButton>
+          </Stack>
         </Toolbar>
       </AppBar>
       <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
