@@ -21,14 +21,14 @@ export class AgoraService {
 
   generateToken(
     channelName: string,
-    uid: number,
+    uid: string,
     role: RtcRoleType,
     expireTimeInSeconds: number
   ): string {
     const currentTimestamp = Math.floor(Date.now() / 1000);
     const privilegeExpiredTs = currentTimestamp + expireTimeInSeconds;
-
-    const token = RtcTokenBuilder.buildTokenWithUid(
+  
+    const token = RtcTokenBuilder.buildTokenWithAccount(
       this.appID,
       this.appCertificate,
       channelName,
@@ -36,7 +36,8 @@ export class AgoraService {
       role,
       privilegeExpiredTs
     );
-
+  
     return token;
   }
+  
 }

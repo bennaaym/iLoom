@@ -18,7 +18,7 @@ export class AgoraController {
 
     const token = this.agoraService.generateToken(
       channelName,
-      Number(uid),
+      uid,
       userRole,
       expireTimeInSeconds
     );

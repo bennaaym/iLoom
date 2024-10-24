@@ -14,11 +14,11 @@ import {
 import { IoMdExit } from "react-icons/io";
 import { useAuth } from "@/common/providers/AuthProvider";
 
-interface DashboardLayoutProps {
+interface LayoutProps {
   children: ReactNode;
 }
 
-export default function DashboardLayout({ children }: DashboardLayoutProps) {
+export default function Layout({ children }: LayoutProps) {
   const { user, signOut } = useAuth();
 
   return (
