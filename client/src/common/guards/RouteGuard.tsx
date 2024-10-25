@@ -1,14 +1,21 @@
 import { ReactNode, useEffect } from "react";
 import { useAuth } from "../providers/AuthProvider";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 export const RouteGuard = ({ children }: { children: ReactNode }) => {
   const { user } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!user) return router.replace("/auth/sign-in");
-    router.replace("/dashboard");
+    else {
+      router.replace(
+        pathname && pathname !== "/" && !pathname.includes("/auth")
+          ? pathname
+          : "/dashboard"
+      );
+    }
   }, [user]);
 
   return children;

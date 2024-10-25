@@ -14,15 +14,7 @@ import { Edit, Delete } from "@mui/icons-material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteClassroom } from "@/features/dashboard/api/classroom.api";
 import { useRouter } from "next/navigation";
-
-interface Classroom {
-  id: string;
-  name: string;
-  startDate: string;
-  endDate: string;
-  duration: number;
-  capacity: number;
-}
+import { Classroom } from "@/features/classroom/types";
 
 interface ClassroomListProps {
   classrooms: Classroom[];
@@ -48,8 +40,8 @@ export default function ClassroomList({
     mutation.mutate(id);
   };
 
-  const handleJoin = (id: string) => {
-    router.push(`/classroom/${id}/`);
+  const handleJoin = (shareableCode: string) => {
+    router.push(`/classroom/${shareableCode}`);
   };
 
   return (
@@ -69,7 +61,7 @@ export default function ClassroomList({
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => handleJoin(classroom.id)}
+                onClick={() => handleJoin(classroom.shareableCode)}
               >
                 Join
               </Button>

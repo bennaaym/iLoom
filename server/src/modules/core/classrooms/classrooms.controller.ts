@@ -8,7 +8,8 @@ import {
   Param,
   Patch,
   Post,
-  Query
+  Query,
+  Req
 } from '@nestjs/common';
 import {ClassroomsService} from './classrooms.service';
 import {
@@ -19,10 +20,12 @@ import {
 } from './dtos';
 import {
   CurrentUser,
+  PublicRoute,
   SerializePaginatedResponse,
   SerializeResponse
 } from '@common/decorators';
 import {UserDocument} from '@modules/core/users/user.schema';
+import {Request} from 'express';
 
 @Controller('classrooms')
 export class ClassroomsController {
@@ -38,6 +41,13 @@ export class ClassroomsController {
   @SerializeResponse(ClassroomDto)
   retrieve(@Param('id') id: string, @CurrentUser() user: UserDocument) {
     return this.classroomsService.retrieve(id, user);
+  }
+
+
+  @Get(":code/join")
+  @SerializeResponse(ClassroomDto)
+  join(@Param("code") code: string){
+    return this.classroomsService.join(code)
   }
 
   @Post()
@@ -60,5 +70,16 @@ export class ClassroomsController {
   @Delete(':id')
   delete(@Param('id') id: string, @CurrentUser() user: UserDocument) {
     return this.classroomsService.delete(id, user);
+  }
+
+  @PublicRoute()
+  @HttpCode(HttpStatus.OK)
+  @Post(':code/whiteboard')
+  setupWhiteboard(
+    @Req() req: Request,
+    @Param('code') code: string,
+    @CurrentUser() user: UserDocument
+  ) {
+    return this.classroomsService.setupWhiteboard(code, user);
   }
 }

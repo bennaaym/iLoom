@@ -60,4 +60,10 @@ export class ConfigService {
       }
     };
   }
+
+  get liveblocks() {
+    return {
+      secret: this.get('LIVE_BLOCKS_SECRET')
+    };
+  }
 }
