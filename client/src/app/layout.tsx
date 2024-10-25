@@ -6,6 +6,8 @@ import {
   QueryProvider,
 } from "@/common/providers";
 import { RouteGuard } from "@/common/guards";
+import { MainLayout } from "@/common/components";
+import "@/common/styles/global.css";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -14,7 +16,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <AppThemeProvider>
           <QueryProvider>
             <AuthProvider>
-              <RouteGuard>{children}</RouteGuard>
+              <RouteGuard>
+                <MainLayout>{children}</MainLayout>
+              </RouteGuard>
             </AuthProvider>
           </QueryProvider>
         </AppThemeProvider>

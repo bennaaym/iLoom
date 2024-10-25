@@ -125,7 +125,6 @@ export const AuthCard = <Values extends FormikValues>({
                     value={values.password}
                     error={Boolean(errors.password)}
                     helperText={<>{errors.password}</>}
-                    autoFocus
                     fullWidth
                   />
                 </FormControl>

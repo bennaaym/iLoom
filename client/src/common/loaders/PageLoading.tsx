@@ -8,7 +8,8 @@ export const PageLoading = () => {
     <Box
       display="flex"
       width="full"
-      height="100vh"
+      height="80vh"
+      overflow="hidden"
       justifyContent="center"
       alignItems="center"
     >
