@@ -10,7 +10,8 @@ import {Classroom, ClassroomSchema} from './classroom.schema';
     MongooseModule.forFeature([{name: Classroom.name, schema: ClassroomSchema}])
   ],
   controllers: [ClassroomsController],
-  providers: [ClassroomsService, ClassroomRepository]
+  providers: [ClassroomsService, ClassroomRepository],
+  exports: [ClassroomsService],
 })
 export class ClassroomsModule {}
 export {ClassroomsService} from './classrooms.service';

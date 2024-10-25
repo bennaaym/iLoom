@@ -8,8 +8,10 @@ import { fetchClassroom } from "@/features/dashboard/api/classroom.api";
 import VideoConference from "../video-conference/VideoConference";
 import Chat from "../components/Chat";
 import Whiteboard from "../whiteboard/Whiteboard";
+import { useAuth } from "@/common/providers/AuthProvider";
 
 export default function ClassroomPage() {
+  const { user } = useAuth();
   const { id } = useParams();
   const router = useRouter();
   const classroomId = Array.isArray(id) ? id[0] : id;
@@ -53,16 +55,18 @@ export default function ClassroomPage() {
           minWidth="300px"
           display="flex"
           flexDirection="column"
+          height="100%"
           mr={2}
         >
           <VideoConference classroomId={classroom.id} />
 
-          <Box flexGrow={1} mt={2}>
-            <Chat classroomId={classroom.id} />
+          <Box height="50%" flexGrow={1} mt={2}>
+            <Chat classroomId={classroom.id} userId={user?.id!} />
           </Box>
         </Box>
 
-        <Box flexGrow={1}>
+        <Box
+          height="100%" flexGrow={1}>
           {/* Placeholder for Whiteboard */}
           <Whiteboard />
         </Box>
