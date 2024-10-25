@@ -1,8 +1,7 @@
 "use client";
 
-import ClassroomPage from "@/features/classroom/pages/classroom.page";
+import Classroom from "@/features/classroom/pages/Classroom.page";
 
-export default function ClassroomPageWrapper() {
-  console.log("asdfasfd")
-  return <ClassroomPage />;
+export default function ClassroomPage() {
+  return <Classroom />;
 }

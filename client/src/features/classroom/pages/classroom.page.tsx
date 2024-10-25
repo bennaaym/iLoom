@@ -6,7 +6,7 @@ import { Box, Typography } from "@mui/material";
 import ClassroomLayout from "../components/ClassroomLayout";
 import { fetchClassroom } from "@/features/dashboard/api/classroom.api";
 import VideoConference from "../video-conference/VideoConference";
-import Chat from "../class-chat/pages/Chat";
+import Chat from "../components/Chat";
 import Whiteboard from "../whiteboard/Whiteboard";
 
 export default function ClassroomPage() {
