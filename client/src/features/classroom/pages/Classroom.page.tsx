@@ -7,8 +7,10 @@ import Chat from "../components/Chat";
 import { Whiteboard } from "../whiteboard/components";
 import { PageLoading } from "@/common/loaders";
 import { useJoinClassroom } from "../hooks";
+import { useAuth } from "@/common/providers/AuthProvider";
 
-export const Classroom = () => {
+export default function Classroom() {
+  const { user } = useAuth();
   const { id } = useParams();
   const { classroom, isLoading, isError } = useJoinClassroom(id as string);
   const router = useRouter();
@@ -33,7 +35,7 @@ export const Classroom = () => {
         <VideoConference classroomId={classroom.id} />
 
         <Box flexGrow={1} mt={2}>
-          <Chat classroomId={classroom.id} />
+          <Chat classroomId={classroom.id} userId={user?.id!} />
         </Box>
       </Box>
 

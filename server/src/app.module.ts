@@ -5,8 +5,9 @@ import {AuthModule} from '@modules/core/auth';
 import {ClassroomsModule} from '@modules/core/classrooms';
 import {UsersModule} from '@modules/core/users';
 import {DatabaseModule} from '@modules/database';
-import {MiddlewareConsumer, Module} from '@nestjs/common';
+import {MiddlewareConsumer, Module} from '@nestjs/common'; 
 import {AgoraModule} from '@modules/core/agora';
+import { ChatModule } from '@modules/core/chat';
 import {APP_GUARD} from '@nestjs/core';
 
 @Module({
@@ -16,7 +17,8 @@ import {APP_GUARD} from '@nestjs/core';
     AuthModule,
     UsersModule,
     ClassroomsModule,
-    AgoraModule
+    AgoraModule,
+    ChatModule
   ],
   providers: [
     {

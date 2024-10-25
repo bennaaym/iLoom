@@ -14,7 +14,8 @@ import {LiveblocksModule} from '@modules/liveblocks';
     LiveblocksModule
   ],
   controllers: [ClassroomsController],
-  providers: [ClassroomsService, ClassroomRepository]
+  providers: [ClassroomsService, ClassroomRepository],
+  exports: [ClassroomsService],
 })
 export class ClassroomsModule {}
 export {ClassroomsService} from './classrooms.service';
