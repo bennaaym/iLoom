@@ -1,76 +1,52 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Box, Typography } from "@mui/material";
-import ClassroomLayout from "../components/ClassroomLayout";
-import { fetchClassroom } from "@/features/dashboard/api/classroom.api";
+import { Box } from "@mui/material";
 import VideoConference from "../video-conference/VideoConference";
 import Chat from "../components/Chat";
-import Whiteboard from "../whiteboard/Whiteboard";
+import { Whiteboard } from "../whiteboard/components";
+import { PageLoading } from "@/common/loaders";
+import { useJoinClassroom } from "../hooks";
 import { useAuth } from "@/common/providers/AuthProvider";
 
-export default function ClassroomPage() {
+export default function Classroom() {
   const { user } = useAuth();
   const { id } = useParams();
+  const { classroom, isLoading, isError } = useJoinClassroom(id as string);
   const router = useRouter();
-  const classroomId = Array.isArray(id) ? id[0] : id;
 
-  const [classroom, setClassroom] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!classroomId) {
-      router.push("/dashboard");
-      return;
-    }
-
-    const getClassroom = async () => {
-      try {
-        const data = await fetchClassroom(classroomId);
-        setClassroom(data);
-      } catch (error) {
-        router.push("/dashboard");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getClassroom();
-  }, [classroomId, router]);
-
-  if (loading) {
-    return (
-      <ClassroomLayout>
-        <Typography>Loading...</Typography>
-      </ClassroomLayout>
-    );
+  if (isLoading) return <PageLoading />;
+  if (isError) {
+    router.replace("/dashboard");
+    return;
   }
 
+  if (!classroom) return <></>;
+
   return (
-    <ClassroomLayout>
-      <Box display="flex" height="100%">
-        <Box
-          width="25%"
-          minWidth="300px"
-          display="flex"
-          flexDirection="column"
-          height="100%"
-          mr={2}
-        >
-          <VideoConference classroomId={classroom.id} />
+    <Box display="flex" height="100%" pl={2}>
+      <Box
+        width="25%"
+        minWidth="300px"
+        display="flex"
+        flexDirection="column"
+        mr={2}
+      >
+        <VideoConference classroomId={classroom.id} />
 
-          <Box height="50%" flexGrow={1} mt={2}>
-            <Chat classroomId={classroom.id} userId={user?.id!} />
-          </Box>
-        </Box>
-
-        <Box
-          height="100%" flexGrow={1}>
-          {/* Placeholder for Whiteboard */}
-          <Whiteboard />
+        <Box flexGrow={1} mt={2}>
+          <Chat classroomId={classroom.id} userId={user?.id!} />
         </Box>
       </Box>
-    </ClassroomLayout>
+
+      <Box flexGrow={1}>
+        <Whiteboard
+          classroom={{
+            id: classroom.id,
+            shareableCode: classroom.shareableCode,
+          }}
+        />
+      </Box>
+    </Box>
   );
-}
+};
