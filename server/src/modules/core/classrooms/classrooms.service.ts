@@ -13,10 +13,14 @@ import {
 import {UserDocument} from '../users/user.schema';
 import {dayjs, lodash} from '@libs';
 import {ExplicityAny} from '@common/types';
+import {LiveblocksService} from '@modules/liveblocks';
 
 @Injectable()
 export class ClassroomsService {
-  constructor(private readonly repository: ClassroomRepository) {}
+  constructor(
+    private readonly repository: ClassroomRepository,
+    private readonly liveblocks: LiveblocksService
+  ) {}
 
   private buildListFilter(query: ListClassroomQuery, user: UserDocument) {
     const queryFilter = lodash.pick(query, ['status']);
@@ -62,13 +66,15 @@ export class ClassroomsService {
     return classroom;
   }
 
-  create(dto: CreateClassroomDto, user: UserDocument) {
-    return this.repository.create({
+  async create(dto: CreateClassroomDto, user: UserDocument) {
+    const classroom = await this.repository.create({
       ...dto,
       teacher: user.id,
       startDate: dayjs(dto.startDate).utc().toDate(),
       endDate: dayjs(dto.startDate).add(dto.duration, 'minute').toDate()
     });
+    await this.liveblocks.createRoom(classroom);
+    return classroom;
   }
 
   async update({
@@ -105,5 +111,14 @@ export class ClassroomsService {
 
   async delete(id: string, user: UserDocument) {
     return this.repository.delete({_id: id, teacher: user.id});
+  }
+
+  async setupWhiteboard(classroomCode: string, user: UserDocument) {
+    const classroom = await this.repository.findOne({
+      shareableCode: classroomCode
+    });
+    if (!classroom) throw new NotFoundException();
+
+    return this.liveblocks.createSession({user, classroom});
   }
 }

@@ -12,6 +12,7 @@ export const configSchema = z.object({
   CLIENT_APP_URL: z.string().url(),
   AGORA_APP_ID: z.string(),
   AGORA_APP_CERTIFICATE: z.string(),
+  LIVE_BLOCKS_SECRET: z.string()
 });
 
 export type ConfigSchema = Required<z.infer<typeof configSchema>>;
