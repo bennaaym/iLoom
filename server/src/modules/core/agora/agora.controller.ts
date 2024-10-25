@@ -1,6 +1,6 @@
-import { Controller, Get, Query } from '@nestjs/common';
-import { AgoraService } from './agora.service';
-import { RtcRole } from 'agora-access-token';
+import {Controller, Get, Query} from '@nestjs/common';
+import {AgoraService} from './agora.service';
+import {RtcRole} from 'agora-access-token';
 
 @Controller('agora')
 export class AgoraController {
@@ -23,6 +23,6 @@ export class AgoraController {
       expireTimeInSeconds
     );
 
-    return { token };
+    return {token};
   }
 }
