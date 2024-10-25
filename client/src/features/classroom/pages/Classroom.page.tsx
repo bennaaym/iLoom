@@ -9,7 +9,7 @@ import VideoConference from "../video-conference/VideoConference";
 import Chat from "../components/Chat";
 import Whiteboard from "../whiteboard/Whiteboard";
 
-export default function ClassroomPage() {
+export const Classroom = () => {
   const { id } = useParams();
   const router = useRouter();
   const classroomId = Array.isArray(id) ? id[0] : id;
@@ -55,7 +55,7 @@ export default function ClassroomPage() {
           flexDirection="column"
           mr={2}
         >
-          <VideoConference classroomId={classroom.id} />
+          {classroom && <VideoConference classroomId={classroom?.id} />}
 
           <Box flexGrow={1} mt={2}>
             <Chat classroomId={classroom.id} />
@@ -69,4 +69,4 @@ export default function ClassroomPage() {
       </Box>
     </ClassroomLayout>
   );
-}
+};
