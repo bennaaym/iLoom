@@ -7,6 +7,7 @@ import {
 } from "@/common/providers";
 import { RouteGuard } from "@/common/guards";
 import { MainLayout } from "@/common/components";
+import "@/common/styles/global.css";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

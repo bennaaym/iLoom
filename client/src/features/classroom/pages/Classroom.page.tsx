@@ -1,43 +1,25 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { Box } from "@mui/material";
-import { fetchClassroom } from "@/features/dashboard/api/classroom.api";
 import VideoConference from "../video-conference/VideoConference";
 import Chat from "../components/Chat";
 import { Whiteboard } from "../whiteboard/components";
 import { PageLoading } from "@/common/loaders";
+import { useJoinClassroom } from "../hooks";
 
 export const Classroom = () => {
   const { id } = useParams();
+  const { classroom, isLoading, isError } = useJoinClassroom(id as string);
   const router = useRouter();
-  const classroomId = Array.isArray(id) ? id[0] : id;
 
-  const [classroom, setClassroom] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  if (isLoading) return <PageLoading />;
+  if (isError) {
+    router.replace("/dashboard");
+    return;
+  }
 
-  useEffect(() => {
-    if (!classroomId) {
-      router.push("/dashboard");
-      return;
-    }
-
-    const getClassroom = async () => {
-      try {
-        const data = await fetchClassroom(classroomId);
-        setClassroom(data);
-      } catch (error) {
-        router.push("/dashboard");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getClassroom();
-  }, [classroomId, router]);
-
-  if (loading) return <PageLoading />;
+  if (!classroom) return <></>;
 
   return (
     <Box display="flex" height="100%" pl={2}>
@@ -48,7 +30,7 @@ export const Classroom = () => {
         flexDirection="column"
         mr={2}
       >
-        {classroom && <VideoConference classroomId={classroom?.id} />}
+        <VideoConference classroomId={classroom.id} />
 
         <Box flexGrow={1} mt={2}>
           <Chat classroomId={classroom.id} />

@@ -6,7 +6,11 @@ import "tldraw/tldraw.css";
 import { useTLStore } from "../hooks";
 
 export const TLProvider = () => {
-  const { id, info } = useSelf((me) => ({ id: me.id, info: me.info }));
+  const { id, info, isReadonly } = useSelf((me) => ({
+    id: me.id,
+    info: me.info,
+    isReadonly: !me.canWrite,
+  }));
 
   const store = useTLStore({
     user: { id, name: info?.name },
@@ -17,6 +21,9 @@ export const TLProvider = () => {
       store={store}
       components={{
         StylePanel: () => <DefaultStylePanel />,
+      }}
+      onMount={(editor) => {
+        editor.updateInstanceState({ isReadonly });
       }}
       autoFocus
     />

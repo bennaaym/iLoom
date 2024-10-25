@@ -1,6 +1,7 @@
 import { Box, Stack } from "@mui/material";
 import React, { PropsWithChildren } from "react";
 import { Navbar } from "./Navbar";
+import { usePathname } from "next/navigation";
 import { useAuth } from "../providers/AuthProvider";
 
 export const MainLayout = ({ children }: PropsWithChildren) => {
@@ -9,8 +10,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
   return (
     <Stack>
       {user && <Navbar />}
-
-      <Box component="main" mt="70px">
+      <Box component="main" mt={user ? "70px" : 0}>
         {children}
       </Box>
     </Stack>
