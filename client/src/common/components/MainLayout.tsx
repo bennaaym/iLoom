@@ -10,7 +10,7 @@ export const MainLayout = ({ children }: PropsWithChildren) => {
     <Stack>
       {user && <Navbar />}
 
-      <Box component="main" minHeight="auto" mt="70px">
+      <Box component="main" mt="70px">
         {children}
       </Box>
     </Stack>
