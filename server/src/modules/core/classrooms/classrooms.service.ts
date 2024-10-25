@@ -113,6 +113,12 @@ export class ClassroomsService {
     return this.repository.delete({_id: id, teacher: user.id});
   }
 
+  async join(shareableCode: string) {
+    const classroom = await this.repository.findOne({shareableCode});
+    if (!classroom) throw new NotFoundException();
+    return classroom;
+  }
+
   async setupWhiteboard(classroomCode: string, user: UserDocument) {
     const classroom = await this.repository.findOne({
       shareableCode: classroomCode

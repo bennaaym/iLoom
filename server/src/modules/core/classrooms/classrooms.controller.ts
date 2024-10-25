@@ -43,6 +43,13 @@ export class ClassroomsController {
     return this.classroomsService.retrieve(id, user);
   }
 
+
+  @Get(":code/join")
+  @SerializeResponse(ClassroomDto)
+  join(@Param("code") code: string){
+    return this.classroomsService.join(code)
+  }
+
   @Post()
   @SerializeResponse(ClassroomDto)
   create(@Body() dto: CreateClassroomDto, @CurrentUser() user: UserDocument) {

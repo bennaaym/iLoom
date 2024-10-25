@@ -38,7 +38,7 @@ export class LiveblocksService {
 
   async createRoom(classroom: ClassroomDocument) {
     return this.liveblocks.createRoom(classroom.shareableCode, {
-      defaultAccesses: [],
+    defaultAccesses: [],
       metadata: {
         name: classroom.name,
         teacher: classroom.teacher
