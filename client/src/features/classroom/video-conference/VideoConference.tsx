@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import AgoraRTC, { IAgoraRTCClient } from "agora-rtc-sdk-ng";
+import AgoraRTC, { IAgoraRTCClient, IRemoteVideoTrack, IRemoteAudioTrack } from "agora-rtc-sdk-ng";
 import { getAgoraToken } from "../api/agora.api";
 import { IconButton, Box, Typography } from "@mui/material";
 import { Videocam, VideocamOff } from "@mui/icons-material";
@@ -18,29 +18,36 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
   const [localVideoTrack, setLocalVideoTrack] = useState<any>(null);
   const [isVideoEnabled, setIsVideoEnabled] = useState(false);
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
+  const [teacherVideoTrack, setTeacherVideoTrack] = useState<IRemoteVideoTrack | null>(null);
 
   const { user } = useAuth();
 
   useEffect(() => {
     const initAgora = async () => {
-      const client = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
-      setClient(client);
+      const agoraClient = AgoraRTC.createClient({ mode: "rtc", codec: "vp8" });
+      setClient(agoraClient);
 
       const appId = process.env.NEXT_PUBLIC_AGORA_APP_ID as string;
-      const uid = user?.id!;
-      const token = await getAgoraToken(classroomId, uid, "publisher");
+      const uid = user?.role === "teacher" ? Math.floor(Math.random() * 1000) + 1 : Math.floor(Math.random() * 9000) + 1001;
+
+      const token = await getAgoraToken(classroomId, String(uid), "publisher");
 
       try {
-        await client.join(appId, classroomId, token, uid);
-        // Listen participants
-        client.on("user-published", async (agoraUser, mediaType) => {
-          await client.subscribe(agoraUser, mediaType);
+        await agoraClient.join(appId, classroomId, token, uid);
+        agoraClient.on("user-published", async (agoraUser, mediaType) => {
+          await agoraClient.subscribe(agoraUser, mediaType);
+
           if (mediaType === "video") {
             const remoteVideoTrack = agoraUser.videoTrack;
             if (remoteVideoTrack) {
-              remoteVideoTrack.play(`remote-player-${agoraUser.uid}`);
+              const userUid = parseInt(agoraUser.uid as string, 10);
+              if (userUid <= 1000) {
+                setTeacherVideoTrack(remoteVideoTrack);
+                remoteVideoTrack.play("remote-teacher-player");
+              }
             }
           }
+
           if (mediaType === "audio") {
             const remoteAudioTrack = agoraUser.audioTrack;
             if (remoteAudioTrack) {
@@ -48,6 +55,17 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
             }
           }
         });
+
+        agoraClient.on("user-unpublished", (agoraUser, mediaType) => {
+          if (mediaType === "video") {
+            const userUid = parseInt(agoraUser.uid as string, 10);
+            if (userUid <= 1000) {
+              teacherVideoTrack?.stop();
+              setTeacherVideoTrack(null);
+            }
+          }
+        });
+
       } catch (error) {
       }
     };
@@ -64,6 +82,10 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
   }, [classroomId]);
 
   const toggleVideo = async () => {
+    if (user?.role !== "teacher") {
+      return;
+    }
+
     try {
       if (isVideoEnabled) {
         await client?.unpublish([localVideoTrack]);
@@ -72,18 +94,12 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
         setLocalVideoTrack(null);
         setIsVideoEnabled(false);
       } else {
-        if (user?.role !== "teacher") {
-          return;
-        }
-        if (localVideoTrack) {
-          await client?.unpublish([localVideoTrack]);
-          localVideoTrack.stop();
-          localVideoTrack.close();
-        }
         const videoTrack = await AgoraRTC.createCameraVideoTrack();
         setLocalVideoTrack(videoTrack);
         await client?.publish([videoTrack]);
-        videoTrack.play("local-player");
+        setTimeout(() => {
+          videoTrack.play("local-player");
+        }, 100);
         setIsVideoEnabled(true);
       }
     } catch (error) {
@@ -91,21 +107,25 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
   };
 
   const toggleAudio = async () => {
-    if (isAudioEnabled) {
-      localAudioTrack.stop();
-      localAudioTrack.close();
-      setLocalAudioTrack(null);
-      setIsAudioEnabled(false);
-    } else {
-      const audioTrack = await AgoraRTC.createMicrophoneAudioTrack({
-        encoderConfig: "high_quality_stereo",
-        ANS: true,
-        AEC: true,
-        AGC: true
-      });
-      setLocalAudioTrack(audioTrack);
-      await client?.publish([audioTrack]);
-      setIsAudioEnabled(true);
+    try {
+      if (isAudioEnabled) {
+        await client?.unpublish([localAudioTrack]);
+        localAudioTrack?.stop();
+        localAudioTrack?.close();
+        setLocalAudioTrack(null);
+        setIsAudioEnabled(false);
+      } else {
+        const audioTrack = await AgoraRTC.createMicrophoneAudioTrack({
+          encoderConfig: "high_quality_stereo",
+          ANS: true,
+          AEC: true,
+          AGC: true,
+        });
+        setLocalAudioTrack(audioTrack);
+        await client?.publish([audioTrack]);
+        setIsAudioEnabled(true);
+      }
+    } catch (error) {
     }
   };
 
@@ -122,17 +142,18 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
         </IconButton>
       </Box>
 
-      <div
-        id="local-player"
-        style={{
-          width: "100%",
-          height: "200px",
-          backgroundColor: "#000",
-          display: isVideoEnabled ? "block" : "none",
-        }}
-      ></div>
+      {teacherVideoTrack && user?.role === "student" && (
+        <Box
+          id="remote-teacher-player"
+          style={{
+            width: "100%",
+            height: "200px",
+            backgroundColor: "#000",
+          }}
+        ></Box>
+      )}
 
-      {!isVideoEnabled && (
+      {!teacherVideoTrack && user?.role === "student" && (
         <Box
           width="100%"
           height="200px"
@@ -145,7 +166,29 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
         </Box>
       )}
 
-      <div id="remote-player-container"></div>
+      {isVideoEnabled && user?.role === "teacher" && (
+        <Box
+          id="local-player"
+          style={{
+            width: "100%",
+            height: "200px",
+            backgroundColor: "#000",
+          }}
+        ></Box>
+      )}
+
+      {!isVideoEnabled && user?.role === "teacher" && (
+        <Box
+          width="100%"
+          height="200px"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          bgcolor="#ccc"
+        >
+          <Typography>Camera Off</Typography>
+        </Box>
+      )}
     </Box>
   );
 }
