@@ -2,12 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import { Box, Typography } from "@mui/material";
-import ClassroomLayout from "../components/ClassroomLayout";
+import { Box } from "@mui/material";
 import { fetchClassroom } from "@/features/dashboard/api/classroom.api";
 import VideoConference from "../video-conference/VideoConference";
 import Chat from "../components/Chat";
-import Whiteboard from "../whiteboard/Whiteboard";
+import { Whiteboard } from "../whiteboard/components";
+import { PageLoading } from "@/common/loaders";
 
 export const Classroom = () => {
   const { id } = useParams();
@@ -37,36 +37,32 @@ export const Classroom = () => {
     getClassroom();
   }, [classroomId, router]);
 
-  if (loading) {
-    return (
-      <ClassroomLayout>
-        <Typography>Loading...</Typography>
-      </ClassroomLayout>
-    );
-  }
+  if (loading) return <PageLoading />;
 
   return (
-    <ClassroomLayout>
-      <Box display="flex" height="100%">
-        <Box
-          width="25%"
-          minWidth="300px"
-          display="flex"
-          flexDirection="column"
-          mr={2}
-        >
-          {classroom && <VideoConference classroomId={classroom?.id} />}
+    <Box display="flex" height="100%" pl={2}>
+      <Box
+        width="25%"
+        minWidth="300px"
+        display="flex"
+        flexDirection="column"
+        mr={2}
+      >
+        {classroom && <VideoConference classroomId={classroom?.id} />}
 
-          <Box flexGrow={1} mt={2}>
-            <Chat classroomId={classroom.id} />
-          </Box>
-        </Box>
-
-        <Box flexGrow={1}>
-          {/* Placeholder for Whiteboard */}
-          <Whiteboard />
+        <Box flexGrow={1} mt={2}>
+          <Chat classroomId={classroom.id} />
         </Box>
       </Box>
-    </ClassroomLayout>
+
+      <Box flexGrow={1}>
+        <Whiteboard
+          classroom={{
+            id: classroom.id,
+            shareableCode: classroom.shareableCode,
+          }}
+        />
+      </Box>
+    </Box>
   );
 };

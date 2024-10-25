@@ -1,5 +1,4 @@
 "use client";
-import Layout from "@/features/dashboard/components/Layout";
 import {
   Typography,
   Box,
@@ -16,7 +15,7 @@ import { fetchClassrooms } from "@/features/dashboard/api/classroom.api";
 import ClassroomList from "../components/ClassromsList";
 import ClassroomForm from "../components/ClassroomForm";
 
-export default function DashboardPage() {
+export const Dashboard = () => {
   const [tabValue, setTabValue] = useState(0);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [selectedClassroom, setSelectedClassroom] = useState(null);
@@ -64,7 +63,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <Layout>
+    <Box p={4}>
       <Typography variant="h4" gutterBottom>
         Classroom Dashboard
       </Typography>
@@ -134,6 +133,6 @@ export default function DashboardPage() {
           />
         </Paper>
       </Modal>
-    </Layout>
+    </Box>
   );
-}
+};
