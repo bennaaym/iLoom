@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Box, TextField, IconButton, Typography, Stack } from "@mui/material";
+import { Box, TextField, IconButton, Typography, Stack, useMediaQuery } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { ChatSocketProvider, useClassroomChat } from "../providers";
 import { brand, gray } from "@/common/theme";
