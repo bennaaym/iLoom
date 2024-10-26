@@ -2,6 +2,7 @@ import {Injectable} from '@nestjs/common';
 import {ConfigSchema} from './config.schema';
 import {ConfigService as NestConfigService} from '@nestjs/config';
 import {Env} from '@common/types';
+import MongoStore from 'connect-mongo';
 
 @Injectable()
 export class ConfigService {
@@ -50,6 +51,7 @@ export class ConfigService {
 
   get session() {
     return {
+      store: MongoStore.create({mongoUrl: this.databaseURI}),
       secret: this.sessionSecret,
       resave: false,
       saveUninitialized: true,
