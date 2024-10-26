@@ -5,6 +5,7 @@ import {
   AuthProvider,
   QueryProvider,
 } from "@/common/providers";
+import { AgoraProvider } from "@/features/classroom/hooks/AgoraProvider";
 import { RouteGuard } from "@/common/guards";
 import { MainLayout } from "@/common/components";
 import "@/common/styles/global.css";
@@ -16,9 +17,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <AppThemeProvider>
           <QueryProvider>
             <AuthProvider>
-              <RouteGuard>
-                <MainLayout>{children}</MainLayout>
-              </RouteGuard>
+              <AgoraProvider>
+                <RouteGuard>
+                  <MainLayout>{children}</MainLayout>
+                </RouteGuard>
+              </AgoraProvider>
             </AuthProvider>
           </QueryProvider>
         </AppThemeProvider>
