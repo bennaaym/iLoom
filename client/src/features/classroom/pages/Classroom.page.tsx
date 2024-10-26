@@ -9,7 +9,7 @@ import { PageLoading } from "@/common/loaders";
 import { useJoinClassroom } from "../hooks";
 import { useAuth } from "@/common/providers/AuthProvider";
 
-export default function Classroom() {
+export const Classroom = () => {
   const { user } = useAuth();
   const { id } = useParams();
   const { classroom, isLoading, isError } = useJoinClassroom(id as string);
@@ -32,7 +32,7 @@ export default function Classroom() {
         flexDirection="column"
         mr={2}
       >
-        {/* <VideoConference classroomId={classroom.id} /> */}
+        <VideoConference classroomId={classroom.id} />
 
         {user && (
           <Box flexGrow={1} mt={2}>
@@ -51,4 +51,4 @@ export default function Classroom() {
       </Box>
     </Box>
   );
-}
+};
