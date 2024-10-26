@@ -1,17 +1,18 @@
 import {PaginatedResults} from '@common/dtos';
-import {orderBy} from 'lodash';
 import {
   FilterQuery,
   Model,
   ProjectionType,
   QueryOptions,
-  SortOrder,
-  SortValues,
   UpdateQuery
 } from 'mongoose';
 
 export abstract class BaseRepository<T> {
   constructor(private readonly baseModel: Model<T>) {}
+
+  get model() {
+    return this.baseModel;
+  }
 
   findMany(
     filter?: FilterQuery<T>,
