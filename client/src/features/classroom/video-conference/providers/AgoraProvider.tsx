@@ -1,9 +1,16 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import type { IAgoraRTCClient, IRemoteVideoTrack, ILocalVideoTrack, IAgoraRTCRemoteUser } from "agora-rtc-sdk-ng";
-import { getAgoraToken } from "../api/agora.api";
+import type {
+  IAgoraRTCClient,
+  IRemoteVideoTrack,
+  ILocalVideoTrack,
+  IAgoraRTCRemoteUser,
+} from "agora-rtc-sdk-ng";
+import { getAgoraToken } from "../../api/agora.api";
 import { useAuth } from "@/common/providers/AuthProvider";
 
-const AgoraRTC = typeof window !== "undefined" ? require("agora-rtc-sdk-ng") : null;
+const AgoraRTC =
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  typeof window !== "undefined" ? require("agora-rtc-sdk-ng") : null;
 
 interface AgoraContextProps {
   client: IAgoraRTCClient | null;
@@ -19,13 +26,17 @@ interface AgoraContextProps {
 
 const AgoraContext = createContext<AgoraContextProps | undefined>(undefined);
 
-export const AgoraProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AgoraProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [client, setClient] = useState<IAgoraRTCClient | null>(null);
   const [localAudioTrack, setLocalAudioTrack] = useState<any>(null);
-  const [localVideoTrack, setLocalVideoTrack] = useState<ILocalVideoTrack | null>(null);
+  const [localVideoTrack, setLocalVideoTrack] =
+    useState<ILocalVideoTrack | null>(null);
   const [isAudioEnabled, setIsAudioEnabled] = useState(false);
   const [isVideoEnabled, setIsVideoEnabled] = useState(false);
-  const [teacherVideoTrack, setTeacherVideoTrack] = useState<IRemoteVideoTrack | null>(null);
+  const [teacherVideoTrack, setTeacherVideoTrack] =
+    useState<IRemoteVideoTrack | null>(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -33,37 +44,45 @@ export const AgoraProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setClient(agoraClient);
 
     AgoraRTC.onAutoplayFailed = () => {
-      alert("Please toggle the microphone on and off to enable audio and video playback.");
+      alert(
+        "Please toggle the microphone on and off to enable audio and video playback."
+      );
     };
 
-    agoraClient.on("user-published", async (agoraUser: IAgoraRTCRemoteUser, mediaType: "audio" | "video") => {
-      await agoraClient.subscribe(agoraUser, mediaType);
+    agoraClient.on(
+      "user-published",
+      async (agoraUser: IAgoraRTCRemoteUser, mediaType: "audio" | "video") => {
+        await agoraClient.subscribe(agoraUser, mediaType);
 
-      if (mediaType === "video") {
-        const remoteVideoTrack = agoraUser.videoTrack;
-        if (remoteVideoTrack) {
-          const userUid = parseInt(agoraUser.uid as string, 10);
-          if (userUid <= 1000) {
-            setTeacherVideoTrack(remoteVideoTrack);
-            remoteVideoTrack.play("remote-teacher-player");
+        if (mediaType === "video") {
+          const remoteVideoTrack = agoraUser.videoTrack;
+          if (remoteVideoTrack) {
+            const userUid = parseInt(agoraUser.uid as string, 10);
+            if (userUid <= 1000) {
+              setTeacherVideoTrack(remoteVideoTrack);
+              remoteVideoTrack.play("remote-teacher-player");
+            }
+          }
+        }
+
+        if (mediaType === "audio") {
+          const remoteAudioTrack = agoraUser.audioTrack;
+          if (remoteAudioTrack) {
+            remoteAudioTrack.play();
           }
         }
       }
+    );
 
-      if (mediaType === "audio") {
-        const remoteAudioTrack = agoraUser.audioTrack;
-        if (remoteAudioTrack) {
-          remoteAudioTrack.play();
+    agoraClient.on(
+      "user-unpublished",
+      (agoraUser: IAgoraRTCRemoteUser, mediaType: "audio" | "video") => {
+        if (mediaType === "video") {
+          teacherVideoTrack?.stop();
+          setTeacherVideoTrack(null);
         }
       }
-    });
-
-    agoraClient.on("user-unpublished", (agoraUser: IAgoraRTCRemoteUser, mediaType: "audio" | "video") => {
-      if (mediaType === "video") {
-        teacherVideoTrack?.stop();
-        setTeacherVideoTrack(null);
-      }
-    });
+    );
 
     return () => {
       leaveClassroom();
@@ -72,13 +91,16 @@ export const AgoraProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
   const joinClassroom = async (classroomId: string) => {
     if (!client || !user) return;
-    
+
     if (client.connectionState === "CONNECTED") {
       await leaveClassroom();
     }
 
     const appId = process.env.NEXT_PUBLIC_AGORA_APP_ID as string;
-    const uid = user.role === "teacher" ? Math.floor(Math.random() * 1000) + 1 : Math.floor(Math.random() * 9000) + 1001;
+    const uid =
+      user.role === "teacher"
+        ? Math.floor(Math.random() * 1000) + 1
+        : Math.floor(Math.random() * 9000) + 1001;
     const token = await getAgoraToken(classroomId, String(uid), "publisher");
 
     await client.join(appId, classroomId, token, uid);
@@ -128,7 +150,7 @@ export const AgoraProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  const toggleVideo = async (classroomId: string) => { 
+  const toggleVideo = async (classroomId: string) => {
     if (!client || user?.role !== "teacher") return;
 
     if (client.connectionState !== "CONNECTED") {
@@ -150,8 +172,7 @@ export const AgoraProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           videoTrack.play("local-player");
         }, 100);
         setIsVideoEnabled(true);
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   };
 

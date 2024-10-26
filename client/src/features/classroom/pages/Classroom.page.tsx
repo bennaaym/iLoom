@@ -2,7 +2,7 @@
 
 import { useRouter, useParams } from "next/navigation";
 import { Box } from "@mui/material";
-import VideoConference from "../video-conference/VideoConference";
+import { VideoConference } from "../video-conference/components";
 import { Chat } from "../classroom-chat/components";
 import { Whiteboard } from "../whiteboard/components";
 import { PageLoading } from "@/common/loaders";

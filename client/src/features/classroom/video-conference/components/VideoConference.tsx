@@ -1,14 +1,14 @@
 import React, { useEffect, useRef } from "react";
 import { Box, IconButton, Typography } from "@mui/material";
 import { Videocam, VideocamOff, Mic, MicOff } from "@mui/icons-material";
-import { useAgora } from "../hooks/AgoraProvider";
+import { useAgora } from "../providers/AgoraProvider";
 import { useAuth } from "@/common/providers/AuthProvider";
 
 interface VideoConferenceProps {
   classroomId: string;
 }
 
-export default function VideoConference({ classroomId }: VideoConferenceProps) {
+export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
   const {
     joinClassroom,
     leaveClassroom,
@@ -20,7 +20,7 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
     localVideoTrack,
   } = useAgora();
 
-  const { user } = useAuth(); 
+  const { user } = useAuth();
 
   const localPlayerRef = useRef<HTMLDivElement>(null);
   const remotePlayerRef = useRef<HTMLDivElement>(null);
@@ -39,7 +39,7 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
     }
 
     return () => {
-      localVideoTrack?.stop(); 
+      localVideoTrack?.stop();
     };
   }, [localVideoTrack]);
 
@@ -49,7 +49,7 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
     }
 
     return () => {
-      teacherVideoTrack?.stop(); 
+      teacherVideoTrack?.stop();
     };
   }, [teacherVideoTrack]);
 
@@ -66,8 +66,8 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
         </IconButton>
       </Box>
 
-      {user?.role === "teacher" && (
-        isVideoEnabled && localVideoTrack ? (
+      {user?.role === "teacher" &&
+        (isVideoEnabled && localVideoTrack ? (
           <Box
             ref={localPlayerRef}
             id="local-player"
@@ -88,11 +88,10 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
           >
             <Typography>No Video Shared</Typography>
           </Box>
-        )
-      )}
+        ))}
 
-      {user?.role === "student" && (
-        teacherVideoTrack ? (
+      {user?.role === "student" &&
+        (teacherVideoTrack ? (
           <Box
             ref={remotePlayerRef}
             id="remote-teacher-player"
@@ -113,8 +112,7 @@ export default function VideoConference({ classroomId }: VideoConferenceProps) {
           >
             <Typography>No Video Shared</Typography>
           </Box>
-        )
-      )}
+        ))}
     </Box>
   );
-}
+};
