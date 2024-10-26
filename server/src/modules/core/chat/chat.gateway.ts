@@ -34,12 +34,8 @@ export class ChatGateway {
     @ConnectedSocket() client: Socket
   ) {
     const user = await this.usersService.findByIdentifier('id', message.userId);
-    const room = await this.classroomsService.retrieve(
-      message.classroomId,
-      user
-    );
 
-    if (!user || !room || !client.rooms.has(message.classroomId)) {
+    if (!user || !client.rooms.has(message.classroomId)) {
       return;
     }
 
@@ -59,12 +55,8 @@ export class ChatGateway {
     @ConnectedSocket() client: Socket
   ) {
     const user = await this.usersService.findByIdentifier('id', message.userId);
-    const room = await this.classroomsService.retrieve(
-      message.classroomId,
-      user
-    );
 
-    if (!user || !room) {
+    if (!user) {
       return;
     }
     if (client.rooms.has(message.classroomId)) {
