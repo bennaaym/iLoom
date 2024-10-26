@@ -2,14 +2,14 @@
 
 import { useRouter, useParams } from "next/navigation";
 import { Box } from "@mui/material";
-import VideoConference from "../video-conference/VideoConference";
-import Chat from "../components/Chat";
+import { VideoConference } from "../video-conference/components";
+import { Chat } from "../classroom-chat/components";
 import { Whiteboard } from "../whiteboard/components";
 import { PageLoading } from "@/common/loaders";
 import { useJoinClassroom } from "../hooks";
 import { useAuth } from "@/common/providers/AuthProvider";
 
-export default function Classroom() {
+export const Classroom = () => {
   const { user } = useAuth();
   const { id } = useParams();
   const { classroom, isLoading, isError } = useJoinClassroom(id as string);
@@ -34,9 +34,11 @@ export default function Classroom() {
       >
         <VideoConference classroomId={classroom.id} />
 
-        <Box flexGrow={1} mt={2}>
-          <Chat classroomId={classroom.id} userId={user?.id!} />
-        </Box>
+        {user && (
+          <Box flexGrow={1} mt={2}>
+            <Chat roomId={classroom.shareableCode} userId={user.id} />
+          </Box>
+        )}
       </Box>
 
       <Box flexGrow={1}>

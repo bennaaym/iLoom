@@ -5,7 +5,7 @@ import {
   AuthProvider,
   QueryProvider,
 } from "@/common/providers";
-import { AgoraProvider } from "@/features/classroom/hooks/AgoraProvider";
+import { AgoraProvider } from "@/features/classroom/video-conference/providers/AgoraProvider";
 import { RouteGuard } from "@/common/guards";
 import { MainLayout } from "@/common/components";
 import "@/common/styles/global.css";
