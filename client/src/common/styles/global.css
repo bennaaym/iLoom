@@ -1,3 +1,7 @@
+body {
+  overflow-x: hidden !important;
+}
+
 .tl-watermark_SEE-LICENSE {
   display: none !important;
 }
