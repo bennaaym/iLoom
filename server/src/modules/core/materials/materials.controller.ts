@@ -1,7 +1,16 @@
-import {Body, Controller, Post} from '@nestjs/common';
+import {Body, Controller, Get, Post, Query} from '@nestjs/common';
 import {MaterialsService} from './materials.service';
-import {CreateEnglishMaterialDto, MaterialDto} from './dtos';
-import {CurrentUser, Roles, SerializeResponse} from '@common/decorators';
+import {
+  CreateEnglishMaterialDto,
+  ListMaterialsQuery,
+  MaterialDto
+} from './dtos';
+import {
+  CurrentUser,
+  Roles,
+  SerializePaginatedResponse,
+  SerializeResponse
+} from '@common/decorators';
 import {EUserRole} from '@common/types';
 import {UserDocument} from '../users/user.schema';
 
@@ -9,6 +18,12 @@ import {UserDocument} from '../users/user.schema';
 @Controller('materials')
 export class MaterialsController {
   constructor(private readonly materialsService: MaterialsService) {}
+
+  @Get('/')
+  @SerializePaginatedResponse(MaterialDto)
+  list(@Query() query: ListMaterialsQuery, @CurrentUser() user: UserDocument) {
+    return this.materialsService.list(query, user);
+  }
 
   @Post('/english')
   @SerializeResponse(MaterialDto)

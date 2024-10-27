@@ -7,6 +7,9 @@ const reading = {
   schema: {
     type: 'object',
     properties: {
+      title: {
+        type: 'string'
+      },
       text: {
         type: 'string'
       },
@@ -23,7 +26,7 @@ const reading = {
         }
       }
     },
-    required: ['text', 'questions', 'answers']
+    required: ['title', 'text', 'questions', 'answers']
   } as FunctionDeclarationSchema
 };
 
