@@ -5,7 +5,8 @@ export enum Env {
 
 export enum EUserRole {
   ADMIN = 'admin',
-  TEACHER = 'teacher'
+  TEACHER = 'teacher',
+  STUDENT = 'student'
 }
 
 export type ExplicityAny = any;

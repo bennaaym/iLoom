@@ -1,4 +1,9 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable
+} from '@nestjs/common';
 import {SignInDto, SignUpDto} from './dtos';
 import {UsersService} from '@modules/core/users';
 import {HashingUtil} from './utils';
@@ -6,7 +11,10 @@ import {OAuthStrategy, OAuthUser} from './strategies/oauth';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    @Inject(forwardRef(() => UsersService))
+    private readonly usersService: UsersService
+  ) {}
 
   async signUp(dto: SignUpDto) {
     if (await this.usersService.isEmailTaken(dto.email))

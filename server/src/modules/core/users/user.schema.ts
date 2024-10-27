@@ -1,6 +1,6 @@
 import {EUserRole} from '@common/types';
 import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
-import {Document} from 'mongoose';
+import mongoose, {Document, Types } from 'mongoose';
 
 @Schema({timestamps: true})
 export class User {
@@ -18,6 +18,11 @@ export class User {
 
   @Prop({enum: EUserRole, default: EUserRole.TEACHER})
   role: string;
+
+  @Prop({ type: mongoose.Schema.Types.Mixed, default: {} })
+  metadata: {
+    createdByTeacher?: string; 
+  };
 }
 
 export type UserDocument = User & Document;
