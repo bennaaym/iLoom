@@ -3,17 +3,18 @@ import Button from "@mui/material/Button";
 import MuiCard from "@mui/material/Card";
 import FormControl from "@mui/material/FormControl";
 import { styled } from "@mui/material/styles";
-import { Formik, FormikValues } from "formik";
+import { Formik } from "formik";
 import {
+  Alert,
   FormHelperText,
   FormLabel,
-  InputLabel,
   MenuItem,
   Select,
-  Typography,
 } from "@mui/material";
 import { createClassroomContentValidation } from "../validations";
-import { subjects, levels, activity } from "../constants";
+import * as constants from "../constants";
+import { useGenerateMaterial } from "../hooks";
+import { useClassroomMaterial } from "../../providers/ClassroomMaterialProvider";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -27,13 +28,26 @@ const Card = styled(MuiCard)(({ theme }) => ({
   [theme.breakpoints.up("sm")]: {
     width: "450px",
   },
+  borderRadius: 0,
 }));
 
 export const CreateContentForm = () => {
+  const { generate, isLoading, error } = useGenerateMaterial();
+  const { shareMaterial } = useClassroomMaterial();
+
   const handleSubmit = (
     values: typeof createClassroomContentValidation.initialValue
   ) => {
-    console.log(values);
+    generate(
+      {
+        ...values,
+      },
+      {
+        onSuccess(data) {
+          shareMaterial(data);
+        },
+      }
+    );
   };
 
   return (
@@ -44,6 +58,16 @@ export const CreateContentForm = () => {
       validateOnChange
     >
       {({ values, errors, handleChange, handleSubmit }) => {
+        const subjects = constants.subjects;
+        const levels = values.subject
+          ? constants.level[values.subject as keyof typeof constants.level]
+          : [];
+        const activities = values.subject
+          ? constants.activity[
+              values.subject as keyof typeof constants.activity
+            ]
+          : [];
+
         return (
           <form onSubmit={handleSubmit}>
             <Card variant="outlined">
@@ -62,7 +86,9 @@ export const CreateContentForm = () => {
                     name="subject"
                     value={values.subject}
                     onChange={handleChange}
-                    placeholder="Select a subject"
+                    sx={{ textTransform: "capitalize" }}
+                    placeholder="hello"
+                    displayEmpty
                   >
                     {subjects.map((subject) => {
                       return (
@@ -82,80 +108,74 @@ export const CreateContentForm = () => {
                     </FormHelperText>
                   )}
                 </FormControl>
+                <FormControl fullWidth>
+                  <FormLabel htmlFor="level">Level</FormLabel>
+                  <Select
+                    id="level"
+                    name="level"
+                    value={values.level}
+                    onChange={handleChange}
+                    placeholder="Select a level"
+                    sx={{ textTransform: "capitalize" }}
+                  >
+                    {levels.map((level) => {
+                      return (
+                        <MenuItem
+                          key={level}
+                          value={level}
+                          sx={{ textTransform: "capitalize" }}
+                        >
+                          {level}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  {errors.level && (
+                    <FormHelperText error={Boolean(errors.level)}>
+                      {errors.level}
+                    </FormHelperText>
+                  )}
+                </FormControl>
 
-                {values.subject && (
-                  <FormControl fullWidth>
-                    <FormLabel htmlFor="level">Level</FormLabel>
-                    <Select
-                      id="level"
-                      name="level"
-                      value={values.level}
-                      onChange={handleChange}
-                      placeholder="Select a level"
-                    >
-                      {levels[values.subject as keyof typeof levels].map(
-                        (level) => {
-                          return (
-                            <MenuItem
-                              key={level}
-                              value={level}
-                              sx={{ textTransform: "capitalize" }}
-                            >
-                              {level}
-                            </MenuItem>
-                          );
-                        }
-                      )}
-                    </Select>
-                    {errors.level && (
-                      <FormHelperText error={Boolean(errors.level)}>
-                        {errors.level}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                )}
-
-                {values.subject && (
-                  <FormControl fullWidth>
-                    <FormLabel htmlFor="activity">Activity</FormLabel>
-                    <Select
-                      id="activity"
-                      name="activity"
-                      value={values.activity}
-                      onChange={handleChange}
-                      placeholder="Select a activity"
-                    >
-                      {activity[values.subject as keyof typeof activity].map(
-                        (activity) => {
-                          return (
-                            <MenuItem
-                              key={activity}
-                              value={activity}
-                              sx={{ textTransform: "capitalize" }}
-                            >
-                              {activity}
-                            </MenuItem>
-                          );
-                        }
-                      )}
-                    </Select>
-                    {errors.activity && (
-                      <FormHelperText error={Boolean(errors.activity)}>
-                        {errors.activity}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-                )}
+                <FormControl fullWidth>
+                  <FormLabel htmlFor="activity">Activity</FormLabel>
+                  <Select
+                    id="activity"
+                    name="activity"
+                    value={values.activity}
+                    onChange={handleChange}
+                    placeholder="Select a activity"
+                    sx={{ textTransform: "capitalize" }}
+                  >
+                    {activities.map((activity) => {
+                      return (
+                        <MenuItem
+                          key={activity}
+                          value={activity}
+                          sx={{ textTransform: "capitalize" }}
+                        >
+                          {activity}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                  {errors.activity && (
+                    <FormHelperText error={Boolean(errors.activity)}>
+                      {errors.activity}
+                    </FormHelperText>
+                  )}
+                </FormControl>
 
                 <Button
                   sx={{ textTransform: "capitalize", fontWeight: "800" }}
                   type="submit"
                   fullWidth
                   variant="contained"
-                  disabled={false}
+                  disabled={isLoading}
                 >
                   generate
                 </Button>
+                {error && <Alert severity="error">{error.message}</Alert>}
               </Box>
             </Card>
           </form>

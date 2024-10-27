@@ -9,6 +9,7 @@ import { PageLoading } from "@/common/loaders";
 import { useJoinClassroom } from "../hooks";
 import { useAuth } from "@/common/providers/AuthProvider";
 import { CreateContentModal } from "../content-creation/components";
+import { ClassroomMaterialProvider } from "../providers";
 
 export const Classroom = () => {
   const { user } = useAuth();
@@ -42,16 +43,17 @@ export const Classroom = () => {
         )}
       </Box>
 
-      <Box flexGrow={1}>
-        <Whiteboard
-          classroom={{
-            id: classroom.id,
-            shareableCode: classroom.shareableCode,
-          }}
-        />
-      </Box>
-
-      <CreateContentModal />
+      <ClassroomMaterialProvider>
+        <Box flexGrow={1}>
+          <Whiteboard
+            classroom={{
+              id: classroom.id,
+              shareableCode: classroom.shareableCode,
+            }}
+          />
+        </Box>
+        {user?.role === "teacher" && <CreateContentModal />}
+      </ClassroomMaterialProvider>
     </Box>
   );
 };

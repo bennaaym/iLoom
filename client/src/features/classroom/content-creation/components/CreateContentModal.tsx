@@ -7,7 +7,7 @@ import { useBoolean } from "usehooks-ts";
 import { CreateContentForm } from "./CreateContentForm";
 
 export const CreateContentModal = () => {
-  const isModalVisible = useBoolean(true);
+  const isModalVisible = useBoolean(false);
 
   return (
     <Box
@@ -29,12 +29,12 @@ export const CreateContentModal = () => {
           alignItems="center"
           justifyContent="center"
           position="absolute"
-          right="0"
-          top="0"
-          width="500px"
-          height="500px"
+          right="50%"
+          width="fit-content"
+          height="fit-content"
           bgcolor="red"
           zIndex={1000}
+          sx={{ transform: "translateY(-50%)" }}
         >
           <CreateContentForm />
         </Box>
