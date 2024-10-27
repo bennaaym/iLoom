@@ -4,6 +4,9 @@ import {ExplicityAny} from '@common/types';
 
 export class MaterialDto {
   @Expose()
+  id: string;
+
+  @Expose()
   user: string;
 
   @Expose()
