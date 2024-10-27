@@ -8,6 +8,7 @@ import { Whiteboard } from "../whiteboard/components";
 import { PageLoading } from "@/common/loaders";
 import { useJoinClassroom } from "../hooks";
 import { useAuth } from "@/common/providers/AuthProvider";
+import { CreateContentModal } from "../content-creation/components";
 
 export const Classroom = () => {
   const { user } = useAuth();
@@ -49,6 +50,8 @@ export const Classroom = () => {
           }}
         />
       </Box>
+
+      <CreateContentModal />
     </Box>
   );
 };
