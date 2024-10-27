@@ -3,9 +3,10 @@ import { Material } from "../types";
 import { Box, List, ListItemText, Stack, Typography } from "@mui/material";
 
 interface ClassroomMaterialContext {
-  materials: Material[];
+  whiteboardMaterial: Material | null;
   shareMaterial(material: Material): void;
-  renderMaterial(): ReactNode;
+  stopSharing(): void;
+  renderWhiteboardMaterial(): ReactNode;
 }
 
 const ClassroomMaterialContext = createContext<
@@ -21,7 +22,7 @@ const renderReading = (material: Material) => {
     <Box maxWidth="500px">
       <Stack>
         <Box>
-          <Typography variant="h4">Text</Typography>
+          <Typography variant="h4">{material.content.title}</Typography>
           <Typography>{material.content.text}</Typography>
         </Box>
         <Box>
@@ -34,31 +35,39 @@ const renderReading = (material: Material) => {
             )}
           </List>
         </Box>
-        <Box>
-          <Typography variant="h4">Answers</Typography>
-          <Typography>{material.content.answers.join("\n")}</Typography>
-        </Box>
       </Stack>
     </Box>
   );
 };
 
 export const ClassroomMaterialProvider = ({ children }: Props) => {
-  const [materials, setMaterials] = useState<Material[]>([]);
+  const [whiteboardMaterial, setWhiteboardMaterial] = useState<Material | null>(
+    null
+  );
 
   const shareMaterial = (material: Material) => {
-    setMaterials((prev) => [material, ...prev]);
+    setWhiteboardMaterial(material);
   };
 
-  const renderMaterial = () => {
-    if (!materials.length) return <></>;
-    if (materials[0].activity === "reading") return renderReading(materials[0]);
-    return <></>;
+  const stopSharing = () => {
+    setWhiteboardMaterial(null);
+  };
+
+  const renderWhiteboardMaterial = () => {
+    if (!whiteboardMaterial) return null;
+    if (whiteboardMaterial.activity === "reading")
+      return renderReading(whiteboardMaterial);
+    return null;
   };
 
   return (
     <ClassroomMaterialContext.Provider
-      value={{ materials, renderMaterial, shareMaterial }}
+      value={{
+        whiteboardMaterial,
+        renderWhiteboardMaterial,
+        shareMaterial,
+        stopSharing,
+      }}
     >
       {children}
     </ClassroomMaterialContext.Provider>

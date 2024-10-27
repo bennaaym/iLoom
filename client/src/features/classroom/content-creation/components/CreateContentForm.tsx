@@ -1,8 +1,6 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import MuiCard from "@mui/material/Card";
 import FormControl from "@mui/material/FormControl";
-import { styled } from "@mui/material/styles";
 import { Formik } from "formik";
 import {
   Alert,
@@ -13,48 +11,20 @@ import {
 } from "@mui/material";
 import { createClassroomContentValidation } from "../validations";
 import * as constants from "../constants";
-import { useGenerateMaterial } from "../hooks";
-import { useClassroomMaterial } from "../../providers/ClassroomMaterialProvider";
+import { Card } from "@/common/components";
 
-const Card = styled(MuiCard)(({ theme }) => ({
-  display: "flex",
-  flexDirection: "column",
-  alignSelf: "center",
-  width: "100%",
-  padding: theme.spacing(4),
-  gap: theme.spacing(2),
-  boxShadow:
-    "hsla(220, 30%, 5%, 0.05) 0px 5px 15px 0px, hsla(220, 25%, 10%, 0.05) 0px 15px 35px -5px",
-  [theme.breakpoints.up("sm")]: {
-    width: "450px",
-  },
-  borderRadius: 0,
-}));
+interface Props {
+  isLoading: boolean;
+  error: string;
+  onSubmit(values: typeof createClassroomContentValidation.initialValue): void;
+}
 
-export const CreateContentForm = () => {
-  const { generate, isLoading, error } = useGenerateMaterial();
-  const { shareMaterial } = useClassroomMaterial();
-
-  const handleSubmit = (
-    values: typeof createClassroomContentValidation.initialValue
-  ) => {
-    generate(
-      {
-        ...values,
-      },
-      {
-        onSuccess(data) {
-          shareMaterial(data);
-        },
-      }
-    );
-  };
-
+export const CreateContentForm = ({ isLoading, error, onSubmit }: Props) => {
   return (
     <Formik
       initialValues={createClassroomContentValidation.initialValue}
       validationSchema={createClassroomContentValidation.schema}
-      onSubmit={handleSubmit}
+      onSubmit={onSubmit}
       validateOnChange
     >
       {({ values, errors, handleChange, handleSubmit }) => {
@@ -175,7 +145,7 @@ export const CreateContentForm = () => {
                 >
                   generate
                 </Button>
-                {error && <Alert severity="error">{error.message}</Alert>}
+                {error && <Alert severity="error">{error}</Alert>}
               </Box>
             </Card>
           </form>

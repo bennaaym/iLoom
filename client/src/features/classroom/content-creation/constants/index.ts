@@ -3,8 +3,8 @@ export const level = {
   algorithms: ["beginner", "intermediate", "advanced"],
 };
 export const activity = {
-  english: ["reading", "speaking", "writing"],
-  algorithms: ["problem solving", "data structures", "complexity analysis"],
+  english: ["reading"],
+  algorithms: [],
 };
 
 export const subjects = Object.keys(level);

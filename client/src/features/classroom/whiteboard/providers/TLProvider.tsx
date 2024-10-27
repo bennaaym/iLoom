@@ -17,7 +17,7 @@ export const TLProvider = () => {
     user: { id, name: info?.name },
   });
 
-  const { renderMaterial } = useClassroomMaterial();
+  const { renderWhiteboardMaterial } = useClassroomMaterial();
 
   return (
     <Tldraw
@@ -28,7 +28,7 @@ export const TLProvider = () => {
         PageMenu: () => <></>,
         Background: () => (
           <Box mt={8} ml={2}>
-            {renderMaterial()}
+            {renderWhiteboardMaterial()}
           </Box>
         ),
       }}

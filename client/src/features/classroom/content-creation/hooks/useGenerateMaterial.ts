@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Material, Subject } from "../../types";
 
 interface GenerateMaterialPayload {
+  classroom?: string;
   subject: string;
   level: string;
   activity: string;
