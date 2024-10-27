@@ -68,4 +68,10 @@ export class ConfigService {
       secret: this.get('LIVE_BLOCKS_SECRET')
     };
   }
+
+  get gemini() {
+    return {
+      key: this.get('GEMINI_KEY')
+    };
+  }
 }

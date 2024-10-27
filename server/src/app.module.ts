@@ -10,6 +10,8 @@ import {AgoraModule} from '@modules/core/agora';
 import {APP_GUARD} from '@nestjs/core';
 import {ClassroomChatsModule} from '@modules/core/classroom-chats';
 import {SessionsModule} from '@modules/sessions';
+import {GoogleModule} from '@modules/google';
+import { MaterialsModule } from '@modules/core/materials';
 
 @Module({
   imports: [
@@ -20,7 +22,9 @@ import {SessionsModule} from '@modules/sessions';
     ClassroomsModule,
     ClassroomChatsModule,
     AgoraModule,
-    SessionsModule
+    SessionsModule,
+    GoogleModule,
+    MaterialsModule
   ],
   providers: [
     {
