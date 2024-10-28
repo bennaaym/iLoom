@@ -10,6 +10,8 @@ import React, {
 
 interface AuthContext {
   user: User | null;
+  isStudent(): boolean;
+  isAuthenticated(): boolean;
   setUser(user: User): void;
   signOut: () => Promise<void>;
 }
@@ -42,7 +44,15 @@ export const AuthProvider = ({ children }: Props) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, setUser, signOut }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        setUser,
+        signOut,
+        isStudent: () => user?.role === "student",
+        isAuthenticated: () => Boolean(user),
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
