@@ -1,6 +1,6 @@
 import { apiClient, handleApiError } from "@/apis";
 import { useMutation } from "@tanstack/react-query";
-import { Material, Subject } from "../../types";
+import { Material } from "../../types";
 
 interface GenerateMaterialPayload {
   classroom?: string;

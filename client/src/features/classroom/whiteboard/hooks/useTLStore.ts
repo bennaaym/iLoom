@@ -50,7 +50,7 @@ export const useTLStore = ({
     const unsubs: (() => void)[] = [];
     setStoreWithStatus({ status: "loading" });
 
-    async function setup() {
+    const setup = async () => {
       // Get Liveblocks Storage values
       const { root } = await room.getStorage();
       const liveRecords = root.get("records") as any;
@@ -95,7 +95,7 @@ export const useTLStore = ({
       );
 
       // Sync tldraw changes with Presence
-      function syncStoreWithPresence({ changes }: TLStoreEventInfo) {
+      const syncStoreWithPresence = ({ changes }: TLStoreEventInfo) => {
         room.batch(() => {
           Object.values(changes.added).forEach((record) => {
             room.updatePresence({ [record.id]: record });
@@ -109,7 +109,7 @@ export const useTLStore = ({
             room.updatePresence({ [record.id]: null });
           });
         });
-      }
+      };
 
       unsubs.push(
         store.listen(syncStoreWithPresence, {
@@ -270,7 +270,7 @@ export const useTLStore = ({
         status: "synced-remote",
         connectionStatus: "online",
       });
-    }
+    };
 
     setup();
 

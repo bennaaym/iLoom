@@ -1,12 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 import { Box } from "@mui/material";
 import {
   LiveblocksProvider,
   LiveblocksRoomProvider,
   TLProvider,
 } from "../providers";
+import { useClassroomMaterial } from "../../providers/ClassroomMaterialProvider";
 
 interface Props {
   classroom: {
@@ -16,6 +17,12 @@ interface Props {
 }
 
 export const Whiteboard = ({ classroom }: Props) => {
+  const { whiteboardPdf, whiteboardMaterial } = useClassroomMaterial();
+
+  const renderTLDraw = useCallback(() => {
+    return <TLProvider key={whiteboardMaterial?.id} pdf={whiteboardPdf} />;
+  }, [whiteboardPdf]);
+
   return (
     <Box width="100%" height="90vh">
       <LiveblocksProvider roomId={classroom.shareableCode}>
@@ -24,7 +31,7 @@ export const Whiteboard = ({ classroom }: Props) => {
           loading={<Box>whiteboard loading</Box>}
           error={<Box>whiteboard error</Box>}
         >
-          <TLProvider />
+          {renderTLDraw()}
         </LiveblocksRoomProvider>
       </LiveblocksProvider>
     </Box>

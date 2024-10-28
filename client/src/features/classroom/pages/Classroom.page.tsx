@@ -16,7 +16,7 @@ import { ClassroomMaterialProvider } from "../providers";
 import { Fragment } from "react";
 
 export const Classroom = () => {
-  const { user } = useAuth();
+  const { user, isStudent } = useAuth();
   const { id } = useParams();
   const { classroom, isLoading, isError } = useJoinClassroom(id as string);
   const router = useRouter();
@@ -66,7 +66,7 @@ export const Classroom = () => {
             }}
           />
         </Box>
-        {user?.role === "teacher" && (
+        {!isStudent() && (
           <Fragment>
             <CreateContentModal roomId={classroom.id} />
             <ListClassroomMaterials roomId={classroom.id} />

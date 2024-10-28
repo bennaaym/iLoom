@@ -18,7 +18,8 @@ export interface Material {
   scope: "global" | "classroom";
   subject: Subject;
   activity: string;
-  content: Record<string, ExplicityAny>;
+  content: Record<string, any>;
+  contentPdf: string;
   createdAt: string;
   updatedAt: string;
 }
