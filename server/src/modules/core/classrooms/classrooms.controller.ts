@@ -21,11 +21,13 @@ import {
 import {
   CurrentUser,
   PublicRoute,
+  Roles,
   SerializePaginatedResponse,
   SerializeResponse
 } from '@common/decorators';
 import {UserDocument} from '@modules/core/users/user.schema';
 import {Request} from 'express';
+import { EUserRole } from '@common/types';
 
 @Controller('classrooms')
 export class ClassroomsController {
@@ -50,6 +52,7 @@ export class ClassroomsController {
     return this.classroomsService.join(code)
   }
 
+  @Roles(EUserRole.ADMIN, EUserRole.TEACHER)
   @Post()
   @SerializeResponse(ClassroomDto)
   create(@Body() dto: CreateClassroomDto, @CurrentUser() user: UserDocument) {
