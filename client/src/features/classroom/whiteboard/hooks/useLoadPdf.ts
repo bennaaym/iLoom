@@ -88,9 +88,12 @@ export const useLoadPdf = () => {
   };
 
   const loadBlank = async () => {
-    const response = await axios.get("/assets/blank.pdf", {
-      responseType: "arraybuffer",
-    });
+    const response = await axios.get(
+      "https://storage.googleapis.com/iloomai/materials/blank.pdf",
+      {
+        responseType: "arraybuffer",
+      }
+    );
 
     const pdf = await load("blankPdf", response.data);
     return pdf;
