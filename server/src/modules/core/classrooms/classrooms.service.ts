@@ -12,7 +12,7 @@ import {
 } from './dtos';
 import {UserDocument} from '../users/user.schema';
 import {dayjs, lodash} from '@libs';
-import {ExplicityAny} from '@common/types';
+import {EUserRole, ExplicityAny} from '@common/types';
 import {LiveblocksService} from '@modules/liveblocks';
 
 @Injectable()
@@ -51,6 +51,22 @@ export class ClassroomsService {
 
   async list(query: ListClassroomQuery, user: UserDocument) {
     const pageOptions = lodash.pick(query, ['page', 'perPage']);
+
+    if (user.role === EUserRole.STUDENT) {
+      if (!user.metadata.createdByTeacher) {
+        throw new NotFoundException('Teacher not found for this student');
+      }
+      const filter = {
+        ...this.buildListFilter(query, user),
+        teacher: user.metadata.createdByTeacher
+      };
+
+      return this.repository.paginate({
+        filter,
+        orderBy: {startDate: 1, endDate: 1},
+        pageOptions
+      });
+    }
 
     return this.repository.paginate({
       filter: this.buildListFilter(query, user),

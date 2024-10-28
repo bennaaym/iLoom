@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { VideoConference } from "../video-conference/components";
 import { Chat } from "../classroom-chat/components";
 import { Whiteboard } from "../whiteboard/components";
@@ -28,7 +28,17 @@ export const Classroom = () => {
   }
 
   if (!classroom) return <></>;
+  const isClassExpired = new Date(classroom.endDate) < new Date();
 
+  if (isClassExpired) {
+    return (
+      <Box display="flex" alignItems="center" justifyContent="center" height="100%">
+        <Typography variant="h6" color="error">
+          This classroom has expired.
+        </Typography>
+      </Box>
+    );
+  }
   return (
     <Box display="flex" height="100%" pl={2}>
       <Box
