@@ -1,4 +1,4 @@
-import {Injectable, NotFoundException} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {Storage} from '@google-cloud/storage';
 import {ConfigService} from '@modules/config';
 
@@ -20,7 +20,7 @@ export class StorageService {
   }
 
   getPublicUrl = (path: string) => {
-    return `https://storage.googleapis.com/${this.bucket}/${path}`;
+    return `https://${this.bucket}.storage.googleapis.com/${path}`;
   };
 
   async upload({
@@ -41,20 +41,6 @@ export class StorageService {
       resumable: false
     });
     return this.getPublicUrl(path);
-  }
-
-  async download(path: string) {
-    try {
-      const bucket = this.storage.bucket(this.bucket);
-      const file = bucket.file(path);
-      const exists = await file.exists();
-      if (!exists[0]) throw new Error('File not found');
-      return file;
-
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    } catch (err: unknown) {
-      throw new NotFoundException('File not found');
-    }
   }
 
   async delete(bucketName: string, filename: string) {
