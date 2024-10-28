@@ -24,6 +24,9 @@ export class Material {
 
   @Prop({type: mongoose.Schema.Types.Mixed, required: true})
   content: Record<string, ExplicityAny>;
+
+  @Prop()
+  contentPdf: string;
 }
 
 export type MaterialDocument = Material & Document;

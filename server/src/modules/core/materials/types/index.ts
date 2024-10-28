@@ -23,6 +23,7 @@ export enum EnglishLevel {
 }
 
 export interface ReadingActivity {
+  title: string;
   text: string;
   questions: string[];
   answers: string[];

@@ -1,11 +1,31 @@
 import {Injectable} from '@nestjs/common';
 import {GeminiService} from '@modules/google';
-import {EnglishLevel, ReadingActivity} from './types';
+import {EMaterialActivity, EnglishLevel, ReadingActivity} from './types';
 import {englishPrompts} from './prompts';
+import {MaterialDocument} from './material.schema';
 
 @Injectable()
 export class EnglishService {
   constructor(private readonly geminiService: GeminiService) {}
+
+  private readingToHtml = (material: MaterialDocument) => {
+    const content = material.content as ReadingActivity;
+    return `
+      <h3>${content.title}</h3>
+      <p>${content.text}</p>
+      <h3>Questions</h3>
+      <div>${content.questions.map((question) => `<p>${question}</p>`).join('')}</div>
+    `;
+  };
+
+  toHtml(material: MaterialDocument) {
+    switch (material.activity) {
+      case EMaterialActivity.READING:
+        return this.readingToHtml(material);
+      default:
+        return '';
+    }
+  }
 
   async generateReading({level}: {level: EnglishLevel}) {
     return await this.geminiService.generateJSON<ReadingActivity>(

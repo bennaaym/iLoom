@@ -25,6 +25,9 @@ export class MaterialDto {
   content: Record<string, ExplicityAny>;
 
   @Expose()
+  contentPdf: string;
+
+  @Expose()
   createdAt: string;
 
   @Expose()

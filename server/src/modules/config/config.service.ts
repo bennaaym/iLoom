@@ -74,4 +74,12 @@ export class ConfigService {
       key: this.get('GEMINI_KEY')
     };
   }
+
+  get gcp() {
+    const buffer = Buffer.from(this.get('GCP_CREDENTIALS'), 'base64');
+    const credentials = JSON.parse(buffer.toString('utf-8'));
+    return {
+      credentials
+    };
+  }
 }

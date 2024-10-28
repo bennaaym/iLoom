@@ -6,12 +6,17 @@ import {EMaterialActivity, EMaterialScope, EMaterialSubject} from './types';
 import {MaterialsRepository} from './materials.repository';
 import {ExplicityAny} from '@common/types';
 import {lodash} from '@libs';
+import {StorageService} from '@modules/google';
+import {PdfService} from '@modules/pdf';
+import {MaterialDocument} from './material.schema';
 
 @Injectable()
 export class MaterialsService {
   constructor(
     private readonly englishService: EnglishService,
-    private readonly repository: MaterialsRepository
+    private readonly repository: MaterialsRepository,
+    private readonly storageService: StorageService,
+    private readonly pdfService: PdfService
   ) {}
 
   private buildListFilter(query: ListMaterialsQuery, user: UserDocument) {
@@ -20,6 +25,25 @@ export class MaterialsService {
       $or: [{classroom: queryFilter.classroom}, {scope: EMaterialScope.GLOBAL}],
       user: user.id
     };
+  }
+
+  private async upload(material: MaterialDocument) {
+    let toHtml: (html: MaterialDocument) => string;
+
+    switch (material.subject) {
+      case EMaterialSubject.ENGLISH:
+        toHtml = this.englishService.toHtml.bind(this.englishService);
+        break;
+      default:
+        throw new Error(`Invalid material subject: ${material.subject}`);
+    }
+
+    const pdfBuffer = await this.pdfService.htmlToPdf(toHtml(material));
+    return this.storageService.upload({
+      fileBuffer: pdfBuffer,
+      path: `materials/${material.id}`,
+      fileType: 'application/pdf'
+    });
   }
 
   async list(query: ListMaterialsQuery, user: UserDocument) {
@@ -52,8 +76,7 @@ export class MaterialsService {
     }
 
     const content = await promise;
-
-    return this.repository.create({
+    const material = await this.repository.create({
       user: user.id,
       classroom: dto.classroom,
       scope: dto.classroom ? EMaterialScope.CLASSROOM : EMaterialScope.GLOBAL,
@@ -61,5 +84,7 @@ export class MaterialsService {
       activity: dto.activity,
       content
     });
+    const contentPdf = await this.upload(material);
+    return this.repository.update(material.id, {contentPdf});
   }
 }
