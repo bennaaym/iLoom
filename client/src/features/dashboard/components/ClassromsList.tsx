@@ -1,12 +1,9 @@
-"use client";
-
 import React from "react";
 import {
   List,
   ListItem,
   ListItemText,
   IconButton,
-  ListItemSecondaryAction,
   Stack,
   Button,
 } from "@mui/material";
@@ -46,32 +43,37 @@ export default function ClassroomList({
 
   return (
     <List>
-      {classrooms.map((classroom) => (
-        <ListItem key={classroom.id}>
-          <ListItemText
-            primary={classroom.name}
-            secondary={`Start: ${new Date(
-              classroom.startDate
-            ).toLocaleString()} - End: ${new Date(
-              classroom.endDate
-            ).toLocaleString()}`}
-          />
-          <ListItemSecondaryAction>
-            <Stack direction="row" spacing={1}>
+      {classrooms.map((classroom) => {
+        const isClassExpired = new Date(classroom.endDate) < new Date();
+
+        return (
+          <ListItem key={classroom.id}>
+            <ListItemText
+              primary={classroom.name}
+              secondary={`Start: ${new Date(
+                classroom.startDate
+              ).toLocaleString()} - End: ${new Date(
+                classroom.endDate
+              ).toLocaleString()}`}
+            />
+            <Stack direction="row" spacing={1} sx={{ marginLeft: "auto" }}>
               <Button
                 variant="contained"
                 color="primary"
                 onClick={() => handleJoin(classroom.shareableCode)}
+                disabled={isClassExpired}
               >
                 Join
               </Button>
-              <IconButton
-                edge="end"
-                aria-label="edit"
-                onClick={() => onEdit(classroom)}
-              >
-                <Edit />
-              </IconButton>
+              {!isClassExpired && (
+                <IconButton
+                  edge="end"
+                  aria-label="edit"
+                  onClick={() => onEdit(classroom)}
+                >
+                  <Edit />
+                </IconButton>
+              )}
               <IconButton
                 edge="end"
                 aria-label="delete"
@@ -80,9 +82,9 @@ export default function ClassroomList({
                 <Delete />
               </IconButton>
             </Stack>
-          </ListItemSecondaryAction>
-        </ListItem>
-      ))}
+          </ListItem>
+        );
+      })}
     </List>
   );
 }

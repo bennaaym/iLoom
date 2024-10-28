@@ -1,4 +1,4 @@
-import {CurrentUser, SerializeResponse} from '@common/decorators';
+import {CurrentUser, Roles, SerializeResponse} from '@common/decorators';
 import {
   Body,
   Controller,
@@ -19,7 +19,7 @@ import {EUserRole} from '@common/types';
 import {FileInterceptor} from '@nestjs/platform-express';
 import csvParser from 'csv-parser';
 import {Readable} from 'stream';
-
+@Roles(EUserRole.ADMIN, EUserRole.TEACHER)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -32,9 +32,6 @@ export class UsersController {
 
   @Get('/students')
   async getStudents(@CurrentUser() teacher: UserDocument) {
-    if (teacher.role !== EUserRole.TEACHER) {
-      throw new ForbiddenException('Only teachers can view their students');
-    }
     return this.usersService.getStudents(teacher.id);
   }
 
@@ -44,9 +41,6 @@ export class UsersController {
     @Body() data: {students: Array<Partial<UserDocument>>},
     @CurrentUser() teacher: UserDocument
   ) {
-    if (teacher.role !== EUserRole.TEACHER) {
-      throw new ForbiddenException('Only teachers can create students');
-    }
     await this.usersService.createStudents(data, teacher.id);
   }
 
@@ -57,12 +51,6 @@ export class UsersController {
     @UploadedFile() file: Express.Multer.File,
     @CurrentUser() teacher: UserDocument
   ) {
-    if (teacher.role !== EUserRole.TEACHER) {
-      throw new ForbiddenException(
-        'Only teachers can upload student CSV files'
-      );
-    }
-
     const students = await this.parseCsv(file.buffer);
     await this.usersService.createStudents({students}, teacher.id);
   }
@@ -73,10 +61,6 @@ export class UsersController {
     @Param('id') studentId: string,
     @CurrentUser() teacher: UserDocument
   ) {
-    if (teacher.role !== EUserRole.TEACHER) {
-      throw new ForbiddenException('Only teachers can delete students');
-    }
-
     await this.usersService.deleteStudent(studentId, teacher.id);
   }
 
