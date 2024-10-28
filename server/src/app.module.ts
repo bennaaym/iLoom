@@ -11,7 +11,8 @@ import {APP_GUARD} from '@nestjs/core';
 import {ClassroomChatsModule} from '@modules/core/classroom-chats';
 import {SessionsModule} from '@modules/sessions';
 import {GoogleModule} from '@modules/google';
-import { MaterialsModule } from '@modules/core/materials';
+import {MaterialsModule} from '@modules/core/materials';
+import {PdfModule} from '@modules/pdf';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { MaterialsModule } from '@modules/core/materials';
     AgoraModule,
     SessionsModule,
     GoogleModule,
-    MaterialsModule
+    MaterialsModule,
+    PdfModule
   ],
   providers: [
     {

@@ -44,6 +44,7 @@ export class GeminiService {
     });
 
     const args = result.response.functionCalls()[0].args as T;
+
     return args;
   }
 }
