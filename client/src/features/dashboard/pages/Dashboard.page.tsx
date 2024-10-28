@@ -74,16 +74,16 @@ export const Dashboard = () => {
       <Typography variant="h4" gutterBottom color="primary">
         Classroom Dashboard
       </Typography>
-      <Box display="flex" gap={2} mb={2}>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleCreateClassroom}
-          sx={{ textTransform: "capitalize", fontWeight: "bold" }}
-        >
-          Create New Classroom
-        </Button>
-        {user?.role === "teacher" && (
+      {user?.role === "teacher" && (
+        <Box display="flex" gap={2} mb={2}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleCreateClassroom}
+            sx={{ textTransform: "capitalize", fontWeight: "bold" }}
+          >
+            Create New Classroom
+          </Button>
           <Button
             variant="contained"
             color="secondary"
@@ -92,8 +92,9 @@ export const Dashboard = () => {
           >
             Manage Students
           </Button>
-        )}
-      </Box>
+        </Box>
+      )}
+
 
       <Box sx={{ width: "100%" }}>
         <Tabs
