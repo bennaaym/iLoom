@@ -3,7 +3,10 @@ import {EnglishLevel} from '../types';
 
 const reading = {
   prompt: (ctx: {level: EnglishLevel; ageGroup: string; description: string}) =>
-    `generate a reading comprehension activity for ${ctx.level}. The activity should include at least 3 questions`,
+    `Generate a reading comprehension activity for ${ctx.level} English learners.
+     Age group: ${ctx.ageGroup}.
+     Topic: ${ctx.description}.
+     Include a passage and at least 3 comprehension questions with answers.`,
   schema: {
     type: 'object',
     properties: {

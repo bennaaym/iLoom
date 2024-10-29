@@ -31,22 +31,12 @@ export class GeminiService {
           parts: [{text: prompt}]
         }
       ],
-      tools: [
-        {
-          functionDeclarations: [
-            {
-              name: `function_${lodash.random(1_000_000)}`,
-              parameters: schema
-            }
-          ]
-        }
-      ]
+      generationConfig: {
+        responseMimeType: 'application/json',
+        responseSchema: schema
+      }
     });
-    console.log(prompt)
-    console.log(result.response.functionCalls()[0])
 
-    const args = result.response.functionCalls()[0].args as T;
-
-    return args;
+    return JSON.parse(result.response.text()) as T;
   }
 }

@@ -1,4 +1,4 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
+import {BadRequestException, ForbiddenException, Injectable, NotFoundException} from '@nestjs/common';
 import {EnglishService} from './english.service';
 import {CreateEnglishMaterialDto, ListMaterialsQuery} from './dtos';
 import {UserDocument} from '../users/user.schema';
@@ -55,15 +55,20 @@ export class MaterialsService {
     });
   }
 
+  async getMaterialById(id: string, user: UserDocument): Promise<MaterialDocument> {
+    const material = await this.repository.findById(id);
+    if (!material) {
+      throw new NotFoundException('Material not found');
+    }
+    if (material.user !== user.id) throw new ForbiddenException();
+    return material;
+  }
+
   async generateEnglishStoryMaterial(
     dto: CreateEnglishMaterialDto,
     image: Express.Multer.File,
     user: UserDocument,
   ) {
-    if (!image) {
-      throw new BadRequestException('Image file is required');
-    }
-
     const imageUrl = await this.storageService.upload({
       fileBuffer: image.buffer,
       path: `images/${Date.now()}_${image.originalname}`,
