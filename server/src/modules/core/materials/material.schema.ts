@@ -27,6 +27,9 @@ export class Material {
 
   @Prop()
   contentPdf: string;
+
+  @Prop()
+  imageUrl: string;
 }
 
 export type MaterialDocument = Material & Document;

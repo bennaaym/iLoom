@@ -27,12 +27,39 @@ export class EnglishService {
     }
   }
 
-  async generateReading({level}: {level: EnglishLevel}) {
+  async generateReading({
+    level,
+    ageGroup,
+    description,
+  }: {
+    level: EnglishLevel;
+    ageGroup: string;
+    description: string;
+  }) {
     return await this.geminiService.generateJSON<ReadingActivity>(
-      englishPrompts.reading.prompt({level}),
+      englishPrompts.reading.prompt({ level, ageGroup, description }),
       englishPrompts.reading.schema
     );
   }
+
+  async generateStoryFromImage({
+    level,
+    ageGroup,
+    description,
+    imageUrl,
+  }: {
+    level: EnglishLevel;
+    ageGroup: string;
+    description: string;
+    imageUrl: string;
+  }) {
+    return await this.geminiService.generateJSON<ReadingActivity>(
+      englishPrompts.story.prompt({ level, ageGroup, description, imageUrl }),
+      englishPrompts.reading.schema,
+    );
+  }
+  
+  
   generateSpeaking() {
     return Promise.resolve({text: ''});
   }

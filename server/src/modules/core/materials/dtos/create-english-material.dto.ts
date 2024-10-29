@@ -12,4 +12,8 @@ export class CreateEnglishMaterialDto {
 
   @IsEnum(EnglishLevel)
   level: EnglishLevel;
+  @IsString()
+  ageGroup: string;
+  @IsString()
+  description: string;
 }
