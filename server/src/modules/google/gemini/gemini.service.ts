@@ -42,6 +42,8 @@ export class GeminiService {
         }
       ]
     });
+    console.log(prompt)
+    console.log(result.response.functionCalls()[0])
 
     const args = result.response.functionCalls()[0].args as T;
 
