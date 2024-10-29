@@ -13,8 +13,6 @@ export class EnglishService {
     return `
       <h3>${content.title}</h3>
       <p>${content.text}</p>
-      <h3>Questions</h3>
-      <div>${content.questions.map((question) => `<p>${question}</p>`).join('')}</div>
     `;
   };
 

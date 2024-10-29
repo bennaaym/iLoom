@@ -1,4 +1,8 @@
-import {Injectable} from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common';
 import {EnglishService} from './english.service';
 import {CreateEnglishMaterialDto, ListMaterialsQuery} from './dtos';
 import {UserDocument} from '../users/user.schema';
@@ -53,6 +57,13 @@ export class MaterialsService {
       orderBy: {createdAt: -1, updatedAt: -1},
       pageOptions
     });
+  }
+
+  async retrieve(id: string, user: UserDocument) {
+    const material = await this.repository.findById(id);
+    if (material) throw new NotFoundException();
+    if (material.user !== user.id) throw new ForbiddenException();
+    return material;
   }
 
   async generateEnglishMaterial(

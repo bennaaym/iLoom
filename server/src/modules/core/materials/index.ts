@@ -18,3 +18,4 @@ import {PdfModule} from '@modules/pdf';
   providers: [MaterialsService, EnglishService, MaterialsRepository]
 })
 export class MaterialsModule {}
+export {MaterialsService} from './materials.service';
