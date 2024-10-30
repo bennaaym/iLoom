@@ -55,6 +55,8 @@ export default function ClassroomForm({
     }
   }, [classroom]);
 
+  const currentDateTime = new Date().toISOString().slice(0, 16);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -62,7 +64,11 @@ export default function ClassroomForm({
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3, maxWidth: 400, mx: "auto" }}>
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{ mt: 3, maxWidth: 400, mx: "auto" }}
+    >
       <Typography variant="h5" gutterBottom>
         {isEditMode ? "Edit Classroom" : "Create Classroom"}
       </Typography>
@@ -81,10 +87,12 @@ export default function ClassroomForm({
           required
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
-          slotProps={{
-            inputLabel: { shrink: true },
+          InputLabelProps={{
+            shrink: true,
           }}
-          onBlur={() => setStartDate(startDate)}
+          inputProps={{
+            min: currentDateTime,
+          }}
         />
         <FormControl fullWidth>
           <Select
@@ -92,6 +100,7 @@ export default function ClassroomForm({
             label="Duration (minutes)"
             onChange={(e) => setDuration(Number(e.target.value))}
             displayEmpty
+            inputProps={{ "aria-label": "Duration" }}
           >
             <MenuItem value="" disabled>
               Duration (minutes)
@@ -111,18 +120,30 @@ export default function ClassroomForm({
           value={capacity}
           onChange={(e) => {
             const newCapacity = Number(e.target.value);
-            if (newCapacity <= 12) {
+            if (newCapacity >= 1 && newCapacity <= 12) {
               setCapacity(newCapacity);
             }
           }}
-          slotProps={{
-            htmlInput: { min: 1, max: 12 },
+          inputProps={{
+            min: 1,
+            max: 12,
           }}
         />
 
         <Stack direction="row" spacing={2} justifyContent="flex-end">
-          <Button type="submit" variant="contained" color="primary" disabled={mutation.isPending}>
-            {mutation.isPending ? <CircularProgress size={24} /> : isEditMode ? "Update" : "Create"}
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={mutation.isPending}
+          >
+            {mutation.isPending ? (
+              <CircularProgress size={24} />
+            ) : isEditMode ? (
+              "Update"
+            ) : (
+              "Create"
+            )}
           </Button>
           <Button variant="outlined" color="secondary" onClick={onCancel}>
             Cancel

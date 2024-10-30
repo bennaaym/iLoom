@@ -24,12 +24,12 @@ const ArticleGenerator = () => {
   const fields = [
     {
       id: "level", label: "Level", type: FormFieldType.SELECT, options: [
-        { label: "A1", value: "A1" },
-        { label: "A2", value: "A2" },
-        { label: "B1", value: "B1" },
-        { label: "B2", value: "B2" },
-        { label: "C1", value: "C1" },
-        { label: "C2", value: "C2" },
+        { label: "Beginner (A1)", value: "A1" },
+        { label: "Elementary (A2)", value: "A2" },
+        { label: "Intermediate (B1)", value: "B1" },
+        { label: "Upper-Intermediate (B2)", value: "B2" },
+        { label: "Advanced (C1)", value: "C1" },
+        { label: "Proficiency (C2)", value: "C2" },
       ], placeholder: "Select the article level"
     },
     {
@@ -53,7 +53,7 @@ const ArticleGenerator = () => {
 
       <BaseForm
         fields={fields}
-        initialValues={{level: "", targetAgeGroup: "", description: "" }}
+        initialValues={{ level: "", targetAgeGroup: "", description: "" }}
         validationSchema={articleGenerationValidationSchema}
         submitLabel="Generate Article"
         isLoading={mutation.isPending}

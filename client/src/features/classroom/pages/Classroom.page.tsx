@@ -54,7 +54,7 @@ export const Classroom = () => {
         flexDirection="column"
         mr={2}
       >
-        {/* <VideoConference classroomId={classroom.id} /> */}
+        <VideoConference classroomId={classroom.id} />
 
         {user && (
           <Box flexGrow={1} mt={2}>
