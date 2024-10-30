@@ -7,6 +7,9 @@ interface GenerateMaterialPayload {
   subject: string;
   level: string;
   activity: string;
+  ageGroup?: string;
+  description?: string;
+  image?: File | null;
 }
 
 export const useGenerateMaterial = () => {
@@ -14,10 +17,26 @@ export const useGenerateMaterial = () => {
     mutationKey: ["generateMaterial"],
     mutationFn: async (payload: GenerateMaterialPayload) => {
       try {
-        const res = await apiClient.post(
-          `/materials/${payload.subject}`,
-          payload
-        );
+        let res;
+        if (payload.subject === "english" && payload.activity === "story") {
+          const formData = new FormData();
+          if (payload.classroom)
+            formData.append("classroom", payload.classroom);
+          formData.append("level", payload.level);
+          formData.append("activity", payload.activity);
+          if (payload.ageGroup) formData.append("ageGroup", payload.ageGroup);
+          if (payload.description)
+            formData.append("description", payload.description);
+          if (payload.image) formData.append("image", payload.image);
+
+          res = await apiClient.post("/materials/english/story", formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          });
+        } else {
+          res = await apiClient.post(`/materials/${payload.subject}`, payload);
+        }
         return res.data as Material;
       } catch (err) {
         throw new Error(handleApiError(err).message);

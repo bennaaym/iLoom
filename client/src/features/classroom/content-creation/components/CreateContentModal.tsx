@@ -10,6 +10,7 @@ import { createClassroomContentValidation } from "../validations";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatedFloatingModal } from "./AnimatedFloatingModal";
 import { FloatingButton } from "@/common/components";
+import { Tooltip } from "@mui/material";
 
 interface Props {
   roomId: string;
@@ -44,13 +45,15 @@ export const CreateContentModal = ({ roomId }: Props) => {
     <AnimatedFloatingModal
       isOpen={isModalVisible.value}
       renderButton={() => (
-        <FloatingButton
-          icon={<FaRobot size={30} />}
-          position="absolute"
-          right="0"
-          bottom="0"
-          onClick={isModalVisible.toggle}
-        />
+        <Tooltip title="Create new content">
+          <FloatingButton
+            icon={<FaRobot size={30} />}
+            position="absolute"
+            right="0"
+            bottom="0"
+            onClick={isModalVisible.toggle}
+          />
+        </Tooltip>
       )}
     >
       <CreateContentForm

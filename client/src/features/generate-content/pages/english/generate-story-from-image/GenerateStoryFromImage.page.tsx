@@ -11,9 +11,9 @@ const formFields = [
     label: "Age Group",
     type: FormFieldType.SELECT,
     options: [
-      { label: "Children", value: "children" },
-      { label: "Teenagers", value: "teenagers" },
-      { label: "Adults", value: "adults" },
+      { label: "Teen (13-17)", value: "Teen (13-17)" },
+      { label: "Young Adult (18-25)", value: "Young Adult (18-25)" },
+      { label: "Adult (25+)", value: "Adult (25+)" },
     ],
     placeholder: "Select Age Group",
   },

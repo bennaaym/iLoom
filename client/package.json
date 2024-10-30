@@ -37,6 +37,7 @@
     "yup": "^1.4.0"
   },
   "devDependencies": {
+    "@types/date-fns": "^2.6.3",
     "@types/lodash": "^4.17.12",
     "@types/node": "^20",
     "@types/react": "^18",
