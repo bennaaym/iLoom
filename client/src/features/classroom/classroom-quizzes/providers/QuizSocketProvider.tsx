@@ -7,15 +7,31 @@ import React, {
   useContext,
 } from "react";
 import io, { Socket } from "socket.io-client";
+import { toast } from "react-toastify";
 
 enum EClassroomQuizEvent {
   START_QUIZ = "start-quiz",
+  END_QUIZ = "end-quiz",
+  SUBMIT_QUIZ = "submit-quiz",
+}
+interface QuizQuestion {
+  question: string;
+  options: string[];
+}
+
+export interface Quiz {
+  teacher: string;
+  classroom: string;
+  material: string;
+  questions: QuizQuestion[];
 }
 
 interface QuizContext {
-  quiz: Record<string, any>;
-  startQuiz(materialId: string, cb?: () => void): void;
-  endQuiz(materialId: string, cb?: () => void): void;
+  isQuizRunning: boolean;
+  quiz: Quiz | null;
+  startQuiz(materialId: string): void;
+  endQuiz(): void;
+  submitQuiz(): void;
 }
 
 const QuizContext = createContext<QuizContext | undefined>(undefined);
@@ -27,7 +43,7 @@ interface Props {
 
 export const QuizSocketProvider = ({ roomId, children }: Props) => {
   const socket = useRef<Socket | null>(null);
-  const [quiz, setQuiz] = useState<Record<string, any>>([]);
+  const [quiz, setQuiz] = useState<Quiz | null>(null);
 
   const getSocket = () => {
     return socket.current!;
@@ -42,31 +58,53 @@ export const QuizSocketProvider = ({ roomId, children }: Props) => {
       transports: ["websocket"],
     });
 
-    getSocket().on(
-      EClassroomQuizEvent.START_QUIZ,
-      (quiz: Record<string, any>) => {
-        console.log(quiz);
-      }
-    );
+    getSocket().on(EClassroomQuizEvent.START_QUIZ, (quiz: Quiz) => {
+      setQuiz(quiz);
+    });
+
+    getSocket().on(EClassroomQuizEvent.END_QUIZ, () => {
+      setQuiz(null);
+    });
+
+    getSocket().on(EClassroomQuizEvent.SUBMIT_QUIZ, ({ student }) => {
+      toast.success(`${student.name} submitted`, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+        theme: "colored",
+      });
+    });
 
     return () => {
       getSocket().disconnect();
     };
   }, []);
 
-  const startQuiz = (materialId: string, cb?: () => void) => {
-    console.log("start ===>");
+  const startQuiz = (materialId: string) => {
     getSocket().emit(EClassroomQuizEvent.START_QUIZ, materialId);
-    cb && cb();
   };
 
-  const endQuiz = (materialId: string, cb?: () => void) => {
-    getSocket().emit(EClassroomQuizEvent.START_QUIZ, materialId);
-    cb && cb();
+  const endQuiz = () => {
+    getSocket().emit(EClassroomQuizEvent.END_QUIZ);
+  };
+
+  const submitQuiz = () => {
+    getSocket().emit(EClassroomQuizEvent.SUBMIT_QUIZ);
   };
 
   return (
-    <QuizContext.Provider value={{ quiz, startQuiz, endQuiz }}>
+    <QuizContext.Provider
+      value={{
+        quiz,
+        isQuizRunning: Boolean(quiz),
+        startQuiz,
+        endQuiz,
+        submitQuiz,
+      }}
+    >
       {children}
     </QuizContext.Provider>
   );

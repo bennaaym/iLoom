@@ -4,25 +4,23 @@ import { useClassroomQuiz } from "../providers/QuizSocketProvider";
 import { Box } from "@mui/material";
 import { FloatingButton } from "@/common/components";
 import { MdQuiz } from "react-icons/md";
-import { useBoolean } from "usehooks-ts";
 import { useClassroomMaterial } from "../../providers/ClassroomMaterialProvider";
 import { useAuth } from "@/common/providers/AuthProvider";
+import { QuizModal } from "./QuizModal";
 
 export const ClassroomQuizContent = () => {
-  const { startQuiz, endQuiz } = useClassroomQuiz();
+  const { isQuizRunning, quiz, startQuiz, endQuiz, submitQuiz } =
+    useClassroomQuiz();
   const { whiteboardMaterial } = useClassroomMaterial();
   const { isStudent } = useAuth();
-  const isQuizRunning = useBoolean(false);
 
   const handleClick = () => {
     if (!whiteboardMaterial) return;
-    if (isQuizRunning.value) {
-      endQuiz(whiteboardMaterial.id);
+    if (isQuizRunning) {
+      endQuiz();
     } else {
       startQuiz(whiteboardMaterial.id);
     }
-
-    isQuizRunning.toggle();
   };
 
   return (
@@ -38,8 +36,17 @@ export const ClassroomQuizContent = () => {
           position="absolute"
           right="0"
           bottom="140px"
-          bgcolor={isQuizRunning.value ? "error" : "primary"}
+          bgcolor={isQuizRunning ? "error" : "primary"}
           onClick={handleClick}
+        />
+      )}
+
+      {isStudent() && isQuizRunning && quiz && (
+        <QuizModal
+          quiz={quiz}
+          onSubmit={() => {
+            submitQuiz();
+          }}
         />
       )}
     </Box>
