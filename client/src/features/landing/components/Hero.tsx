@@ -10,7 +10,18 @@ import { useRouter } from "next/navigation";
 export const Hero = () => {
   const router = useRouter();
   return (
-    <Box width="100%" height="100vh" position="relative">
+    <Box
+      width="100%"
+      height="100vh"
+      position="relative"
+      sx={(theme) => {
+        return {
+          [theme.breakpoints.down("md")]: {
+            height: "50vh",
+          },
+        };
+      }}
+    >
       <Box position="absolute" left={0} right={0} width="100%" height="100%">
         <Image src={HeroBg} alt="hero-image" fill />
       </Box>
