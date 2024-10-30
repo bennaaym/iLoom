@@ -5,3 +5,7 @@ body {
 .tl-watermark_SEE-LICENSE {
   display: none !important;
 }
+
+a {
+  text-decoration: none !important;
+}

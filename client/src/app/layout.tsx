@@ -9,11 +9,17 @@ import { AgoraProvider } from "@/features/classroom/video-conference/providers/A
 import { RouteGuard } from "@/common/guards";
 import { MainLayout } from "@/common/components";
 import "@/common/styles/global.css";
+import { Poppins } from "next/font/google";
+
+const font = Poppins({
+  weight: ["400", "500", "600", "700", "800", "900"],
+  subsets: ["latin"],
+});
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <body>
+      <body className={font.className}>
         <AppThemeProvider>
           <QueryProvider>
             <AuthProvider>

@@ -13,6 +13,7 @@ import { Alert } from "@mui/material";
 import { ReactNode } from "react";
 import Link from "next/link";
 import { useGoogleAuth } from "../hooks";
+import { brand, gray } from "@/common/theme";
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: "flex",
@@ -66,6 +67,7 @@ export const AuthCard = <Values extends FormikValues>({
                 component="h1"
                 variant="h4"
                 sx={{ width: "100%", fontSize: "clamp(2rem, 10vw, 2.15rem)" }}
+                color="primary"
               >
                 {title}
               </Typography>
@@ -130,7 +132,10 @@ export const AuthCard = <Values extends FormikValues>({
                 </FormControl>
 
                 <Button
-                  sx={{ textTransform: "capitalize", fontWeight: "800" }}
+                  sx={{
+                    textTransform: "capitalize",
+                    fontWeight: "800",
+                  }}
                   type="submit"
                   fullWidth
                   variant="contained"
@@ -155,8 +160,8 @@ export const AuthCard = <Values extends FormikValues>({
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 <Button
                   sx={{
-                    borderColor: "primary.dark",
                     textTransform: "capitalize",
+                    color: gray[500],
                   }}
                   fullWidth
                   variant="outlined"

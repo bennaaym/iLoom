@@ -8,7 +8,7 @@ export const RouteGuard = ({ children }: { children: ReactNode }) => {
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!user) return router.replace("/auth/sign-in");
+    if (!user) return router.replace("/");
     else {
       router.replace(
         pathname && pathname !== "/" && !pathname.includes("/auth")

@@ -1,7 +1,7 @@
 "use client";
-import { PageLoading } from "@/common/loaders";
+import { Landing } from "@/features/landing/pages";
 import React from "react";
 
 export default function HomePage() {
-  return <PageLoading />;
+  return <Landing />;
 }
