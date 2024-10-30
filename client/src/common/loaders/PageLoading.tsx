@@ -13,7 +13,7 @@ export const PageLoading = () => {
       justifyContent="center"
       alignItems="center"
     >
-      <BounceLoader size={240} color={brand[500]} />
+      <BounceLoader size={240} color={brand[400]} />
       <Typography
         fontSize={40}
         fontWeight="800"
