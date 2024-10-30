@@ -37,11 +37,8 @@ export class MaterialsController {
   }
   @Get('/:id')
   @SerializeResponse(MaterialDto)
-  async getEnglishMaterialById(
-    @Param('id') id: string,
-    @CurrentUser() user: UserDocument
-  ) {
-    return this.materialsService.getMaterialById(id, user);
+  async retrieve(@Param('id') id: string, @CurrentUser() user: UserDocument) {
+    return this.materialsService.retrieve(id, user);
   }
 
   @Post('/english')

@@ -19,17 +19,26 @@ const reading = {
       questions: {
         type: 'array',
         items: {
-          type: 'string'
-        }
-      },
-      answers: {
-        type: 'array',
-        items: {
-          type: 'string'
+          type: 'object',
+          properties: {
+            question: {
+              type: 'string'
+            },
+            options: {
+              type: 'array',
+              items: {
+                type: 'string'
+              }
+            },
+            answer: {
+              type: 'string'
+            }
+          },
+          required: ['question', 'options', 'answer']
         }
       }
     },
-    required: ['title', 'text', 'questions', 'answers']
+    required: ['title', 'text', 'questions']
   } as FunctionDeclarationSchema
 };
 

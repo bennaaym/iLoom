@@ -14,6 +14,7 @@ import {
 } from "../content-creation/components";
 import { ClassroomMaterialProvider } from "../providers";
 import { Fragment } from "react";
+import { ClassroomQuiz } from "../classroom-quizzes/components";
 
 export const Classroom = () => {
   const { user, isStudent } = useAuth();
@@ -32,7 +33,12 @@ export const Classroom = () => {
 
   if (isClassExpired) {
     return (
-      <Box display="flex" alignItems="center" justifyContent="center" height="100%">
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
+        height="100%"
+      >
         <Typography variant="h6" color="error">
           This classroom has expired.
         </Typography>
@@ -48,11 +54,11 @@ export const Classroom = () => {
         flexDirection="column"
         mr={2}
       >
-        <VideoConference classroomId={classroom.id} />
+        {/* <VideoConference classroomId={classroom.id} /> */}
 
         {user && (
           <Box flexGrow={1} mt={2}>
-            <Chat roomId={classroom.shareableCode} userId={user.id} />
+            <Chat roomId={classroom.id} userId={user.id} />
           </Box>
         )}
       </Box>
@@ -72,6 +78,7 @@ export const Classroom = () => {
             <ListClassroomMaterials roomId={classroom.id} />
           </Fragment>
         )}
+        <ClassroomQuiz roomId={classroom.id} />
       </ClassroomMaterialProvider>
     </Box>
   );

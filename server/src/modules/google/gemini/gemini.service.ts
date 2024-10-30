@@ -5,7 +5,6 @@ import {
   GenerativeModel,
   GoogleGenerativeAI
 } from '@google/generative-ai';
-import {lodash} from '@libs';
 
 @Injectable()
 export class GeminiService {

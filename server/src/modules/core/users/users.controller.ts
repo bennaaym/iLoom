@@ -24,6 +24,7 @@ import {Readable} from 'stream';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  @Roles(EUserRole.ADMIN, EUserRole.TEACHER, EUserRole.STUDENT)
   @Get('/me')
   @SerializeResponse(BasicUserDto)
   me(@CurrentUser() user: UserDocument) {
