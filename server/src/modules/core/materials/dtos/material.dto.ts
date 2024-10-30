@@ -32,4 +32,7 @@ export class MaterialDto {
 
   @Expose()
   updatedAt: string;
+  
+  @Expose()
+  imageUrl: string;
 }

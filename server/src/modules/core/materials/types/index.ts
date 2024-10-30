@@ -9,6 +9,7 @@ export enum EMaterialSubject {
 
 export enum EMaterialActivity {
   READING = 'reading',
+  STORY = 'story',
   SPEAKING = 'speaking',
   WRITING = 'writing'
 }

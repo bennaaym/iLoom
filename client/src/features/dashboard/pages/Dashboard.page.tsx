@@ -69,6 +69,14 @@ export const Dashboard = () => {
     router.push("/dashboard/student-management");
   };
 
+  const handleGenerateContent = () => {
+    router.push("/generate-content");
+  };
+
+  const handleMyContent = () => {
+    router.push("/my-content");
+  };
+
   return (
     <Box p={4} sx={{ backgroundColor: "#f4f6f8", minHeight: "100vh" }}>
       <Typography variant="h4" gutterBottom color="primary">
@@ -86,11 +94,27 @@ export const Dashboard = () => {
           </Button>
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={handleManageStudents}
             sx={{ textTransform: "capitalize", fontWeight: "bold" }}
           >
             Manage Students
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleGenerateContent}
+            sx={{ textTransform: "capitalize", fontWeight: "bold" }}
+          >
+            Generate Content
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleMyContent}
+            sx={{ textTransform: "capitalize", fontWeight: "bold" }}
+          >
+            My Content
           </Button>
         </Box>
       )}
