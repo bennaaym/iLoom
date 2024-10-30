@@ -1,4 +1,8 @@
-import {BadRequestException, ForbiddenException, Injectable, NotFoundException} from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException
+} from '@nestjs/common';
 import {EnglishService} from './english.service';
 import {CreateEnglishMaterialDto, ListMaterialsQuery} from './dtos';
 import {UserDocument} from '../users/user.schema';
@@ -55,11 +59,9 @@ export class MaterialsService {
     });
   }
 
-  async getMaterialById(id: string, user: UserDocument): Promise<MaterialDocument> {
+  async retrieve(id: string, user: UserDocument) {
     const material = await this.repository.findById(id);
-    if (!material) {
-      throw new NotFoundException('Material not found');
-    }
+    if (!material) throw new NotFoundException();
     if (material.user !== user.id) throw new ForbiddenException();
     return material;
   }
@@ -67,19 +69,19 @@ export class MaterialsService {
   async generateEnglishStoryMaterial(
     dto: CreateEnglishMaterialDto,
     image: Express.Multer.File,
-    user: UserDocument,
+    user: UserDocument
   ) {
     const imageUrl = await this.storageService.upload({
       fileBuffer: image.buffer,
       path: `images/${Date.now()}_${image.originalname}`,
-      fileType: image.mimetype,
+      fileType: image.mimetype
     });
 
     const content = await this.englishService.generateStoryFromImage({
       level: dto.level,
       ageGroup: dto.ageGroup,
       description: dto.description,
-      imageUrl,
+      imageUrl
     });
 
     const material = await this.repository.create({
@@ -89,11 +91,11 @@ export class MaterialsService {
       subject: EMaterialSubject.ENGLISH,
       activity: EMaterialActivity.STORY,
       content,
-      imageUrl,
+      imageUrl
     });
 
     const contentPdf = await this.upload(material);
-    return this.repository.update(material.id, { contentPdf });
+    return this.repository.update(material.id, {contentPdf});
   }
 
   async generateEnglishMaterial(
@@ -107,7 +109,7 @@ export class MaterialsService {
         promise = this.englishService.generateReading({
           level: dto.level,
           ageGroup: dto.ageGroup,
-          description: dto.description,
+          description: dto.description
         });
         break;
       case EMaterialActivity.SPEAKING:

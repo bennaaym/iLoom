@@ -20,7 +20,6 @@ import {UsersModule} from '@modules/core/users';
     ClassroomChatsService,
     ClassroomChatsRepository,
     ClassroomChatsGateway
-  ],
-  exports: [ClassroomChatsGateway]
+  ]
 })
 export class ClassroomChatsModule {}

@@ -26,6 +26,9 @@ export enum EnglishLevel {
 export interface ReadingActivity {
   title: string;
   text: string;
-  questions: string[];
-  answers: string[];
+  questions: {
+    question: string;
+    options: string[];
+    answer: string[];
+  }[];
 }
