@@ -13,6 +13,7 @@ import {SessionsModule} from '@modules/sessions';
 import {GoogleModule} from '@modules/google';
 import {MaterialsModule} from '@modules/core/materials';
 import {PdfModule} from '@modules/pdf';
+import {ClassroomQuizzesModule} from '@modules/core/classroom-quizzes';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import {PdfModule} from '@modules/pdf';
     UsersModule,
     ClassroomsModule,
     ClassroomChatsModule,
+    ClassroomQuizzesModule,
     AgoraModule,
     SessionsModule,
     GoogleModule,

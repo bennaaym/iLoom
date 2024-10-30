@@ -15,7 +15,7 @@ declare module 'socket.io' {
 }
 
 interface SocketAuthContext {
-  readonly socket: Socket;
+  socket: Socket;
   readonly sessionsService: SessionsService;
   readonly usersService: UsersService;
   readonly configService: ConfigService;
@@ -57,7 +57,6 @@ export const socketAuth = async ({
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err: unknown) {
-    console.error(err);
     socket.disconnect();
   }
 };

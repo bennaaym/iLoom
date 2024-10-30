@@ -61,7 +61,7 @@ export class MaterialsService {
 
   async retrieve(id: string, user: UserDocument) {
     const material = await this.repository.findById(id);
-    if (material) throw new NotFoundException();
+    if (!material) throw new NotFoundException();
     if (material.user !== user.id) throw new ForbiddenException();
     return material;
   }

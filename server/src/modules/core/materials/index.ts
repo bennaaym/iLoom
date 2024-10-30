@@ -15,7 +15,8 @@ import {PdfModule} from '@modules/pdf';
     PdfModule
   ],
   controllers: [MaterialsController],
-  providers: [MaterialsService, EnglishService, MaterialsRepository]
+  providers: [MaterialsService, EnglishService, MaterialsRepository],
+  exports: [MaterialsService]
 })
 export class MaterialsModule {}
 export {MaterialsService} from './materials.service';

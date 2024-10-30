@@ -1,5 +1,10 @@
 import {ExplicityAny} from '@common/types';
-import {IsArray, IsNotEmpty, IsString} from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNotEmptyObject,
+  IsObject,
+  IsString
+} from 'class-validator';
 
 export class CreateQuizDto {
   @IsString()
@@ -14,7 +19,7 @@ export class CreateQuizDto {
   @IsNotEmpty()
   material: string;
 
-  @IsArray()
-  @IsNotEmpty()
-  answers: Record<string, ExplicityAny>[];
+  @IsObject()
+  @IsNotEmptyObject()
+  answers: Record<string, ExplicityAny>;
 }

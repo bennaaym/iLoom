@@ -14,7 +14,7 @@ export class ClassroomQuizzesService {
 
   async retrieveQuiz(materialId: string, user: UserDocument) {
     const material = await this.MaterialService.retrieve(materialId, user);
-    return removeKeys(material.content, ['answer', 'answers']);
+    return removeKeys(material.content, ['answer', 'answers']).questions;
   }
 
   create(dto: CreateQuizDto, user: UserDocument) {

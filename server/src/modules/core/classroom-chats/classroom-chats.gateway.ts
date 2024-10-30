@@ -12,19 +12,11 @@ import {Injectable, Logger, UseFilters, UseGuards} from '@nestjs/common';
 import {ConfigService} from '@modules/config';
 import {SessionsService} from '@modules/sessions';
 import {UsersService} from '../users';
-import {UserDocument} from '../users/user.schema';
 import {ClassroomChatsService} from './classroom-chats.service';
 import {lodash} from '@libs';
 import {socketAuth} from '@common/socket';
 import {WebSocketExceptionFilter} from '@common/filters';
 import {SocketAuthorizationGuard} from '@common/guards';
-
-declare module 'socket.io' {
-  interface Socket {
-    currentUser: UserDocument;
-    classroom: string;
-  }
-}
 
 enum EClassroomChatEvent {
   MESSAGE = 'message',
@@ -56,7 +48,7 @@ export class ClassroomChatsGateway
   ) {}
 
   private async auth(socket: Socket) {
-    socketAuth({
+    return socketAuth({
       socket,
       configService: this.configService,
       sessionsService: this.sessionsService,
@@ -66,9 +58,9 @@ export class ClassroomChatsGateway
 
   async handleConnection(@ConnectedSocket() socket: Socket) {
     await this.auth(socket);
+
     this.logger.log(`Client connected: ${socket.id}`);
     const messages = await this.classroomChatsService.list(socket.classroom);
-
     socket.join(socket.classroom);
 
     this.server.to(socket.classroom).emit(

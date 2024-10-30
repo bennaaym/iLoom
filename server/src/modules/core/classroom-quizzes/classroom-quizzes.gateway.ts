@@ -18,16 +18,18 @@ import {Roles} from '@common/decorators';
 import {EUserRole} from '@common/types';
 import {WebSocketExceptionFilter} from '@common/filters';
 import {ClassroomQuizzesService} from './classroom-quizzes.service';
+import {lodash} from '@libs';
 
 enum EClassroomQuizEvent {
-  START_QUIZ = 'start-quiz'
+  START_QUIZ = 'start-quiz',
+  END_QUIZ = 'end-quiz',
+  SUBMIT_QUIZ = 'submit-quiz'
 }
 
 @UseFilters(new WebSocketExceptionFilter())
 @UseGuards(SocketAuthorizationGuard)
 @Injectable()
 @WebSocketGateway({
-  
   namespace: 'classroom-quiz',
   transports: ['websocket'],
   cors: {
@@ -49,7 +51,7 @@ export class ClassroomQuizzesGateway
   ) {}
 
   private async auth(socket: Socket) {
-    socketAuth({
+    return socketAuth({
       socket,
       configService: this.configService,
       usersService: this.userService,
@@ -60,8 +62,10 @@ export class ClassroomQuizzesGateway
   async handleConnection(@ConnectedSocket() socket: Socket) {
     await this.auth(socket);
     this.logger.log(`Client connected: ${socket.id}`);
-    console.log('=======> {}');
     socket.join(socket.classroom);
+    if (socket.currentUser.role !== EUserRole.STUDENT) {
+      socket.join(`${socket.classroom}-${socket.currentUser.id}`);
+    }
   }
 
   async handleDisconnect(@ConnectedSocket() socket: Socket) {
@@ -70,15 +74,40 @@ export class ClassroomQuizzesGateway
 
   @Roles(EUserRole.ADMIN, EUserRole.TEACHER)
   @SubscribeMessage(EClassroomQuizEvent.START_QUIZ)
-  async handleMessage(
+  async handleStartQuiz(
     @ConnectedSocket() socket: Socket,
     @MessageBody() materialId: string
   ) {
-    const quiz = await this.classroomQuizzesService.retrieveQuiz(
+    const questions = await this.classroomQuizzesService.retrieveQuiz(
       materialId,
       socket.currentUser
     );
-    console.log('quiz=====>', quiz);
-    this.server.to(socket.classroom).emit(quiz);
+    this.server.to(socket.classroom).emit(EClassroomQuizEvent.START_QUIZ, {
+      teacher: socket.currentUser.id,
+      material: materialId,
+      classroom: socket.classroom,
+      questions
+    });
+  }
+
+  @Roles(EUserRole.ADMIN, EUserRole.TEACHER)
+  @SubscribeMessage(EClassroomQuizEvent.END_QUIZ)
+  async handleEndQuiz(@ConnectedSocket() socket: Socket) {
+    this.server.to(socket.classroom).emit(EClassroomQuizEvent.END_QUIZ);
+  }
+
+  @Roles(EUserRole.ADMIN, EUserRole.STUDENT)
+  @SubscribeMessage(EClassroomQuizEvent.SUBMIT_QUIZ)
+  async handSubmitQuiz(@ConnectedSocket() socket: Socket) {
+    this.server
+      .to(`${socket.classroom}-${socket.currentUser.metadata.createdByTeacher}`)
+      .emit(EClassroomQuizEvent.SUBMIT_QUIZ, {
+        student: lodash.pick(socket.currentUser, [
+          'id',
+          'name',
+          'email',
+          'role'
+        ])
+      });
   }
 }

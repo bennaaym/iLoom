@@ -20,7 +20,7 @@ export class ClassroomQuiz {
   material: string;
 
   @Prop({type: [mongoose.Schema.Types.Mixed], required: true})
-  answers: Record<string, ExplicityAny>[];
+  answers: Record<string, ExplicityAny>;
 }
 
 export type ClassroomQuizDocument = ClassroomQuiz & Document;
