@@ -66,6 +66,38 @@ export class MaterialsService {
     return material;
   }
 
+  async generateEnglishStoryMaterial(
+    dto: CreateEnglishMaterialDto,
+    image: Express.Multer.File,
+    user: UserDocument
+  ) {
+    const imageUrl = await this.storageService.upload({
+      fileBuffer: image.buffer,
+      path: `images/${Date.now()}_${image.originalname}`,
+      fileType: image.mimetype
+    });
+
+    const content = await this.englishService.generateStoryFromImage({
+      level: dto.level,
+      ageGroup: dto.ageGroup,
+      description: dto.description,
+      imageUrl
+    });
+
+    const material = await this.repository.create({
+      user: user.id,
+      classroom: dto.classroom,
+      scope: dto.classroom ? EMaterialScope.CLASSROOM : EMaterialScope.GLOBAL,
+      subject: EMaterialSubject.ENGLISH,
+      activity: EMaterialActivity.STORY,
+      content,
+      imageUrl
+    });
+
+    const contentPdf = await this.upload(material);
+    return this.repository.update(material.id, {contentPdf});
+  }
+
   async generateEnglishMaterial(
     dto: CreateEnglishMaterialDto,
     user: UserDocument
@@ -74,7 +106,11 @@ export class MaterialsService {
 
     switch (dto.activity) {
       case EMaterialActivity.READING:
-        promise = this.englishService.generateReading({level: dto.level});
+        promise = this.englishService.generateReading({
+          level: dto.level,
+          ageGroup: dto.ageGroup,
+          description: dto.description
+        });
         break;
       case EMaterialActivity.SPEAKING:
         promise = this.englishService.generateSpeaking();
