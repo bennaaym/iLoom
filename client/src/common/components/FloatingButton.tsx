@@ -4,10 +4,14 @@ interface Props extends BoxProps {
   icon: React.ReactNode;
 }
 
-export const FloatingButton = ({ icon, ...props }: Props) => {
+export const FloatingButton = ({
+  icon,
+  bgcolor = "primary",
+  ...props
+}: Props) => {
   return (
     <Box {...props} sx={{ "& > :not(style)": { m: 1 } }}>
-      <Fab color="primary" aria-label="add">
+      <Fab color={bgcolor as any} aria-label="add">
         {icon}
       </Fab>
     </Box>

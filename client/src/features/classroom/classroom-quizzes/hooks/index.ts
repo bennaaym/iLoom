@@ -1,0 +1,1 @@
+export { useSubmitQuiz } from "./useSubmitQuiz";
