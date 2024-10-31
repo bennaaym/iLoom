@@ -38,6 +38,7 @@ export const Navbar = () => {
   const scroll = (page: (typeof pages)[number]) => {
     document.getElementById(page.href.replace("#", ""))?.scrollIntoView({
       behavior: "smooth",
+      block: "start",
     });
   };
 
@@ -78,7 +79,7 @@ export const Navbar = () => {
               variant="h6"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
+              href="#hero"
               sx={{
                 mr: 4,
                 display: { xs: "none", md: "flex" },
@@ -150,7 +151,7 @@ export const Navbar = () => {
               variant="h5"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
+              href="#hero"
               sx={{
                 display: { xs: "flex", md: "none" },
                 flexGrow: 1,
@@ -179,6 +180,7 @@ export const Navbar = () => {
                     handleCloseNavMenu();
                   }}
                   sx={{
+                    my: 2,
                     color: brand[400],
                     display: "block",
                     "&:hover": {
@@ -205,7 +207,6 @@ export const Navbar = () => {
                 boxShadow: "none",
                 bgcolor: "primary",
                 fontWeight: 800,
-                // fontSize: 18,
 
                 "&:hover": {
                   bgcolor: brand[400],
