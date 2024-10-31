@@ -5,7 +5,7 @@ import { SiGoogleclassroom } from "react-icons/si";
 import { VscRobot } from "react-icons/vsc";
 import { brand } from "@/common/theme";
 import TeamMemberYusuf from "../assets/images/team-yusuf.png";
-import TeamMemberBennaaym from "../assets/images/team-bennaaym.jpg";
+import TeamMemberBennaaym from "../assets/images/team-bennaaym.jpeg";
 
 export const features = [
   {

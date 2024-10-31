@@ -3,7 +3,7 @@ import { Box, Button, Container, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import { brand, gray } from "@/common/theme";
 import HeroBg from "../assets/images/hero-bg.png";
-import HeroIllustration from "../assets/images/hero-bg.svg";
+import HeroIllustration from "../assets/images/hero-illustration.svg";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
@@ -11,6 +11,7 @@ export const Hero = () => {
   const router = useRouter();
   return (
     <Box
+      id="hero"
       width="100%"
       height="100vh"
       position="relative"
@@ -22,8 +23,16 @@ export const Hero = () => {
         };
       }}
     >
-      <Box position="absolute" left={0} right={0} width="100%" height="100%">
-        <Image src={HeroBg} alt="hero-image" fill />
+      <Box
+        position="absolute"
+        left={0}
+        right={0}
+        top={-60}
+        bottom={0}
+        width="100vw"
+        height="100%"
+      >
+        <Image src={HeroBg} alt="hero-image" fill objectFit="cover" />
       </Box>
       <Box pt={15}>
         <Container maxWidth="sm">
@@ -70,7 +79,7 @@ export const Hero = () => {
               </Button>
             </Stack>
             <Box
-              mt={8}
+              mt={6}
               left={-16}
               position="relative"
               zIndex={4}
