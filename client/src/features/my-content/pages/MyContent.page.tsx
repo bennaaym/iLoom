@@ -1,9 +1,22 @@
+"use client";
 import React from "react";
-import { Box, Typography, Card, CardContent, CardMedia, CircularProgress, Grid } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Grid2,
+  Card,
+  CardContent,
+  Stack,
+  Chip,
+} from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { fetchMaterials } from "../api";
 import { IMaterial } from "@/common/interfaces";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { PageLoading } from "@/common/loaders";
+import { ErrorMessage } from "@/common/components/messages/ErrorMessage";
+import { brand, gray } from "@/common/theme";
+import Link from "next/link";
 
 const MyContent: React.FC = () => {
   const router = useRouter();
@@ -13,36 +26,43 @@ const MyContent: React.FC = () => {
     queryFn: fetchMaterials,
   });
 
-  const handleCardClick = (id: string) => {
-    router.push(`/my-content/${id}`);
-  };
+  const renderContent = () => {
+    if (isLoading) return <PageLoading />;
+    if (isError)
+      return (
+        <ErrorMessage message={`Failed to load content: ${error.message}`} />
+      );
 
-  return (
-    <Box p={4}>
-      <Typography variant="h4" gutterBottom>
-        My Content
-      </Typography>
-      {isLoading ? (
-        <CircularProgress />
-      ) : isError ? (
-        <Typography color="error">Failed to load content: {error.message}</Typography>
-      ) : (
-        <Grid container spacing={4}>
-          {data && data.length > 0 ? (
-            data.map((material) => (
-              <Grid item xs={12} sm={6} md={4} key={material.id}>
+    if (!data?.length)
+      return <Typography color={gray[400]}>No Material available</Typography>;
+
+    return (
+      <Grid2
+        container
+        columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+        columnSpacing={2}
+        rowSpacing={2}
+        alignItems="center"
+        justifyContent={{ sm: "center", md: "flex-start" }}
+      >
+        {data.map((material) => (
+          <Grid2 key={material.id}>
+            <Box width={250} height={150}>
+              <Link href={`/materials/${material.id}`}>
                 <Card
-                  onClick={() => handleCardClick(material.id)}
+                  variant="outlined"
+                  elevation={0}
                   sx={{
-                    cursor: "pointer",
+                    boxShadow: "none",
+                    display: "block",
+                    width: "100%",
                     height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    transition: "transform 0.2s, box-shadow 0.2s",
                     "&:hover": {
-                      transform: "scale(1.05)",
-                      boxShadow: 6,
+                      bgcolor: brand[400],
+                      color: "white",
+                      cursor: "pointer",
                     },
+                    position: "relative",
                   }}
                 >
                   <CardContent>
@@ -52,16 +72,33 @@ const MyContent: React.FC = () => {
                     <Typography variant="body2" color="text.secondary">
                       {material.content.description}
                     </Typography>
+                    <Chip
+                      label={material.subject}
+                      variant="filled"
+                      color="primary"
+                      sx={{
+                        position: "absolute",
+                        bottom: 10,
+                        textTransform: "capitalize",
+                      }}
+                    />
                   </CardContent>
                 </Card>
-              </Grid>
-            ))
-          ) : (
-            <Typography>No content available.</Typography>
-          )}
-        </Grid>
-      )}
-    </Box>
+              </Link>
+            </Box>
+          </Grid2>
+        ))}
+      </Grid2>
+    );
+  };
+
+  return (
+    <Stack p={4} gap={4}>
+      <Typography variant="h4" gutterBottom color="primary">
+        My Materials
+      </Typography>
+      {renderContent()}
+    </Stack>
   );
 };
 

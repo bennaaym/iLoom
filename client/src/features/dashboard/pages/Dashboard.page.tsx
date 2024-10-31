@@ -1,49 +1,102 @@
+"use client";
 import {
   Typography,
   Box,
-  Button,
   Tabs,
   Tab,
-  CircularProgress,
   Paper,
   Modal,
+  Button,
+  Stack,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { fetchClassrooms } from "@/features/dashboard/api/classroom.api";
 import ClassroomList from "../components/ClassromsList";
 import ClassroomForm from "../components/ClassroomForm";
-import { useRouter } from "next/navigation";
+import { ErrorMessage } from "@/common/components/messages/ErrorMessage";
+import { PageLoading } from "@/common/loaders";
+import { gray } from "@/common/theme";
+import { Classroom } from "@/features/classroom/types";
 import { useAuth } from "@/common/providers/AuthProvider";
 
-export const Dashboard = () => {
-  const [tabValue, setTabValue] = useState(0);
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [selectedClassroom, setSelectedClassroom] = useState(null);
-  const { user } = useAuth();
-  const router = useRouter();
+interface TabProps {
+  onEdit(classroom: Classroom): void;
+}
 
-  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-    setTabValue(newValue);
-  };
-
-  const {
-    data: upcomingClassrooms,
-    isLoading: isLoadingUpcoming,
-    isError: isErrorUpcoming,
-  } = useQuery({
+const UpcomingClassesTab = ({ onEdit }: TabProps) => {
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["upcomingClassrooms"],
     queryFn: () => fetchClassrooms("upcoming"),
   });
 
-  const {
-    data: pastClassrooms,
-    isLoading: isLoadingPast,
-    isError: isErrorPast,
-  } = useQuery({
+  const renderContent = () => {
+    if (isLoading) return <PageLoading />;
+    if (isError)
+      return (
+        <ErrorMessage message="Failed to load upcoming classes, please try again." />
+      );
+    if (!data?.data.length)
+      return <Typography color={gray[400]}>No classes scheduled</Typography>;
+
+    return <ClassroomList classrooms={data.data} onEdit={onEdit} />;
+  };
+
+  return (
+    <Paper
+      elevation={0}
+      sx={{
+        p: 2,
+        borderRadius: "5px",
+        backgroundColor: "#ffffff",
+      }}
+    >
+      {renderContent()}
+    </Paper>
+  );
+};
+
+const PastClassesTab = ({ onEdit }: TabProps) => {
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["pastClassrooms"],
     queryFn: () => fetchClassrooms("past"),
   });
+
+  const renderContent = () => {
+    if (isLoading) return <PageLoading />;
+    if (isError)
+      return (
+        <ErrorMessage message="Failed to load upcoming classes, please try again." />
+      );
+    if (!data?.data.length)
+      return <Typography color={gray[400]}>No past classes found</Typography>;
+
+    return <ClassroomList classrooms={data.data} onEdit={onEdit} />;
+  };
+
+  return (
+    <Paper
+      elevation={0}
+      sx={{
+        p: 2,
+        borderRadius: "5px",
+        backgroundColor: "#ffffff",
+      }}
+    >
+      {renderContent()}
+    </Paper>
+  );
+};
+
+export const Dashboard = () => {
+  const { user, isStudent } = useAuth();
+  const [tabValue, setTabValue] = useState(0);
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [selectedClassroom, setSelectedClassroom] = useState(null);
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
 
   const handleCreateClassroom = () => {
     setSelectedClassroom(null);
@@ -65,62 +118,30 @@ export const Dashboard = () => {
     setSelectedClassroom(null);
   };
 
-  const handleManageStudents = () => {
-    router.push("/dashboard/student-management");
-  };
-
-  const handleGenerateContent = () => {
-    router.push("/generate-content");
-  };
-
-  const handleMyContent = () => {
-    router.push("/my-content");
-  };
-
   return (
-    <Box p={4} sx={{ backgroundColor: "#f4f6f8", minHeight: "100vh" }}>
-      <Typography variant="h4" gutterBottom color="primary">
-        Classroom Dashboard
-      </Typography>
-      {user?.role === "teacher" && (
-        <Box display="flex" gap={2} mb={2}>
+    <Stack p={4} gap={4}>
+      <Stack gap={2}>
+        <Typography variant="h4" gutterBottom color="primary">
+          Classrooms
+        </Typography>
+
+        {user && !isStudent() && (
           <Button
             variant="contained"
             color="primary"
             onClick={handleCreateClassroom}
-            sx={{ textTransform: "capitalize", fontWeight: "bold" }}
+            sx={{
+              textTransform: "capitalize",
+              fontWeight: "bold",
+              width: "fit-content",
+            }}
           >
             Create New Classroom
           </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleManageStudents}
-            sx={{ textTransform: "capitalize", fontWeight: "bold" }}
-          >
-            Manage Students
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleGenerateContent}
-            sx={{ textTransform: "capitalize", fontWeight: "bold" }}
-          >
-            Generate Content
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleMyContent}
-            sx={{ textTransform: "capitalize", fontWeight: "bold" }}
-          >
-            My Content
-          </Button>
-        </Box>
-      )}
+        )}
+      </Stack>
 
-
-      <Box sx={{ width: "100%" }}>
+      <Box>
         <Tabs
           value={tabValue}
           onChange={handleTabChange}
@@ -129,64 +150,29 @@ export const Dashboard = () => {
           indicatorColor="primary"
           sx={{
             "& .MuiTab-root": {
-              fontWeight: "bold",
+              fontWeight: "600",
             },
           }}
         >
-          <Tab label="Upcoming Classes" />
-          <Tab label="Past Classes" />
+          {["Upcoming Classes", "Past Classes"].map((tab, index) => {
+            return (
+              <Tab
+                key={index}
+                label={tab}
+                sx={{
+                  "&:hover": {
+                    color: "white",
+                  },
+                }}
+              />
+            );
+          })}
         </Tabs>
         <Box sx={{ mt: 2 }}>
           {tabValue === 0 && (
-            <Paper
-              elevation={3}
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                backgroundColor: "#ffffff",
-              }}
-            >
-              {isLoadingUpcoming ? (
-                <Box display="flex" justifyContent="center">
-                  <CircularProgress color="primary" />
-                </Box>
-              ) : isErrorUpcoming ? (
-                <Typography color="error" align="center">
-                  Error loading upcoming classes.
-                </Typography>
-              ) : (
-                <ClassroomList
-                  classrooms={upcomingClassrooms?.data}
-                  onEdit={handleEditClassroom}
-                />
-              )}
-            </Paper>
+            <UpcomingClassesTab onEdit={handleEditClassroom} />
           )}
-          {tabValue === 1 && (
-            <Paper
-              elevation={3}
-              sx={{
-                p: 2,
-                borderRadius: 2,
-                backgroundColor: "#ffffff",
-              }}
-            >
-              {isLoadingPast ? (
-                <Box display="flex" justifyContent="center">
-                  <CircularProgress color="primary" />
-                </Box>
-              ) : isErrorPast ? (
-                <Typography color="error" align="center">
-                  Error loading past classes.
-                </Typography>
-              ) : (
-                <ClassroomList
-                  classrooms={pastClassrooms?.data}
-                  onEdit={handleEditClassroom}
-                />
-              )}
-            </Paper>
-          )}
+          {tabValue === 1 && <PastClassesTab onEdit={handleEditClassroom} />}
         </Box>
       </Box>
 
@@ -210,6 +196,6 @@ export const Dashboard = () => {
           />
         </Paper>
       </Modal>
-    </Box>
+    </Stack>
   );
 };

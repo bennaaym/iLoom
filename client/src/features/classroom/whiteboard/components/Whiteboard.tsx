@@ -24,7 +24,7 @@ export const Whiteboard = ({ classroom }: Props) => {
   }, [whiteboardPdf]);
 
   return (
-    <Box width="100%" height="90vh">
+    <Box width="100%" height="100%">
       <LiveblocksProvider roomId={classroom.shareableCode}>
         <LiveblocksRoomProvider
           roomId={classroom.shareableCode}

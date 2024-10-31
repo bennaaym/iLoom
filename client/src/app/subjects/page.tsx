@@ -1,6 +1,10 @@
-"use client";
+import { MainLayout } from "@/common/components";
 import GenerateContent from "@/features/generate-content/pages/GenerateContent.page";
 
 export default function GenerateContentPage() {
-  return <GenerateContent />;
+  return (
+    <MainLayout>
+      <GenerateContent />
+    </MainLayout>
+  );
 }

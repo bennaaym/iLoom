@@ -75,25 +75,28 @@ export const Navbar = () => {
               borderBottomRightRadius: "5px",
             }}
           >
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="#hero"
-              sx={{
-                mr: 4,
-                display: { xs: "none", md: "flex" },
-                fontFamily: "Quicksand",
-                fontWeight: 800,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-                fontSize: 32,
-              }}
+            <Box
+              onClick={() => scroll({ label: "", href: "#hero" })}
+              sx={{ cursor: "pointer" }}
             >
-              iLoom
-            </Typography>
-
+              <Typography
+                variant="h6"
+                noWrap
+                component="a"
+                sx={{
+                  mr: 4,
+                  display: { xs: "none", md: "flex" },
+                  fontFamily: "Quicksand",
+                  fontWeight: 800,
+                  letterSpacing: ".3rem",
+                  color: "inherit",
+                  textDecoration: "none",
+                  fontSize: 32,
+                }}
+              >
+                iLoom
+              </Typography>
+            </Box>
             <Box
               sx={{
                 display: { xs: "flex", md: "none" },
@@ -147,24 +150,25 @@ export const Navbar = () => {
                 ))}
               </Menu>
             </Box>
-            <Typography
-              variant="h5"
-              noWrap
-              component="a"
-              href="#hero"
-              sx={{
-                display: { xs: "flex", md: "none" },
-                flexGrow: 1,
-                fontFamily: "Quicksand",
-                fontWeight: 700,
-                letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
-                fontSize: 32,
-              }}
-            >
-              iLoom
-            </Typography>
+            <Box onClick={() => scroll({ label: "", href: "#hero" })}>
+              <Typography
+                variant="h5"
+                noWrap
+                component="a"
+                sx={{
+                  display: { xs: "flex", md: "none" },
+                  flexGrow: 1,
+                  fontFamily: "Quicksand",
+                  fontWeight: 700,
+                  letterSpacing: ".3rem",
+                  color: "inherit",
+                  textDecoration: "none",
+                  fontSize: 32,
+                }}
+              >
+                iLoom
+              </Typography>
+            </Box>
             <Box
               sx={{
                 flexGrow: 1,

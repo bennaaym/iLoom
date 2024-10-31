@@ -1,18 +1,19 @@
+"use client";
 import React from "react";
-import { Box, Typography, Grid, Paper, Button } from "@mui/material";
+import { Typography, Paper, Button, Stack, Grid2 } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 const modules = [
   {
     title: "English",
     description: "Generate English learning activities with AI assistance.",
-    path: "/generate-content/english",
+    path: "/subjects/english",
     icon: "📘",
   },
   {
     title: "Algorithm",
     description: "Create algorithm and coding exercises for students.",
-    path: "/generate-content/algorithm",
+    path: "/subjects/algorithm",
     icon: "💻",
   },
 ];
@@ -25,20 +26,24 @@ const GenerateContent = () => {
   };
 
   return (
-    <Box p={4}>
-      <Typography variant="h4" gutterBottom>
-        Content Generator
+    <Stack p={4} gap={4}>
+      <Typography variant="h4" gutterBottom color="primary">
+        Generate Materials
       </Typography>
-      <Typography variant="subtitle1" sx={{ mb: 4 }}>
-        Select a module to start generating educational content.
-      </Typography>
-      
-      <Grid container spacing={4}>
+
+      <Grid2 container columns={{ sm: 1, md: 2, lg: 3 }} spacing={4}>
         {modules.map((module) => (
-          <Grid item xs={12} sm={6} md={4} key={module.title}>
+          <Grid2 key={module.title}>
             <Paper
               elevation={3}
-              sx={{ p: 3, textAlign: "center", cursor: "pointer" }}
+              sx={{
+                p: 3,
+                textAlign: "center",
+                cursor: "pointer",
+                width: 250,
+                height: 150,
+                py: 2,
+              }}
               onClick={() => handleModuleSelect(module.path)}
             >
               <Typography variant="h5" gutterBottom>
@@ -51,10 +56,10 @@ const GenerateContent = () => {
                 Explore
               </Button>
             </Paper>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
-    </Box>
+      </Grid2>
+    </Stack>
   );
 };
 

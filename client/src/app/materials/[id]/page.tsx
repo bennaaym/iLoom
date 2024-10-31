@@ -1,6 +1,10 @@
-"use client";
+import { MainLayout } from "@/common/components";
 import ContentDetail from "@/features/my-content/pages/ContentDetail.page";
 
 export default function GenerateContentPage() {
-  return <ContentDetail />;
+  return (
+    <MainLayout>
+      <ContentDetail />
+    </MainLayout>
+  );
 }

@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { Box, Typography, Paper, Snackbar, Alert, Stack } from "@mui/material";
 import { useAuth } from "@/common/providers/AuthProvider";
@@ -15,7 +16,7 @@ const StudentManagement = () => {
   });
 
   if (!user || user.role !== "teacher") {
-    redirect("/dashboard");
+    redirect("/classrooms");
   }
 
   const handleSnackbarClose = () => setSnackbar({ ...snackbar, open: false });

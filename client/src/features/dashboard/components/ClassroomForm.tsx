@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Typography,
   TextField,
@@ -9,10 +9,16 @@ import {
   Select,
   MenuItem,
   CircularProgress,
+  InputLabel,
 } from "@mui/material";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createClassroom, updateClassroom } from "@/features/dashboard/api/classroom.api";
+import {
+  createClassroom,
+  updateClassroom,
+} from "@/features/dashboard/api/classroom.api";
 import { ErrorMessage } from "@/common/components/messages/ErrorMessage";
+import { dayjs } from "@/common/libs";
+import { gray } from "@/common/theme";
 
 interface ClassroomFormProps {
   classroom?: any;
@@ -25,10 +31,14 @@ export default function ClassroomForm({
   onSuccess,
   onCancel,
 }: ClassroomFormProps) {
-  const [name, setName] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [duration, setDuration] = useState(60);
-  const [capacity, setCapacity] = useState(10);
+  const [name, setName] = useState(() => classroom?.name ?? "");
+  const [startDate, setStartDate] = useState(() => {
+    return classroom
+      ? dayjs(classroom.startDate).local().format("YYYY-MM-DDTHH:MM")
+      : dayjs().local().format("YYYY-MM-DDTHH:MM");
+  });
+  const [duration, setDuration] = useState(() => classroom?.duration ?? 60);
+  const [capacity, setCapacity] = useState(() => classroom?.capacity ?? 10);
   const [error, setError] = useState<string | null>(null);
 
   const queryClient = useQueryClient();
@@ -46,17 +56,6 @@ export default function ClassroomForm({
     },
   });
 
-  useEffect(() => {
-    if (classroom) {
-      setName(classroom.name);
-      setStartDate(classroom.startDate.substring(0, 16));
-      setDuration(classroom.duration);
-      setCapacity(classroom.capacity);
-    }
-  }, [classroom]);
-
-  const currentDateTime = new Date().toISOString().slice(0, 16);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -73,29 +72,36 @@ export default function ClassroomForm({
         {isEditMode ? "Edit Classroom" : "Create Classroom"}
       </Typography>
       <Stack spacing={2}>
+        <InputLabel htmlFor="name">Class Name</InputLabel>
         <TextField
-          label="Classroom Name"
+          id="name"
           fullWidth
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
+          placeholder="class name"
+          size="small"
+          autoComplete="off"
         />
-        <TextField
-          label="Start Date and Time"
+        <InputLabel htmlFor="startDate">Start Date and Time</InputLabel>
+        <input
+          id="startDate"
           type="datetime-local"
-          fullWidth
-          required
+          min={dayjs().local().format("YYYY-MM-DDTHH:MM")}
           value={startDate}
+          required
           onChange={(e) => setStartDate(e.target.value)}
-          InputLabelProps={{
-            shrink: true,
-          }}
-          inputProps={{
-            min: currentDateTime,
+          style={{
+            borderRadius: "5px",
+            border: `2px solid ${gray[400]}`,
+            padding: "5px",
           }}
         />
+
+        <InputLabel htmlFor="duration">Class Duration</InputLabel>
         <FormControl fullWidth>
           <Select
+            id="duration"
             value={duration}
             label="Duration (minutes)"
             onChange={(e) => setDuration(Number(e.target.value))}
@@ -112,22 +118,21 @@ export default function ClassroomForm({
             ))}
           </Select>
         </FormControl>
+        <InputLabel htmlFor="duration">Class Capacity</InputLabel>
+
         <TextField
-          label="Capacity"
+          id="capacity"
           type="number"
           fullWidth
           required
           value={capacity}
           onChange={(e) => {
             const newCapacity = Number(e.target.value);
-            if (newCapacity >= 1 && newCapacity <= 12) {
+            if (newCapacity >= 1 && newCapacity <= 10) {
               setCapacity(newCapacity);
             }
           }}
-          inputProps={{
-            min: 1,
-            max: 12,
-          }}
+          size="small"
         />
 
         <Stack direction="row" spacing={2} justifyContent="flex-end">

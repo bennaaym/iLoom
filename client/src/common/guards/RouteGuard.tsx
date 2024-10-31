@@ -3,19 +3,17 @@ import { useAuth } from "../providers/AuthProvider";
 import { usePathname, useRouter } from "next/navigation";
 
 export const RouteGuard = ({ children }: { children: ReactNode }) => {
-  const { user } = useAuth();
+  const { isStudent, user } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
-    if (!user) return router.replace("/");
-    else {
-      router.replace(
-        pathname && pathname !== "/" && !pathname.includes("/auth")
-          ? pathname
-          : "/dashboard"
-      );
-    }
+    if (pathname === "/") return;
+    if (!user) return router.replace("/auth/sign-in");
+    if (user && isStudent()) return router.replace("/classrooms");
+    router.replace(
+      pathname && !pathname.includes("/auth") ? pathname : "/classrooms"
+    );
   }, [user]);
 
   return children;

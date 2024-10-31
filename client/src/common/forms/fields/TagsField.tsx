@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { TextField, Chip, Box, Typography } from '@mui/material';
+"use client";
+import React, { useState } from "react";
+import { TextField, Chip, Box, Typography } from "@mui/material";
 
 interface TagsFieldProps {
   label?: string;
@@ -7,25 +8,31 @@ interface TagsFieldProps {
   initialTags?: string[];
 }
 
-const TagsField: React.FC<TagsFieldProps> = ({ label, placeholder = "Add tag", initialTags = [] }) => {
+const TagsField: React.FC<TagsFieldProps> = ({
+  label,
+  placeholder = "Add tag",
+  initialTags = [],
+}) => {
   const [tags, setTags] = useState(initialTags);
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && e.currentTarget.value) {
+    if (e.key === "Enter" && e.currentTarget.value) {
       setTags([...tags, e.currentTarget.value]);
-      e.currentTarget.value = '';
+      e.currentTarget.value = "";
       e.preventDefault();
     }
   };
 
   const handleDelete = (tagToDelete: string) => {
-    setTags(tags.filter(tag => tag !== tagToDelete));
+    setTags(tags.filter((tag) => tag !== tagToDelete));
   };
 
   return (
     <Box mb={2}>
       {label && (
-        <Typography variant="subtitle1" gutterBottom>{label}</Typography>
+        <Typography variant="subtitle1" gutterBottom>
+          {label}
+        </Typography>
       )}
       <TextField
         fullWidth
@@ -35,8 +42,8 @@ const TagsField: React.FC<TagsFieldProps> = ({ label, placeholder = "Add tag", i
         sx={{
           mb: 1,
           borderRadius: 1,
-          '& .MuiOutlinedInput-root': {
-            borderRadius: '4px',
+          "& .MuiOutlinedInput-root": {
+            borderRadius: "4px",
           },
         }}
       />
@@ -47,8 +54,8 @@ const TagsField: React.FC<TagsFieldProps> = ({ label, placeholder = "Add tag", i
             label={tag}
             onDelete={() => handleDelete(tag)}
             sx={{
-              bgcolor: 'primary.light',
-              color: 'primary.contrastText',
+              bgcolor: "primary.light",
+              color: "primary.contrastText",
             }}
           />
         ))}

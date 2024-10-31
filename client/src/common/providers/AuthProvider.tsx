@@ -1,3 +1,4 @@
+"use client";
 import { apiClient } from "@/apis";
 import { User } from "@/features/auth/types";
 import React, {

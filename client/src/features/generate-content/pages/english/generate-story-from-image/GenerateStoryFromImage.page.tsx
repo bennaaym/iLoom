@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { useMutation } from "@tanstack/react-query";
@@ -52,14 +53,11 @@ const initialValues = {
 };
 
 const GenerateStoryFromImage: React.FC = () => {
-
   const mutation = useMutation({
     mutationFn: (data: FormData) => createEnglishStoryMaterial(data),
 
-    onSuccess: (data) => {
-    },
-    onError: (error: any) => {
-    },
+    onSuccess: (data) => {},
+    onError: (error: any) => {},
   });
 
   const handleSubmit = (values: typeof initialValues) => {
@@ -76,7 +74,7 @@ const GenerateStoryFromImage: React.FC = () => {
 
   return (
     <Box p={4}>
-      <Typography variant="h4" gutterBottom>
+      <Typography variant="h4" gutterBottom color="primary">
         Generate Story from Image
       </Typography>
       <BaseForm
