@@ -19,12 +19,11 @@ export class EnglishService {
     const content = material.content as ReadingActivity;
     return `
       <h3>${content.title}</h3>
-      <img src="${material.imageUrl}" alt="Story Image" style="max-width: 100%; height: auto;"/>
+      <img src="${material.imageUrl}" alt="Story Image" style="width: 100%; height: 400px;"/>
       <p>${content.text}</p>
-      <h3>Questions</h3>
-      <div>${content.questions.map((question) => `<p>${question}</p>`).join('')}</div>
     `;
   };
+
   toHtml(material: MaterialDocument) {
     switch (material.activity) {
       case EMaterialActivity.READING:
