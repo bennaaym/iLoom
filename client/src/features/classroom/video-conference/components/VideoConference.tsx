@@ -1,10 +1,21 @@
-import React, { Fragment, useEffect, useRef } from "react";
-import { Box, IconButton, Typography } from "@mui/material";
-import { Videocam, VideocamOff, Mic, MicOff } from "@mui/icons-material";
+import React, { useEffect, useRef } from "react";
+import {
+  Box,
+  IconButton,
+  Typography,
+  Stack,
+  Tooltip,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
+import {
+  Videocam,
+  VideocamOff,
+  Mic,
+  MicOff,
+} from "@mui/icons-material";
 import { useAgora } from "../providers/AgoraProvider";
 import { useAuth } from "@/common/providers/AuthProvider";
-import { brand } from "@/common/theme";
-import { FloatingButton } from "@/common/components";
 
 interface VideoConferenceProps {
   classroomId: string;
@@ -22,10 +33,13 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
     localVideoTrack,
   } = useAgora();
 
-  const { user, isStudent } = useAuth();
+  const { user } = useAuth();
 
   const localPlayerRef = useRef<HTMLDivElement>(null);
   const remotePlayerRef = useRef<HTMLDivElement>(null);
+
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     joinClassroom(classroomId);
@@ -55,65 +69,45 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
     };
   }, [teacherVideoTrack]);
 
-  return (
-    <Fragment>
-      {user && isStudent() && (
-        <Box position="absolute" bottom={20} right={10}>
-          <FloatingButton
-            icon={isAudioEnabled ? <Mic /> : <MicOff />}
-            onClick={() => toggleAudio(classroomId)}
-          />
-        </Box>
-      )}
-      <Box position="relative">
-        {user && !isStudent() && (
-          <Box
-            display="flex"
-            alignItems="center"
-            mb={2}
-            position="absolute"
-            bottom={-8}
-            justifyContent="center"
-            width="100%"
-            gap={1}
-            zIndex={5}
-          >
-            <IconButton
-              onClick={() => toggleVideo(classroomId)}
-              sx={{ border: 1, bgcolor: brand[400], color: "white" }}
-            >
-              {isVideoEnabled ? <Videocam /> : <VideocamOff />}
-            </IconButton>
-            <IconButton
-              onClick={() => toggleAudio(classroomId)}
-              sx={{ border: 1, bgcolor: brand[400], color: "white" }}
-            >
-              {isAudioEnabled ? <Mic /> : <MicOff />}
-            </IconButton>
-          </Box>
-        )}
+  const videoContainerStyles = {
+    width: "100%",
+    height: isSmallScreen ? "180px" : "250px",
+    position: "relative",
+    backgroundColor: "#000",
+    borderRadius: "8px",
+    overflow: "hidden",
+    marginTop: "16px",
+  };
 
+  const controlButtonStyles = {
+    color: "#fff",
+    backgroundColor: "rgba(0, 0, 0, 0.6)",
+    "&:hover": {
+      backgroundColor: "rgba(0, 0, 0, 0.8)",
+    },
+    margin: "0 8px",
+  };
+
+  return (
+    <Box>
+      <Box sx={videoContainerStyles}>
         {user?.role === "teacher" &&
           (isVideoEnabled && localVideoTrack ? (
             <Box
               ref={localPlayerRef}
               id="local-player"
-              style={{
-                width: "100%",
-                height: "200px",
-                backgroundColor: "#000",
-              }}
-            ></Box>
+              sx={{ width: "100%", height: "100%" }}
+            />
           ) : (
             <Box
               width="100%"
-              height="200px"
+              height="100%"
               display="flex"
               alignItems="center"
               justifyContent="center"
-              bgcolor="#ccc"
+              bgcolor="#333"
             >
-              <Typography>No Video Shared</Typography>
+              <Typography color="#fff">Camera is Off</Typography>
             </Box>
           ))}
 
@@ -122,25 +116,53 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
             <Box
               ref={remotePlayerRef}
               id="remote-teacher-player"
-              style={{
-                width: "100%",
-                height: "200px",
-                backgroundColor: "#000",
-              }}
-            ></Box>
+              sx={{ width: "100%", height: "100%" }}
+            />
           ) : (
             <Box
               width="100%"
-              height="200px"
+              height="100%"
               display="flex"
               alignItems="center"
               justifyContent="center"
-              bgcolor="#ccc"
+              bgcolor="#333"
             >
-              <Typography>No Video Shared</Typography>
+              <Typography color="#fff">Teacher&apos;s Camera is Off</Typography>
             </Box>
           ))}
       </Box>
-    </Fragment>
+
+      <Stack
+        direction="row"
+        justifyContent="center"
+        alignItems="center"
+        spacing={2}
+        sx={{
+          mt: 2,
+          backgroundColor: "#d3d3d3",
+          borderRadius: "8px",
+          padding: "8px",
+        }}
+      >
+        {user?.role === "teacher" && (
+          <Tooltip title={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}>
+            <IconButton
+              onClick={() => toggleVideo(classroomId)}
+              sx={controlButtonStyles}
+            >
+              {isVideoEnabled ? <Videocam /> : <VideocamOff />}
+            </IconButton>
+          </Tooltip>
+        )}
+        <Tooltip title={isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"}>
+          <IconButton
+            onClick={() => toggleAudio(classroomId)}
+            sx={controlButtonStyles}
+          >
+            {isAudioEnabled ? <Mic /> : <MicOff />}
+          </IconButton>
+        </Tooltip>
+      </Stack>
+    </Box>
   );
 };
