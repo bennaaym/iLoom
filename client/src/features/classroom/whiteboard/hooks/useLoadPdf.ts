@@ -25,10 +25,7 @@ const pageSpacing = 32;
 export const useLoadPdf = () => {
   const load = async (name: string, source: ArrayBuffer): Promise<Pdf> => {
     const PdfJS = await import("pdfjs-dist");
-    PdfJS.GlobalWorkerOptions.workerSrc = new URL(
-      "pdfjs-dist/build/pdf.worker.min.mjs",
-      import.meta.url
-    ).toString();
+    PdfJS.GlobalWorkerOptions.workerSrc = "/js/pdf.worker.min.mjs";
 
     const pdf = await PdfJS.getDocument(source.slice(0)).promise;
     const pages: PdfPage[] = [];
