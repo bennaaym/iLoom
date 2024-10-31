@@ -46,7 +46,7 @@ export const Classroom = () => {
     );
   }
   return (
-    <Box display="flex" height="100%" pl={2}>
+    <Box display="flex" height="100vh" pb={2} pl={2}>
       <Box
         width="25%"
         minWidth="300px"

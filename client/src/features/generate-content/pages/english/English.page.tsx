@@ -1,18 +1,19 @@
+"use client";
 import React from "react";
-import { Box, Typography, Grid, Paper, Button } from "@mui/material";
+import { Typography, Paper, Button, Stack, Grid2 } from "@mui/material";
 import { useRouter } from "next/navigation";
 
 const englishModules = [
   {
     title: "Article Generator",
     description: "Create engaging reading texts for different levels.",
-    path: "/generate-content/english/article-generator",
+    path: "/subjects/english/article-generator",
     icon: "📝",
   },
   {
     title: "Generate Story from Image",
     description: "Generate creative stories based on an image.",
-    path: "/generate-content/english/generate-story-from-image",
+    path: "/subjects/english/generate-story-from-image",
     icon: "📷",
   },
 ];
@@ -25,20 +26,24 @@ const EnglishContent = () => {
   };
 
   return (
-    <Box p={4}>
-      <Typography variant="h4" gutterBottom>
-        English Content Modules
+    <Stack p={4} gap={4}>
+      <Typography variant="h4" gutterBottom color="primary">
+        English Subject
       </Typography>
-      <Typography variant="subtitle1" sx={{ mb: 4 }}>
-        Select a tool to generate English learning content.
-      </Typography>
-      
-      <Grid container spacing={4}>
+
+      <Grid2 container columns={{ sm: 1, md: 2, lg: 3 }} spacing={4}>
         {englishModules.map((module) => (
-          <Grid item xs={12} sm={6} md={4} key={module.title}>
+          <Grid2 key={module.title}>
             <Paper
               elevation={3}
-              sx={{ p: 3, textAlign: "center", cursor: "pointer" }}
+              sx={{
+                p: 3,
+                textAlign: "center",
+                cursor: "pointer",
+                width: 350,
+                height: 150,
+                py: 2,
+              }}
               onClick={() => handleModuleSelect(module.path)}
             >
               <Typography variant="h5" gutterBottom>
@@ -51,10 +56,10 @@ const EnglishContent = () => {
                 Explore
               </Button>
             </Paper>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
-    </Box>
+      </Grid2>
+    </Stack>
   );
 };
 

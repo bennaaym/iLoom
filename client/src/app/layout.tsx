@@ -7,9 +7,10 @@ import {
 } from "@/common/providers";
 import { AgoraProvider } from "@/features/classroom/video-conference/providers/AgoraProvider";
 import { RouteGuard } from "@/common/guards";
-import { MainLayout } from "@/common/components";
 import "@/common/styles/global.css";
+import "react-toastify/dist/ReactToastify.css";
 import { Poppins } from "next/font/google";
+import { ToastContainer } from "react-toastify";
 
 const font = Poppins({
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -24,13 +25,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <QueryProvider>
             <AuthProvider>
               <AgoraProvider>
-                <RouteGuard>
-                  <MainLayout>{children}</MainLayout>
-                </RouteGuard>
+                <RouteGuard>{children}</RouteGuard>
               </AgoraProvider>
             </AuthProvider>
           </QueryProvider>
         </AppThemeProvider>
+        <ToastContainer />
       </body>
     </html>
   );

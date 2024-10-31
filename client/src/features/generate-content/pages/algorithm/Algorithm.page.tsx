@@ -5,7 +5,7 @@ const AlgorithmContentGenerator = () => {
   return (
     <Box p={4}>
       <Typography variant="h4" gutterBottom>
-        Algorithm Content Generator
+        Algorithms Subject
       </Typography>
       <Typography variant="body1" sx={{ mb: 4 }}>
         Create coding exercises, challenges, and algorithm explanations with AI.

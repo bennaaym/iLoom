@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { Box, Typography, Paper, Snackbar, Alert, Stack } from "@mui/material";
 import { useAuth } from "@/common/providers/AuthProvider";

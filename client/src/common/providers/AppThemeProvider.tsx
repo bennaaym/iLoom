@@ -2,6 +2,7 @@ import * as React from "react";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import {
   inputsCustomizations,
+  buttonsCustomizations,
   colorSchemes,
   typography,
   shadows,
@@ -26,6 +27,7 @@ export const AppThemeProvider = ({ children }: Props) => {
       shape,
       components: {
         ...inputsCustomizations,
+        ...buttonsCustomizations,
       },
     });
   }, []);
