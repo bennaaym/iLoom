@@ -24,7 +24,7 @@ export const Classroom = () => {
 
   if (isLoading) return <PageLoading />;
   if (isError) {
-    router.replace("/dashboard");
+    router.replace("/classrooms");
     return;
   }
 

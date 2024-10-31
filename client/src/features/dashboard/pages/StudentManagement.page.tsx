@@ -16,7 +16,7 @@ const StudentManagement = () => {
   });
 
   if (!user || user.role !== "teacher") {
-    redirect("/dashboard");
+    redirect("/classrooms");
   }
 
   const handleSnackbarClose = () => setSnackbar({ ...snackbar, open: false });

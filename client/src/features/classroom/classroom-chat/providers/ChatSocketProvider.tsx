@@ -14,7 +14,7 @@ enum EClassroomChatEvent {
   MESSAGES = "messages",
 }
 
-interface MessagePayload {
+export interface MessagePayload {
   type: "message" | "notification";
   content: string;
   sender: Omit<User, "email" | "role">;
