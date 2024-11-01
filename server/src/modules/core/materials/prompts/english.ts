@@ -47,9 +47,8 @@ const story = {
     level: EnglishLevel;
     ageGroup: string;
     description: string;
-    imageUrl: string;
   }) =>
-    `Generate a creative story for ${ctx.level} level students in the age group of ${ctx.ageGroup}. The story should be based on the following description and image. Description: "${ctx.description}". Image URL: "${ctx.imageUrl}". Include at least 3 comprehension questions.`,
+    `Generate a creative story for ${ctx.level} level students in the age group of ${ctx.ageGroup}. The story should be based on the following description and image. Description: "${ctx.description}". Include at least 3 comprehension questions.`,
   schema: {
     type: 'object',
     properties: {

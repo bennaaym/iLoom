@@ -1,12 +1,13 @@
 import React from "react";
 import { QuizSocketProvider } from "../providers";
 import { useClassroomQuiz } from "../providers/QuizSocketProvider";
-import { Box } from "@mui/material";
+import { Box, Tooltip } from "@mui/material";
 import { FloatingButton } from "@/common/components";
 import { MdQuiz } from "react-icons/md";
 import { useClassroomMaterial } from "../../providers/ClassroomMaterialProvider";
 import { useAuth } from "@/common/providers/AuthProvider";
 import { QuizModal } from "./QuizModal";
+import { toast } from "react-toastify";
 
 export const ClassroomQuizContent = () => {
   const { isQuizRunning, quiz, startQuiz, endQuiz, submitQuiz } =
@@ -18,8 +19,10 @@ export const ClassroomQuizContent = () => {
     if (!whiteboardMaterial) return;
     if (isQuizRunning) {
       endQuiz();
+      toast.info("The quiz has been successfully ended.");
     } else {
       startQuiz(whiteboardMaterial.id);
+      toast.success("The quiz has started. Students may now join.");
     }
   };
 
@@ -31,14 +34,16 @@ export const ClassroomQuizContent = () => {
       position="relative"
     >
       {!isStudent() && whiteboardMaterial && (
-        <FloatingButton
-          icon={<MdQuiz size={30} />}
-          position="absolute"
-          right="0"
-          bottom="140px"
-          bgcolor={isQuizRunning ? "error" : "primary"}
-          onClick={handleClick}
-        />
+        <Tooltip title={isQuizRunning ? "End quiz" : "Start new quiz"} placement="left">
+          <FloatingButton
+            icon={<MdQuiz size={30} />}
+            position="absolute"
+            right="0"
+            bottom="140px"
+            bgcolor={isQuizRunning ? "error" : "primary"}
+            onClick={handleClick}
+          />
+        </Tooltip>
       )}
 
       {isStudent() && isQuizRunning && quiz && (

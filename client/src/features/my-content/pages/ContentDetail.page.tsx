@@ -35,9 +35,10 @@ const ContentDetail: React.FC = () => {
     if (isLoading) return <PageLoading />;
     if (isError)
       return (
-        <ErrorMessage message={` Failed to load content: ${error.message}`} />
+        <ErrorMessage message={`Failed to load content: ${error.message}`} />
       );
     if (!data) return <></>;
+
     return (
       <Paper sx={{ p: 4, maxWidth: 800, margin: "0 auto" }}>
         <Typography variant="h4" gutterBottom align="center">
@@ -47,30 +48,30 @@ const ContentDetail: React.FC = () => {
         <Typography variant="body1" gutterBottom>
           {data.content.text}
         </Typography>
+
         {data.content.questions && data.content.questions.length > 0 && (
           <Box mt={2}>
             <Typography variant="h6" gutterBottom>
               Questions:
             </Typography>
             <List>
-              {data.content.questions.map((question: string, index: number) => (
-                <ListItem key={index}>
-                  <ListItemText primary={`${index + 1}. ${question}`} />
-                </ListItem>
-              ))}
-            </List>
-          </Box>
-        )}
-
-        {data.content.answers && data.content.answers.length > 0 && (
-          <Box mt={2}>
-            <Typography variant="h6" gutterBottom>
-              Answers:
-            </Typography>
-            <List>
-              {data.content.answers.map((answer: string, index: number) => (
-                <ListItem key={index}>
-                  <ListItemText primary={`${index + 1}. ${answer}`} />
+              {data.content.questions.map((questionObj, index) => (
+                <ListItem key={index} alignItems="flex-start">
+                  <Box>
+                    <Typography variant="body1" fontWeight="bold">
+                      {index + 1}. {questionObj.question}
+                    </Typography>
+                    <List>
+                      {questionObj.options.map((option, optIndex) => (
+                        <ListItem key={optIndex}>
+                          <ListItemText primary={`${String.fromCharCode(65 + optIndex)}. ${option}`} />
+                        </ListItem>
+                      ))}
+                    </List>
+                    <Typography variant="body2" color="textSecondary">
+                      <strong>Answer:</strong> {questionObj.answer}
+                    </Typography>
+                  </Box>
                 </ListItem>
               ))}
             </List>
