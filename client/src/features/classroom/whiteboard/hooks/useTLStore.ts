@@ -67,7 +67,7 @@ export const useTLStore = ({
             name: "Page 1",
             index: "a1" as IndexKey,
           }),
-          ...[...liveRecords.values()],
+          ...[...liveRecords?.values()],
         ],
         "initialize"
       );

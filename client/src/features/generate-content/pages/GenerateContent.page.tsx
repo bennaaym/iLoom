@@ -52,9 +52,6 @@ const GenerateContent = () => {
               <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
                 {module.description}
               </Typography>
-              <Button variant="contained" color="primary">
-                Explore
-              </Button>
             </Paper>
           </Grid2>
         ))}

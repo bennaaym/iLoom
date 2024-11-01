@@ -45,7 +45,7 @@ export const CreateContentModal = ({ roomId }: Props) => {
     <AnimatedFloatingModal
       isOpen={isModalVisible.value}
       renderButton={() => (
-        <Tooltip title="Create new content">
+        <Tooltip title="Create new content" placement="left">
           <FloatingButton
             icon={<FaRobot size={30} />}
             position="absolute"

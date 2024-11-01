@@ -64,7 +64,7 @@ export const ClassroomMaterialProvider = ({ children }: Props) => {
 
   const renderWhiteboardMaterial = () => {
     if (!whiteboardMaterial) return null;
-    if (whiteboardMaterial.activity === "reading")
+    if (whiteboardMaterial.activity === "reading" || whiteboardMaterial.activity === "story")
       return renderReading(whiteboardMaterial);
     return null;
   };

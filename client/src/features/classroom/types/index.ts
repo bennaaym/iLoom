@@ -10,7 +10,11 @@ export interface Classroom {
 }
 
 export type Subject = "english" | "algorithms";
-
+export interface IQuestion {
+  question: string;
+  answer: string;
+  options: string[];
+}
 export interface Material {
   id: string;
   user: string;

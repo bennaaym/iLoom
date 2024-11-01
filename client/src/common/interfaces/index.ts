@@ -30,20 +30,24 @@ export interface IPaginatedResponse<T> {
     limit: number;
   };
 }
-export interface IContents {
-  title: string;
-  text: string;
-  answers: string[];
-  questions: string[];
+export interface IQuestion {
+  question: string;
+  answer: string;
+  options: string[];
 }
+
 export interface IMaterial {
   id: string;
   user: string;
-  classroom: string;
-  scope: EMaterialScope;
-  subject: EMaterialSubject;
-  activity: EMaterialActivity;
-  content: Record<string, any>;
+  classroom: string | null;
+  scope: string;
+  subject: string;
+  activity: string;
+  content: {
+    title: string;
+    text: string;
+    questions: IQuestion[];
+  };
   contentPdf: string;
   createdAt: string;
   updatedAt: string;

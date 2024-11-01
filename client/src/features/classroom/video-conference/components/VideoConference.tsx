@@ -42,12 +42,25 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
-    joinClassroom(classroomId);
+    let hasJoined = false;
+
+    const join = async () => {
+      try {
+        await joinClassroom(classroomId);
+        hasJoined = true;
+      } catch (error) {
+      }
+    };
+
+    join();
 
     return () => {
-      leaveClassroom();
+      if (hasJoined) {
+        leaveClassroom()
+      }
     };
   }, [classroomId]);
+
 
   useEffect(() => {
     if (localVideoTrack && localPlayerRef.current) {
@@ -96,8 +109,38 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
             <Box
               ref={localPlayerRef}
               id="local-player"
-              sx={{ width: "100%", height: "100%" }}
-            />
+              sx={{ width: "100%", height: "100%", position: "relative" }}
+            >
+              <Stack
+                direction="row"
+                justifyContent="center"
+                spacing={2}
+                sx={{
+                  position: "absolute",
+                  bottom: "10px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  zIndex: 2,
+                }}
+              >
+                <Tooltip title={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}>
+                  <IconButton
+                    onClick={() => toggleVideo(classroomId)}
+                    sx={controlButtonStyles}
+                  >
+                    {isVideoEnabled ? <Videocam /> : <VideocamOff />}
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title={isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"}>
+                  <IconButton
+                    onClick={() => toggleAudio(classroomId)}
+                    sx={controlButtonStyles}
+                  >
+                    {isAudioEnabled ? <Mic /> : <MicOff />}
+                  </IconButton>
+                </Tooltip>
+              </Stack>
+            </Box>
           ) : (
             <Box
               width="100%"
@@ -106,8 +149,38 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
               alignItems="center"
               justifyContent="center"
               bgcolor="#333"
+              position="relative"
             >
               <Typography color="#fff">Camera is Off</Typography>
+              <Stack
+                direction="row"
+                justifyContent="center"
+                spacing={2}
+                sx={{
+                  position: "absolute",
+                  bottom: "10px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  zIndex: 2,
+                }}
+              >
+                <Tooltip title={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}>
+                  <IconButton
+                    onClick={() => toggleVideo(classroomId)}
+                    sx={controlButtonStyles}
+                  >
+                    {isVideoEnabled ? <Videocam /> : <VideocamOff />}
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title={isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"}>
+                  <IconButton
+                    onClick={() => toggleAudio(classroomId)}
+                    sx={controlButtonStyles}
+                  >
+                    {isAudioEnabled ? <Mic /> : <MicOff />}
+                  </IconButton>
+                </Tooltip>
+              </Stack>
             </Box>
           ))}
 
@@ -132,37 +205,28 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
           ))}
       </Box>
 
-      <Stack
-        direction="row"
-        justifyContent="center"
-        alignItems="center"
-        spacing={2}
-        sx={{
-          mt: 2,
-          backgroundColor: "#d3d3d3",
-          borderRadius: "8px",
-          padding: "8px",
-        }}
-      >
-        {user?.role === "teacher" && (
-          <Tooltip title={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}>
+      {user?.role === "student" && (
+        <Box
+          sx={{
+            position: "fixed",
+            bottom: "16px",
+            right: "16px",
+            zIndex: 5,
+          }}
+        >
+          <Tooltip title={isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"}>
             <IconButton
-              onClick={() => toggleVideo(classroomId)}
-              sx={controlButtonStyles}
+              onClick={() => toggleAudio(classroomId)}
+              sx={{
+                ...controlButtonStyles,
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
+              }}
             >
-              {isVideoEnabled ? <Videocam /> : <VideocamOff />}
+              {isAudioEnabled ? <Mic /> : <MicOff />}
             </IconButton>
           </Tooltip>
-        )}
-        <Tooltip title={isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"}>
-          <IconButton
-            onClick={() => toggleAudio(classroomId)}
-            sx={controlButtonStyles}
-          >
-            {isAudioEnabled ? <Mic /> : <MicOff />}
-          </IconButton>
-        </Tooltip>
-      </Stack>
+        </Box>
+      )}
     </Box>
   );
 };
