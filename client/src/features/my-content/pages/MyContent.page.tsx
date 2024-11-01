@@ -70,7 +70,7 @@ const MyContent: React.FC = () => {
                       {material.content.title}
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
-                      {material.content.description}
+                      {material.content.text}
                     </Typography>
                     <Chip
                       label={material.subject}
