@@ -67,7 +67,7 @@ export const useTLStore = ({
             name: "Page 1",
             index: "a1" as IndexKey,
           }),
-          ...[...liveRecords?.values()],
+          ...[...(liveRecords?.values() ?? [])],
         ],
         "initialize"
       );
@@ -126,53 +126,54 @@ export const useTLStore = ({
       );
 
       // Update tldraw when Storage changes
-      unsubs.push(
-        room.subscribe(
-          liveRecords,
-          (storageChanges: any) => {
-            const toRemove: TLRecord["id"][] = [];
-            const toPut: TLRecord[] = [];
+      liveRecords &&
+        unsubs.push(
+          room.subscribe(
+            liveRecords,
+            (storageChanges: any) => {
+              const toRemove: TLRecord["id"][] = [];
+              const toPut: TLRecord[] = [];
 
-            for (const update of storageChanges) {
-              if (update.type !== "LiveMap") {
-                return;
-              }
+              for (const update of storageChanges) {
+                if (update.type !== "LiveMap") {
+                  return;
+                }
 
-              for (const [id, { type }] of Object.entries(
-                update.updates
-              ) as any) {
-                switch (type) {
-                  // Object deleted from Liveblocks, remove from tldraw
-                  case "delete": {
-                    toRemove.push(id as TLRecord["id"]);
-                    break;
-                  }
-
-                  // Object updated on Liveblocks, update tldraw
-                  case "update": {
-                    const curr = update.node.get(id);
-                    if (curr) {
-                      toPut.push(curr as any as TLRecord);
+                for (const [id, { type }] of Object.entries(
+                  update.updates
+                ) as any) {
+                  switch (type) {
+                    // Object deleted from Liveblocks, remove from tldraw
+                    case "delete": {
+                      toRemove.push(id as TLRecord["id"]);
+                      break;
                     }
-                    break;
+
+                    // Object updated on Liveblocks, update tldraw
+                    case "update": {
+                      const curr = update.node.get(id);
+                      if (curr) {
+                        toPut.push(curr as any as TLRecord);
+                      }
+                      break;
+                    }
                   }
                 }
               }
-            }
 
-            // Update tldraw with changes
-            store.mergeRemoteChanges(() => {
-              if (toRemove.length) {
-                store.remove(toRemove);
-              }
-              if (toPut.length) {
-                store.put(toPut);
-              }
-            });
-          },
-          { isDeep: true }
-        )
-      );
+              // Update tldraw with changes
+              store.mergeRemoteChanges(() => {
+                if (toRemove.length) {
+                  store.remove(toRemove);
+                }
+                if (toPut.length) {
+                  store.put(toPut);
+                }
+              });
+            },
+            { isDeep: true }
+          )
+        );
 
       // Set user's info
       const userPreferences = computed<{
