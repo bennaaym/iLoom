@@ -92,7 +92,7 @@ export abstract class BaseRepository<T> {
     };
   }): Promise<PaginatedResults<T>> {
     const page = Number(pageOptions?.page || 1);
-    const perPage = Number(pageOptions?.perPage || 10);
+    const perPage = Number(pageOptions?.perPage || 30);
     const skip = page > 0 ? perPage * (page - 1) : 0;
 
     const [total, data] = await Promise.all([

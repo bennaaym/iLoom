@@ -1,4 +1,5 @@
 import {Expose} from 'class-transformer';
+import {EClassroomStatus} from '../types';
 
 export class ClassroomDto {
   @Expose()
@@ -30,4 +31,10 @@ export class ClassroomDto {
 
   @Expose()
   summary: string;
+
+  @Expose()
+  status: EClassroomStatus;
+
+  @Expose()
+  isFinished: true;
 }
