@@ -52,6 +52,11 @@ export class ClassroomsController {
     return this.classroomsService.join(code);
   }
 
+  @Get(':id/summary')
+  summary(@Param('id') id: string) {
+    return this.classroomsService.getSummary(id);
+  }
+
   @Roles(EUserRole.ADMIN, EUserRole.TEACHER)
   @Post()
   @SerializeResponse(ClassroomDto)
