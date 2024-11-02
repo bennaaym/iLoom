@@ -1,6 +1,7 @@
 import {
   ForbiddenException,
   Injectable,
+  Logger,
   NotFoundException,
   UnprocessableEntityException
 } from '@nestjs/common';
@@ -14,12 +15,15 @@ import {UserDocument} from '../users/user.schema';
 import {dayjs, lodash} from '@libs';
 import {EUserRole, ExplicityAny} from '@common/types';
 import {LiveblocksService} from '@modules/liveblocks';
+import {GeminiService} from '@modules/google';
 
 @Injectable()
 export class ClassroomsService {
+  private readonly logger = new Logger(ClassroomsService.name);
   constructor(
     private readonly repository: ClassroomRepository,
-    private readonly liveblocks: LiveblocksService
+    private readonly liveblocks: LiveblocksService,
+    private readonly geminiService: GeminiService
   ) {}
 
   private buildListFilter(query: ListClassroomQuery, user: UserDocument) {
@@ -142,5 +146,44 @@ export class ClassroomsService {
     if (!classroom) throw new NotFoundException();
 
     return this.liveblocks.createSession({user, classroom});
+  }
+
+  async transcribe({
+    id,
+    transcript,
+    user
+  }: {
+    id: string;
+    transcript: string;
+    user: UserDocument;
+  }) {
+    const classroom = await this.retrieve(id, user);
+    const processedTranscript = transcript.startsWith('<override>')
+      ? transcript.replace('<override>', '')
+      : `${classroom.transcript} ${transcript}`;
+
+    return this.repository.update(id, {transcript: processedTranscript});
+  }
+
+  async getSummary(id: string) {
+    const classroom = await this.repository.findById(id);
+
+    if (!classroom || !classroom.transcript)
+      throw new NotFoundException('No summary found for this class');
+
+    const isClassroomEnded = dayjs(classroom.endDate)
+      .utc()
+      .isBefore(dayjs().utc());
+
+    if (!isClassroomEnded)
+      throw new UnprocessableEntityException(
+        'Cannot provide summary of an ongoing class'
+      );
+
+    if (classroom.summary) return {summary: classroom.summary};
+    const summary = await this.geminiService.generateText(
+      `Summarize this classroom lecture by a lecturer as concisely and effectively as possible.\nLecture: ${classroom.transcript}`
+    );
+    return this.repository.update(id, {summary});
   }
 }
