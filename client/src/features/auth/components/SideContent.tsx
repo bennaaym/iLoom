@@ -3,6 +3,7 @@ import { features } from "@/features/landing/constants";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
+import { Logo } from "@/common/components/Logo";
 
 export const SideContent = () => {
   return (
@@ -13,10 +14,8 @@ export const SideContent = () => {
         maxWidth: 450,
       }}
     >
-      <Box sx={{ display: { xs: "none", md: "flex" } }}>
-        <Typography fontWeight="bold" fontSize={40} color="primary">
-          iLoom
-        </Typography>
+      <Box sx={{ display: { xs: "none", md: "flex"}, position:"relative", left:"-18px" }}>
+        <Logo />
       </Box>
       {features.map((feature, index) => (
         <Stack key={index} direction="row" sx={{ gap: 2 }}>
