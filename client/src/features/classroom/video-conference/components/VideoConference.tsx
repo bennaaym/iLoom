@@ -8,12 +8,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import {
-  Videocam,
-  VideocamOff,
-  Mic,
-  MicOff,
-} from "@mui/icons-material";
+import { Videocam, VideocamOff, Mic, MicOff } from "@mui/icons-material";
 import { useAgora } from "../providers/AgoraProvider";
 import { useAuth } from "@/common/providers/AuthProvider";
 
@@ -145,7 +140,9 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
         }}
       >
         {user?.role === "teacher" && (
-          <Tooltip title={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}>
+          <Tooltip
+            title={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}
+          >
             <IconButton
               onClick={() => toggleVideo(classroomId)}
               sx={controlButtonStyles}
@@ -154,7 +151,9 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
             </IconButton>
           </Tooltip>
         )}
-        <Tooltip title={isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"}>
+        <Tooltip
+          title={isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"}
+        >
           <IconButton
             onClick={() => toggleAudio(classroomId)}
             sx={controlButtonStyles}

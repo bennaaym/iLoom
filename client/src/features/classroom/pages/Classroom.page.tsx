@@ -1,12 +1,12 @@
 "use client";
 
 import { useRouter, useParams } from "next/navigation";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { VideoConference } from "../video-conference/components";
 import { Chat } from "../classroom-chat/components";
 import { Whiteboard } from "../whiteboard/components";
 import { PageLoading } from "@/common/loaders";
-import { useJoinClassroom } from "../hooks";
+import { useJoinClassroom, useSTT } from "../hooks";
 import { useAuth } from "@/common/providers/AuthProvider";
 import {
   CreateContentModal,
@@ -21,6 +21,7 @@ export const Classroom = () => {
   const { id } = useParams();
   const { classroom, isLoading, isError } = useJoinClassroom(id as string);
   const router = useRouter();
+  const { isAvailable, startListening, stopListening } = useSTT();
 
   if (isLoading) return <PageLoading />;
   if (isError) {
@@ -55,7 +56,16 @@ export const Classroom = () => {
         mr={2}
       >
         <VideoConference classroomId={classroom.id} />
-
+        {isAvailable && (
+          <Box>
+            <Button variant="outlined" onClick={startListening}>
+              start listening
+            </Button>
+            <Button variant="contained" onClick={stopListening}>
+              stop listening
+            </Button>
+          </Box>
+        )}
         {user && (
           <Box flexGrow={1} mt={2}>
             <Chat roomId={classroom.id} userId={user.id} />
