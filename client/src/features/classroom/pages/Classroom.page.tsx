@@ -11,10 +11,14 @@ import {
   CreateContentModal,
   ListClassroomMaterials,
 } from "../content-creation/components";
-import { ClassroomMaterialProvider } from "../providers";
+import {
+  ClassroomMaterialProvider,
+  ClassroomSocketProvider,
+} from "../providers";
 import { Fragment } from "react";
 import { ClassroomQuiz } from "../classroom-quizzes/components";
 import { Transcriber } from "../classroom-transcript/components";
+import { ClassroomPanel } from "../classroom-control/components";
 
 export const Classroom = () => {
   const { user, isStudent } = useAuth();
@@ -29,9 +33,8 @@ export const Classroom = () => {
   }
 
   if (!classroom) return <></>;
-  const isClassExpired = new Date(classroom.endDate) < new Date();
 
-  if (isClassExpired) {
+  if (classroom.isFinished) {
     return (
       <Box
         display="flex"
@@ -46,34 +49,37 @@ export const Classroom = () => {
     );
   }
   return (
-    <Box display="flex" height="100vh" pb={2} pl={2}>
-      <Stack width="25%" minWidth="300px" mr={2} gap={2}>
-        <VideoConference classroomId={classroom.id} />
-        {user && !isStudent() && <Transcriber roomId={classroom.id} />}
-        {user && (
-          <Box flexGrow={1}>
-            <Chat roomId={classroom.id} userId={user.id} />
-          </Box>
-        )}
-      </Stack>
+    <ClassroomSocketProvider roomId={classroom.id}>
+      <Box display="flex" height="100vh" pb={2} pl={2}>
+        <Stack width="25%" minWidth="300px" mr={2} gap={2}>
+          <ClassroomPanel classroom={classroom} />
+          <VideoConference classroomId={classroom.id} />
+          {user && !isStudent() && <Transcriber roomId={classroom.id} />}
+          {user && (
+            <Box flexGrow={1}>
+              <Chat roomId={classroom.id} userId={user.id} />
+            </Box>
+          )}
+        </Stack>
 
-      <ClassroomMaterialProvider>
-        <Box flexGrow={1}>
-          <Whiteboard
-            classroom={{
-              id: classroom.id,
-              shareableCode: classroom.shareableCode,
-            }}
-          />
-        </Box>
-        {!isStudent() && (
-          <Fragment>
-            <CreateContentModal roomId={classroom.id} />
-            <ListClassroomMaterials roomId={classroom.id} />
-          </Fragment>
-        )}
-        <ClassroomQuiz roomId={classroom.id} />
-      </ClassroomMaterialProvider>
-    </Box>
+        <ClassroomMaterialProvider>
+          <Box flexGrow={1}>
+            <Whiteboard
+              classroom={{
+                id: classroom.id,
+                shareableCode: classroom.shareableCode,
+              }}
+            />
+          </Box>
+          {user && !isStudent() && (
+            <Fragment>
+              <CreateContentModal roomId={classroom.id} />
+              <ListClassroomMaterials roomId={classroom.id} />
+            </Fragment>
+          )}
+          <ClassroomQuiz roomId={classroom.id} />
+        </ClassroomMaterialProvider>
+      </Box>
+    </ClassroomSocketProvider>
   );
 };

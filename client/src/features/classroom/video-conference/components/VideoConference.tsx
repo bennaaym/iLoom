@@ -82,7 +82,6 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
     backgroundColor: "#000",
     borderRadius: "8px",
     overflow: "hidden",
-    marginTop: "16px",
   };
 
   const controlButtonStyles = {
