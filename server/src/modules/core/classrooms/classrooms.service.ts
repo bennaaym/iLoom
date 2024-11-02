@@ -143,4 +143,21 @@ export class ClassroomsService {
 
     return this.liveblocks.createSession({user, classroom});
   }
+
+  async transcribe({
+    id,
+    transcript,
+    user
+  }: {
+    id: string;
+    transcript: string;
+    user: UserDocument;
+  }) {
+    const classroom = await this.retrieve(id, user);
+    const processedTranscript = transcript.startsWith('<override>')
+      ? transcript.replace('<override>', '')
+      : `${classroom.transcript} ${transcript}`;
+
+    return this.repository.update(id, {transcript: processedTranscript});
+  }
 }

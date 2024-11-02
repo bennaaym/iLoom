@@ -25,6 +25,12 @@ export class Classroom {
 
   @Prop({unique: true, index: true, default: () => nanoid(10)})
   shareableCode: string;
+
+  @Prop({default: ''})
+  transcript: string;
+
+  @Prop({default: ''})
+  summary: string;
 }
 
 export type ClassroomDocument = Classroom & Document;

@@ -16,6 +16,7 @@ import {
   ClassroomDto,
   CreateClassroomDto,
   ListClassroomQuery,
+  TranscribeClassroomDto,
   UpdateClassroomDto
 } from './dtos';
 import {
@@ -27,7 +28,7 @@ import {
 } from '@common/decorators';
 import {UserDocument} from '@modules/core/users/user.schema';
 import {Request} from 'express';
-import { EUserRole } from '@common/types';
+import {EUserRole} from '@common/types';
 
 @Controller('classrooms')
 export class ClassroomsController {
@@ -45,11 +46,10 @@ export class ClassroomsController {
     return this.classroomsService.retrieve(id, user);
   }
 
-
-  @Get(":code/join")
+  @Get(':code/join')
   @SerializeResponse(ClassroomDto)
-  join(@Param("code") code: string){
-    return this.classroomsService.join(code)
+  join(@Param('code') code: string) {
+    return this.classroomsService.join(code);
   }
 
   @Roles(EUserRole.ADMIN, EUserRole.TEACHER)
@@ -84,5 +84,19 @@ export class ClassroomsController {
     @CurrentUser() user: UserDocument
   ) {
     return this.classroomsService.setupWhiteboard(code, user);
+  }
+
+  @HttpCode(HttpStatus.OK)
+  @Post(':id/transcribe')
+  transcribe(
+    @Param('id') id: string,
+    @Body() dto: TranscribeClassroomDto,
+    @CurrentUser() user: UserDocument
+  ) {
+    return this.classroomsService.transcribe({
+      id,
+      transcript: dto.transcript,
+      user
+    });
   }
 }

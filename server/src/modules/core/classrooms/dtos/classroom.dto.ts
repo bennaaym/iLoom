@@ -23,5 +23,11 @@ export class ClassroomDto {
   capacity: string;
 
   @Expose()
-  shareableCode;
+  shareableCode: string;
+
+  @Expose()
+  transcript: string;
+
+  @Expose()
+  summary: string;
 }
