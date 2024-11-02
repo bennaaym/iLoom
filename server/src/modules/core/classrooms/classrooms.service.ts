@@ -16,6 +16,7 @@ import {dayjs, lodash} from '@libs';
 import {EUserRole, ExplicityAny} from '@common/types';
 import {LiveblocksService} from '@modules/liveblocks';
 import {GeminiService} from '@modules/google';
+import {EClassroomStatus} from './types';
 
 @Injectable()
 export class ClassroomsService {
@@ -34,6 +35,7 @@ export class ClassroomsService {
       const now = dayjs().utc().toDate();
       filter = {
         ...filter,
+        status: EClassroomStatus.ON_GOING,
         $or: [
           {startDate: {$gt: now}},
           {
@@ -47,7 +49,10 @@ export class ClassroomsService {
     if (queryFilter.status && queryFilter.status === 'past') {
       filter = {
         ...filter,
-        endDate: {$lt: dayjs().utc().toDate()}
+        $or: [
+          {endDate: {$lt: dayjs().utc().toDate()}},
+          {status: EClassroomStatus.FINISHED}
+        ]
       };
     }
     return filter;
@@ -74,7 +79,7 @@ export class ClassroomsService {
 
     return this.repository.paginate({
       filter: this.buildListFilter(query, user),
-      orderBy: {startDate: 1, endDate: 1},
+      orderBy: {startDate: -1},
       pageOptions
     });
   }
@@ -136,6 +141,8 @@ export class ClassroomsService {
   async join(shareableCode: string) {
     const classroom = await this.repository.findOne({shareableCode});
     if (!classroom) throw new NotFoundException();
+    if (classroom.isFinished)
+      throw new UnprocessableEntityException('Classroom expired');
     return classroom;
   }
 
@@ -163,6 +170,11 @@ export class ClassroomsService {
       : `${classroom.transcript} ${transcript}`;
 
     return this.repository.update(id, {transcript: processedTranscript});
+  }
+
+  async endClassroom(id: string, user: UserDocument) {
+    await this.retrieve(id, user);
+    this.repository.update(id, {status: EClassroomStatus.FINISHED});
   }
 
   async getSummary(id: string) {
