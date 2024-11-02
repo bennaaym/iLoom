@@ -36,7 +36,8 @@ export const ListClassroomMaterials = ({ roomId }: Props) => {
   const [previewMaterial, setPreviewMaterial] = useState<Material | null>(null);
   const [previewPdf, setPreviewPdf] = useState<string | null>(null);
   const { materials, isLoading, error } = useMaterials({ classroom: roomId });
-  const { whiteboardMaterial, shareMaterial, stopSharing } = useClassroomMaterial();
+  const { whiteboardMaterial, shareMaterial, stopSharing } =
+    useClassroomMaterial();
 
   const handleDisplay = (material: Material) => {
     shareMaterial(material);
@@ -99,15 +100,27 @@ export const ListClassroomMaterials = ({ roomId }: Props) => {
                     p={1}
                     borderBottom={1}
                     borderColor="divider"
-                    bgcolor={whiteboardMaterial?.id === material.id ? gray[200] : "inherit"}
+                    bgcolor={
+                      whiteboardMaterial?.id === material.id
+                        ? gray[200]
+                        : "inherit"
+                    }
                   >
                     <Stack gap={1}>
                       <Typography textTransform="capitalize" fontWeight="bold">
                         {material.content.title}
                       </Typography>
                       <Stack direction="row" gap={1}>
-                        <Chip label={material.subject} variant="outlined" size="small" />
-                        <Chip label={material.activity} variant="outlined" size="small" />
+                        <Chip
+                          label={material.subject}
+                          variant="outlined"
+                          size="small"
+                        />
+                        <Chip
+                          label={material.activity}
+                          variant="outlined"
+                          size="small"
+                        />
                       </Stack>
                     </Stack>
                     <Stack direction="row">
@@ -117,7 +130,9 @@ export const ListClassroomMaterials = ({ roomId }: Props) => {
                         </IconButton>
                       </Tooltip>
                       <Tooltip title="Open PDF">
-                        <IconButton onClick={() => handlePreviewPdf(material.contentPdf)}>
+                        <IconButton
+                          onClick={() => handlePreviewPdf(material.contentPdf)}
+                        >
                           <MdPictureAsPdf color={brand[500]} />
                         </IconButton>
                       </Tooltip>
@@ -158,8 +173,16 @@ export const ListClassroomMaterials = ({ roomId }: Props) => {
           maxWidth="md"
           fullWidth
         >
-          <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h6">{previewMaterial.content.title}</Typography>
+          <DialogTitle
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Typography variant="h6">
+              {previewMaterial.content.title}
+            </Typography>
             <IconButton
               edge="end"
               color="inherit"
@@ -174,37 +197,50 @@ export const ListClassroomMaterials = ({ roomId }: Props) => {
             <Typography variant="body1" paragraph>
               {previewMaterial.content.text}
             </Typography>
-            {previewMaterial.content.questions && previewMaterial.content.questions.length > 0 && (
-              <Box mt={2}>
-                <Typography variant="h6" gutterBottom>
-                  Questions:
-                </Typography>
-                <List>
-                  {previewMaterial.content.questions.map((question: IQuestion, index: number) => (
-                    <Paper key={index} sx={{ p: 2, mb: 2, borderRadius: 2 }} elevation={1}>
-                      <Typography variant="body1" fontWeight="bold" gutterBottom>
-                        {index + 1}. {question.question}
-                      </Typography>
-                      <Divider sx={{ my: 1 }} />
-                      <List disablePadding>
-                        {question.options.map((option, optIndex) => (
-                          <ListItem key={optIndex} disableGutters>
-                            <ListItemText
-                              primary={`${String.fromCharCode(65 + optIndex)}. ${option}`}
-                              sx={{ ml: 2 }}
-                            />
-                          </ListItem>
-                        ))}
-                      </List>
-                      <Divider sx={{ my: 1 }} />
-                      <Typography variant="body2" color="textSecondary">
-                        <strong>Answer:</strong> {question.answer}
-                      </Typography>
-                    </Paper>
-                  ))}
-                </List>
-              </Box>
-            )}
+            {previewMaterial.content.questions &&
+              previewMaterial.content.questions.length > 0 && (
+                <Box mt={2}>
+                  <Typography variant="h6" gutterBottom>
+                    Questions:
+                  </Typography>
+                  <List>
+                    {previewMaterial.content.questions.map(
+                      (question: IQuestion, index: number) => (
+                        <Paper
+                          key={index}
+                          sx={{ p: 2, mb: 2, borderRadius: 2 }}
+                          elevation={1}
+                        >
+                          <Typography
+                            variant="body1"
+                            fontWeight="bold"
+                            gutterBottom
+                          >
+                            {index + 1}. {question.question}
+                          </Typography>
+                          <Divider sx={{ my: 1 }} />
+                          <List disablePadding>
+                            {question.options.map((option, optIndex) => (
+                              <ListItem key={optIndex} disableGutters>
+                                <ListItemText
+                                  primary={`${String.fromCharCode(
+                                    65 + optIndex
+                                  )}. ${option}`}
+                                  sx={{ ml: 2 }}
+                                />
+                              </ListItem>
+                            ))}
+                          </List>
+                          <Divider sx={{ my: 1 }} />
+                          <Typography variant="body2" color="textSecondary">
+                            <strong>Answer:</strong> {question.answer}
+                          </Typography>
+                        </Paper>
+                      )
+                    )}
+                  </List>
+                </Box>
+              )}
           </DialogContent>
         </Dialog>
       )}
@@ -217,7 +253,13 @@ export const ListClassroomMaterials = ({ roomId }: Props) => {
           maxWidth="lg"
           fullWidth
         >
-          <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <DialogTitle
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <Typography variant="h6">PDF Preview</Typography>
             <IconButton
               edge="end"

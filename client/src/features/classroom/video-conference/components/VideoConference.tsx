@@ -8,12 +8,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import {
-  Videocam,
-  VideocamOff,
-  Mic,
-  MicOff,
-} from "@mui/icons-material";
+import { Videocam, VideocamOff, Mic, MicOff } from "@mui/icons-material";
 import { useAgora } from "../providers/AgoraProvider";
 import { useAuth } from "@/common/providers/AuthProvider";
 
@@ -48,19 +43,17 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
       try {
         await joinClassroom(classroomId);
         hasJoined = true;
-      } catch (error) {
-      }
+      } catch (error) {}
     };
 
     join();
 
     return () => {
       if (hasJoined) {
-        leaveClassroom()
+        leaveClassroom();
       }
     };
   }, [classroomId]);
-
 
   useEffect(() => {
     if (localVideoTrack && localPlayerRef.current) {
@@ -123,7 +116,9 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
                   zIndex: 2,
                 }}
               >
-                <Tooltip title={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}>
+                <Tooltip
+                  title={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}
+                >
                   <IconButton
                     onClick={() => toggleVideo(classroomId)}
                     sx={controlButtonStyles}
@@ -131,7 +126,11 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
                     {isVideoEnabled ? <Videocam /> : <VideocamOff />}
                   </IconButton>
                 </Tooltip>
-                <Tooltip title={isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"}>
+                <Tooltip
+                  title={
+                    isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"
+                  }
+                >
                   <IconButton
                     onClick={() => toggleAudio(classroomId)}
                     sx={controlButtonStyles}
@@ -164,7 +163,9 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
                   zIndex: 2,
                 }}
               >
-                <Tooltip title={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}>
+                <Tooltip
+                  title={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}
+                >
                   <IconButton
                     onClick={() => toggleVideo(classroomId)}
                     sx={controlButtonStyles}
@@ -172,7 +173,11 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
                     {isVideoEnabled ? <Videocam /> : <VideocamOff />}
                   </IconButton>
                 </Tooltip>
-                <Tooltip title={isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"}>
+                <Tooltip
+                  title={
+                    isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"
+                  }
+                >
                   <IconButton
                     onClick={() => toggleAudio(classroomId)}
                     sx={controlButtonStyles}
@@ -214,7 +219,9 @@ export const VideoConference = ({ classroomId }: VideoConferenceProps) => {
             zIndex: 5,
           }}
         >
-          <Tooltip title={isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"}>
+          <Tooltip
+            title={isAudioEnabled ? "Mute Microphone" : "Unmute Microphone"}
+          >
             <IconButton
               onClick={() => toggleAudio(classroomId)}
               sx={{

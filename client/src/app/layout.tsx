@@ -1,4 +1,5 @@
 "use client";
+import "regenerator-runtime/runtime";
 import { ReactNode } from "react";
 import {
   AppThemeProvider,

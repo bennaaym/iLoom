@@ -7,6 +7,8 @@ export interface Classroom {
   duration: number;
   capacity: number;
   shareableCode: string;
+  transcript: string;
+  summary: string;
 }
 
 export type Subject = "english" | "algorithms";
