@@ -84,7 +84,6 @@ interface ClassroomItemProps {
 
 const ClassroomItem = ({ classroom, onEdit }: ClassroomItemProps) => {
   const { isStudent } = useAuth();
-  const isClassExpired = dayjs(classroom.endDate).utc().isBefore(dayjs().utc());
   const mutation = useMutation({
     mutationFn: (id: string) => deleteClassroom(id),
     onSuccess: () => {
@@ -123,7 +122,7 @@ const ClassroomItem = ({ classroom, onEdit }: ClassroomItemProps) => {
           ).toLocaleString()}`}
         />
         <Stack direction="row" spacing={1} sx={{ marginLeft: "auto" }}>
-          {!isClassExpired && (
+          {!classroom.isFinished && (
             <Button
               variant="contained"
               color="primary"
@@ -133,7 +132,7 @@ const ClassroomItem = ({ classroom, onEdit }: ClassroomItemProps) => {
               Join
             </Button>
           )}
-          {isClassExpired && (
+          {classroom.isFinished && (
             <Button
               variant="contained"
               color="primary"
@@ -143,8 +142,8 @@ const ClassroomItem = ({ classroom, onEdit }: ClassroomItemProps) => {
             </Button>
           )}
           {!isStudent() && (
-            <Stack>
-              {!isClassExpired && (
+            <Stack direction="row">
+              {!classroom.isFinished && (
                 <IconButton
                   edge="end"
                   aria-label="edit"

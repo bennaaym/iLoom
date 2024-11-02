@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import {
   Typography,
@@ -34,8 +35,8 @@ export default function ClassroomForm({
   const [name, setName] = useState(() => classroom?.name ?? "");
   const [startDate, setStartDate] = useState(() => {
     return classroom
-      ? dayjs(classroom.startDate).local().format("YYYY-MM-DDTHH:MM")
-      : dayjs().local().format("YYYY-MM-DDTHH:MM");
+      ? dayjs(classroom.startDate).local().format("YYYY-MM-DDTHH:mm")
+      : dayjs().local().format("YYYY-MM-DDTHH:mm");
   });
   const [duration, setDuration] = useState(() => classroom?.duration ?? 60);
   const [capacity, setCapacity] = useState(() => classroom?.capacity ?? 10);
@@ -87,7 +88,7 @@ export default function ClassroomForm({
         <input
           id="startDate"
           type="datetime-local"
-          min={dayjs().local().format("YYYY-MM-DDTHH:MM")}
+          min={dayjs().local().format("YYYY-MM-DDTHH:mm")}
           value={startDate}
           required
           onChange={(e) => setStartDate(e.target.value)}

@@ -9,6 +9,8 @@ export interface Classroom {
   shareableCode: string;
   transcript: string;
   summary: string;
+  status: "ongoing" | "finished";
+  isFinished: true;
 }
 
 export type Subject = "english" | "algorithms";
