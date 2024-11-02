@@ -13,11 +13,14 @@ import {lodash} from '@libs';
 import {StorageService} from '@modules/google';
 import {PdfService} from '@modules/pdf';
 import {MaterialDocument} from './material.schema';
+import {CreateAlgorithmMaterialDto} from './dtos/create-algorithm-material.dto copy';
+import {AlgorithmService} from './algorithm.service';
 
 @Injectable()
 export class MaterialsService {
   constructor(
     private readonly englishService: EnglishService,
+    private readonly algorithmService: AlgorithmService,
     private readonly repository: MaterialsRepository,
     private readonly storageService: StorageService,
     private readonly pdfService: PdfService
@@ -37,6 +40,9 @@ export class MaterialsService {
     switch (material.subject) {
       case EMaterialSubject.ENGLISH:
         toHtml = this.englishService.toHtml.bind(this.englishService);
+        break;
+      case EMaterialSubject.COMPUTER_SCIENCE:
+        toHtml = this.algorithmService.toHtml.bind(this.algorithmService);
         break;
       default:
         throw new Error(`Invalid material subject: ${material.subject}`);
@@ -128,6 +134,37 @@ export class MaterialsService {
       classroom: dto.classroom,
       scope: dto.classroom ? EMaterialScope.CLASSROOM : EMaterialScope.GLOBAL,
       subject: EMaterialSubject.ENGLISH,
+      activity: dto.activity,
+      content
+    });
+    const contentPdf = await this.upload(material);
+    return this.repository.update(material.id, {contentPdf});
+  }
+
+  async generateAlgorithmMaterial(
+    dto: CreateAlgorithmMaterialDto,
+    user: UserDocument
+  ) {
+    let promise: Promise<Record<string, ExplicityAny>>;
+
+    switch (dto.activity) {
+      case EMaterialActivity.ALGORITHM:
+        promise = this.algorithmService.generateProblem({
+          level: dto.level,
+          topic: dto.topic,
+          description: dto.description
+        });
+        break;
+      default:
+        throw new Error(`Invalid material activity: ${dto.activity}`);
+    }
+
+    const content = await promise;
+    const material = await this.repository.create({
+      user: user.id,
+      classroom: dto.classroom,
+      scope: dto.classroom ? EMaterialScope.CLASSROOM : EMaterialScope.GLOBAL,
+      subject: EMaterialSubject.COMPUTER_SCIENCE,
       activity: dto.activity,
       content
     });

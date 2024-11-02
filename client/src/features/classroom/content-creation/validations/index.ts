@@ -8,6 +8,7 @@ export const createClassroomContentValidation = {
     ageGroup: "",
     description: "",
     image: null as File | null,
+    topic: "",
   },
   schema: Yup.object().shape({
     subject: Yup.string().required("Subject is required"),
@@ -20,6 +21,12 @@ export const createClassroomContentValidation = {
         return ["reading", "story"].includes(activityValue)
           ? schema.required("Age Group is required")
           : schema;
+      }),
+    topic: Yup.string()
+      .nullable()
+      .when("subject", {
+        is: "algorithm",
+        then: (schema) => schema.required("Topic is required"),
       }),
     description: Yup.string()
       .nullable()

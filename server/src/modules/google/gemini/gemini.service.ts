@@ -76,7 +76,6 @@ export class GeminiService {
         }
       }
     ]);
-    console.log(result.response.text());
     const newPrompt = `${prompt}\nImage description: ${result.response.text()}`;
     return this.generateJSON(newPrompt, schema);
   }

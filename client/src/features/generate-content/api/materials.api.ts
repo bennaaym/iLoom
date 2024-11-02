@@ -22,3 +22,12 @@ export const createEnglishStoryMaterial = async (data: FormData) => {
     throw handleApiError(error);
   }
 };
+
+export const createAlgorithmMaterial = async (data: any) => {
+  try {
+    const response = await apiClient.post("/materials/algorithm", data);
+    return response.data;
+  } catch (error) {
+    throw handleApiError(error);
+  }
+};

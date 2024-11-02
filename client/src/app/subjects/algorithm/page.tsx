@@ -1,10 +1,10 @@
 import { MainLayout } from "@/common/components";
-import AlgorithmContentGenerator from "@/features/generate-content/pages/algorithm/Algorithm.page";
+import Algorithm from "@/features/generate-content/pages/algorithm/Algorithm.page";
 
-export default function GenerateContentPage() {
+export default function AlgorithmPage() {
   return (
     <MainLayout>
-      <AlgorithmContentGenerator />
+      <Algorithm />
     </MainLayout>
   );
 }
