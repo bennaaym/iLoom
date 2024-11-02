@@ -7,6 +7,7 @@ import {MaterialsRepository} from './materials.repository';
 import {GoogleModule} from '@modules/google';
 import {EnglishService} from './english.service';
 import {PdfModule} from '@modules/pdf';
+import { AlgorithmService } from './algorithm.service';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import {PdfModule} from '@modules/pdf';
     PdfModule
   ],
   controllers: [MaterialsController],
-  providers: [MaterialsService, EnglishService, MaterialsRepository],
+  providers: [MaterialsService, EnglishService, MaterialsRepository, AlgorithmService],
   exports: [MaterialsService]
 })
 export class MaterialsModule {}

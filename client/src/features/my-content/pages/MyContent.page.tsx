@@ -12,14 +12,12 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { fetchMaterials } from "../api";
 import { IMaterial } from "@/common/interfaces";
-import { useRouter } from "next/navigation";
 import { PageLoading } from "@/common/loaders";
 import { ErrorMessage } from "@/common/components/messages/ErrorMessage";
 import { brand, gray } from "@/common/theme";
 import Link from "next/link";
 
 const MyContent: React.FC = () => {
-  const router = useRouter();
 
   const { data, isLoading, isError, error } = useQuery<IMaterial[], Error>({
     queryKey: ["materials"],
@@ -69,19 +67,30 @@ const MyContent: React.FC = () => {
                     <Typography variant="h6" component="div">
                       {material.content.title}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {material.content.text}
-                    </Typography>
-                    <Chip
-                      label={material.subject}
-                      variant="filled"
-                      color="primary"
+                    <Box
                       sx={{
-                        position: "absolute",
-                        bottom: 10,
-                        textTransform: "capitalize",
+                        display: "flex",
+                        gap: 1,
+                        marginTop: 1,
                       }}
-                    />
+                    >
+                      <Chip
+                        label={material.subject}
+                        variant="filled"
+                        color="primary"
+                        sx={{
+                          textTransform: "capitalize",
+                        }}
+                      />
+                      <Chip
+                        label={material.activity}
+                        variant="filled"
+                        color="primary"
+                        sx={{
+                          textTransform: "capitalize",
+                        }}
+                      />
+                    </Box>
                   </CardContent>
                 </Card>
               </Link>

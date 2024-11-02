@@ -34,6 +34,8 @@ export const CreateContentForm = ({ isLoading, error, onSubmit }: Props) => {
         return "A story and related questions will be generated from the image you uploaded. This will be an engaging and interactive activity for your students.";
       case "reading":
         return "A reading passage and comprehension questions will be generated based on the description provided. The content will be suitable for the selected age group.";
+      case "algorithm":
+        return "A set of algorithm-related questions will be generated based on the selected topic and difficulty level. This will help students develop their problem-solving and critical thinking skills.";
       default:
         return "";
     }
@@ -94,33 +96,6 @@ export const CreateContentForm = ({ isLoading, error, onSubmit }: Props) => {
                   </FormControl>
 
                   <FormControl fullWidth>
-                    <FormLabel htmlFor="description">Description</FormLabel>
-                    <TextareaAutosize
-                      id="description"
-                      name="description"
-                      value={values.description}
-                      onChange={handleChange}
-                      placeholder="Enter a description"
-                      minRows={4}
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        fontSize: "16px",
-                        borderColor:
-                          errors.description && touched.description
-                            ? "red"
-                            : "rgba(0, 0, 0, 0.23)",
-                        borderRadius: "4px",
-                      }}
-                    />
-                    {errors.description && touched.description && (
-                      <FormHelperText error>
-                        {errors.description}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
-
-                  <FormControl fullWidth>
                     <FormLabel htmlFor="image">Upload Image</FormLabel>
                     <input
                       id="image"
@@ -164,36 +139,36 @@ export const CreateContentForm = ({ isLoading, error, onSubmit }: Props) => {
                       <FormHelperText error>{errors.ageGroup}</FormHelperText>
                     )}
                   </FormControl>
-
-                  <FormControl fullWidth>
-                    <FormLabel htmlFor="description">Description</FormLabel>
-                    <TextareaAutosize
-                      id="description"
-                      name="description"
-                      value={values.description}
-                      onChange={handleChange}
-                      placeholder="Enter a description"
-                      minRows={4}
-                      style={{
-                        width: "100%",
-                        padding: "8px",
-                        fontSize: "16px",
-                        borderColor:
-                          errors.description && touched.description
-                            ? "red"
-                            : "rgba(0, 0, 0, 0.23)",
-                        borderRadius: "4px",
-                      }}
-                    />
-                    {errors.description && touched.description && (
-                      <FormHelperText error>
-                        {errors.description}
-                      </FormHelperText>
-                    )}
-                  </FormControl>
                 </>
               );
             }
+          } else if (values.subject === "algorithm") {
+            return (
+              <>
+                <FormControl fullWidth>
+                  <FormLabel htmlFor="topic">Topic</FormLabel>
+                  <Select
+                    id="topic"
+                    name="topic"
+                    value={values.topic}
+                    onChange={handleChange}
+                    displayEmpty
+                  >
+                    <MenuItem value="" disabled>
+                      Select Topic
+                    </MenuItem>
+                    {constants.algorithmTopics.map((topic) => (
+                      <MenuItem key={topic.value} value={topic.value}>
+                        {topic.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {errors.topic && touched.topic && (
+                    <FormHelperText error>{errors.topic}</FormHelperText>
+                  )}
+                </FormControl>
+              </>
+            );
           }
           return null;
         };
@@ -306,6 +281,33 @@ export const CreateContentForm = ({ isLoading, error, onSubmit }: Props) => {
                 </FormControl>
 
                 {renderAdditionalFields()}
+
+                <FormControl fullWidth>
+                  <FormLabel htmlFor="description">Description</FormLabel>
+                  <TextareaAutosize
+                    id="description"
+                    name="description"
+                    value={values.description}
+                    onChange={handleChange}
+                    placeholder="Enter a description"
+                    minRows={4}
+                    style={{
+                      width: "100%",
+                      padding: "8px",
+                      fontSize: "16px",
+                      borderColor:
+                        errors.description && touched.description
+                          ? "red"
+                          : "rgba(0, 0, 0, 0.23)",
+                      borderRadius: "4px",
+                    }}
+                  />
+                  {errors.description && touched.description && (
+                    <FormHelperText error>
+                      {errors.description}
+                    </FormHelperText>
+                  )}
+                </FormControl>
 
                 {showInfo && values.activity && (
                   <Box mt={2} p={2} border={1} borderColor="grey.300">

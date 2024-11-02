@@ -24,6 +24,7 @@ import {
 import {EUserRole} from '@common/types';
 import {UserDocument} from '../users/user.schema';
 import {FileInterceptor} from '@nestjs/platform-express';
+import { CreateAlgorithmMaterialDto } from './dtos/create-algorithm-material.dto copy';
 
 @Roles(EUserRole.ADMIN, EUserRole.TEACHER)
 @Controller('materials')
@@ -48,6 +49,15 @@ export class MaterialsController {
     @CurrentUser() user: UserDocument
   ) {
     return this.materialsService.generateEnglishMaterial(dto, user);
+  }
+
+  @Post('/algorithm')
+  @SerializeResponse(MaterialDto)
+  generateAlgorithmMaterials(
+    @Body() dto: CreateAlgorithmMaterialDto,
+    @CurrentUser() user: UserDocument
+  ) {
+    return this.materialsService.generateAlgorithmMaterial(dto, user);
   }
 
   @Post('/english/story')
