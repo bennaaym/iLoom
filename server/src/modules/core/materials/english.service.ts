@@ -15,21 +15,12 @@ export class EnglishService {
       <p>${content.text}</p>
     `;
   };
-  private storyToHtml = (material: MaterialDocument) => {
-    const content = material.content as ReadingActivity;
-    return `
-      <h3>${content.title}</h3>
-      <img src="${material.imageUrl}" alt="Story Image" style="width: 100%; height: 400px;"/>
-      <p>${content.text}</p>
-    `;
-  };
-
   toHtml(material: MaterialDocument) {
     switch (material.activity) {
       case EMaterialActivity.READING:
         return this.readingToHtml(material);
       case EMaterialActivity.STORY:
-        return this.storyToHtml(material);
+        return this.readingToHtml(material);
       default:
         return '';
     }
@@ -61,8 +52,9 @@ export class EnglishService {
     description: string;
     imageUrl: string;
   }) {
-    return await this.geminiService.generateJSON<ReadingActivity>(
-      englishPrompts.story.prompt({level, ageGroup, description, imageUrl}),
+    return await this.geminiService.analyzeImage<ReadingActivity>(
+      imageUrl,
+      englishPrompts.story.prompt({level, ageGroup, description}),
       englishPrompts.reading.schema
     );
   }

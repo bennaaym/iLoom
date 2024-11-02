@@ -5,6 +5,9 @@ import {
   GenerativeModel,
   GoogleGenerativeAI
 } from '@google/generative-ai';
+import {GoogleAIFileManager} from '@google/generative-ai/server';
+import axios from 'axios';
+import * as fs from 'fs';
 
 @Injectable()
 export class GeminiService {
@@ -37,5 +40,43 @@ export class GeminiService {
     });
 
     return JSON.parse(result.response.text()) as T;
+  }
+
+  async analyzeImage<T>(
+    imageUrl: string,
+    prompt: string,
+    schema: FunctionDeclarationSchema
+  ) {
+    const fileManager = new GoogleAIFileManager(this.configService.gemini.key);
+    const localImagePath = './temp_image.png';
+    const response = await axios({
+      url: imageUrl,
+      method: 'GET',
+      responseType: 'stream'
+    });
+    await new Promise((resolve, reject) => {
+      const writer = fs.createWriteStream(localImagePath);
+      response.data.pipe(writer);
+      writer.on('finish', resolve);
+      writer.on('error', reject);
+    });
+
+    const uploadResult = await fileManager.uploadFile(localImagePath, {
+      mimeType: 'image/png',
+      displayName: 'Jetpack drawing'
+    });
+
+    fs.unlinkSync(localImagePath);
+    const result = await this.model.generateContent([
+      'Tell me about this image.',
+      {
+        fileData: {
+          fileUri: uploadResult.file.uri,
+          mimeType: uploadResult.file.mimeType
+        }
+      }
+    ]);
+    const newPrompt = `${prompt}\nImage description: ${result.response.text()}`;
+    return this.generateJSON(newPrompt, schema);
   }
 }

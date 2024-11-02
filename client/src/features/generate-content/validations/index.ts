@@ -19,3 +19,9 @@ export const storyValidationSchema = Yup.object().shape({
       return false;
     }),
 });
+
+export const algorithmQuestionValidationSchema = Yup.object({
+  level: Yup.string().required("Difficulty level is required"),
+  topic: Yup.string().required("Algorithm topic is required"),
+  description: Yup.string().required("Description is required"),
+});

@@ -7,10 +7,16 @@ export interface Classroom {
   duration: number;
   capacity: number;
   shareableCode: string;
+  transcript: string;
+  summary: string;
 }
 
 export type Subject = "english" | "algorithms";
-
+export interface IQuestion {
+  question: string;
+  answer: string;
+  options: string[];
+}
 export interface Material {
   id: string;
   user: string;

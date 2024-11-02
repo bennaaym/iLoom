@@ -1,12 +1,11 @@
 "use client";
-
 import { useRouter, useParams } from "next/navigation";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { VideoConference } from "../video-conference/components";
 import { Chat } from "../classroom-chat/components";
 import { Whiteboard } from "../whiteboard/components";
 import { PageLoading } from "@/common/loaders";
-import { useJoinClassroom, useSTT } from "../hooks";
+import { useJoinClassroom } from "../hooks";
 import { useAuth } from "@/common/providers/AuthProvider";
 import {
   CreateContentModal,
@@ -15,13 +14,13 @@ import {
 import { ClassroomMaterialProvider } from "../providers";
 import { Fragment } from "react";
 import { ClassroomQuiz } from "../classroom-quizzes/components";
+import { Transcriber } from "../classroom-transcript/components";
 
 export const Classroom = () => {
   const { user, isStudent } = useAuth();
   const { id } = useParams();
   const { classroom, isLoading, isError } = useJoinClassroom(id as string);
   const router = useRouter();
-  const { isAvailable, startListening, stopListening } = useSTT();
 
   if (isLoading) return <PageLoading />;
   if (isError) {
@@ -48,30 +47,15 @@ export const Classroom = () => {
   }
   return (
     <Box display="flex" height="100vh" pb={2} pl={2}>
-      <Box
-        width="25%"
-        minWidth="300px"
-        display="flex"
-        flexDirection="column"
-        mr={2}
-      >
+      <Stack width="25%" minWidth="300px" mr={2} gap={2}>
         <VideoConference classroomId={classroom.id} />
-        {isAvailable && (
-          <Box>
-            <Button variant="outlined" onClick={startListening}>
-              start listening
-            </Button>
-            <Button variant="contained" onClick={stopListening}>
-              stop listening
-            </Button>
-          </Box>
-        )}
+        {user && !isStudent() && <Transcriber roomId={classroom.id} />}
         {user && (
-          <Box flexGrow={1} mt={2}>
+          <Box flexGrow={1}>
             <Chat roomId={classroom.id} userId={user.id} />
           </Box>
         )}
-      </Box>
+      </Stack>
 
       <ClassroomMaterialProvider>
         <Box flexGrow={1}>

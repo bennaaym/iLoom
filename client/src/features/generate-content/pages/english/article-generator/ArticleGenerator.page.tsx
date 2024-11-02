@@ -4,13 +4,18 @@ import BaseForm, { FormFieldType } from "@/common/forms/BaseForm";
 import { createEnglishMaterial } from "@/features/generate-content/api/materials.api";
 import { articleGenerationValidationSchema } from "@/features/generate-content/validations";
 import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+import { IMaterial } from "@/common/interfaces";
 
 const ArticleGenerator = () => {
+  const router = useRouter();
   const mutation = useMutation({
     mutationFn: (data: Record<string, any>) => createEnglishMaterial(data),
 
-    onSuccess: () => {},
-    onError: (error: any) => {},
+    onSuccess: (data: IMaterial) => {
+      router.push(`/materials/${data.id}`);
+    },
+    onError: (error: any) => { },
   });
 
   const handleGenerateArticle = (values: Record<string, any>) => {

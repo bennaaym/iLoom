@@ -4,14 +4,16 @@ export enum EMaterialScope {
 }
 
 export enum EMaterialSubject {
-  ENGLISH = 'english'
+  ENGLISH = 'english',
+  COMPUTER_SCIENCE = 'computer science'
 }
 
 export enum EMaterialActivity {
   READING = 'reading',
   STORY = 'story',
   SPEAKING = 'speaking',
-  WRITING = 'writing'
+  WRITING = 'writing',
+  ALGORITHM = 'algorithm'
 }
 
 export enum EnglishLevel {
@@ -21,6 +23,12 @@ export enum EnglishLevel {
   B2 = 'B2',
   C1 = 'C1',
   C2 = 'C2'
+}
+
+export enum AlgorithmLevel {
+  BEGINNER = 'beginner',
+  INTERMEDIATE = 'intermediate',
+  ADVANCED = 'advanced'
 }
 
 export interface ReadingActivity {
