@@ -35,6 +35,7 @@ export const StudentList: React.FC = () => {
             justifyContent: "space-between",
             alignItems: "center",
           }}
+          elevation={0}
         >
           <Typography>
             {student.name} - {student.email}
