@@ -63,7 +63,7 @@ export class ConfigService {
       proxy: isProduction,
       cookie: {
         domain: this.domain,
-        sameSite: isProduction ? ('none' as const) : undefined,
+        sameSite: isProduction ? ('none' as const) : ('lax' as const),
         httpOnly: isProduction,
         secure: isProduction,
         maxAge: 1000 * 60 * 60 * 24
