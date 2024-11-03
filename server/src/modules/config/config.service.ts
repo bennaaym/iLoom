@@ -24,6 +24,10 @@ export class ConfigService {
     return this.get('PORT');
   }
 
+  get domain() {
+    return this.get('DOMAIN');
+  }
+
   get sessionSecret() {
     return this.get('SESSION_SECRET');
   }
@@ -56,6 +60,8 @@ export class ConfigService {
       resave: false,
       saveUninitialized: true,
       cookie: {
+        domain: this.domain,
+        sameSite: 'none' as const,
         httpOnly: this.env === Env.PRODUCTION,
         secure: this.databaseURI === Env.PRODUCTION,
         maxAge: 1000 * 60 * 60 * 24
