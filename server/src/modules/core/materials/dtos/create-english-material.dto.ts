@@ -1,4 +1,4 @@
-import {IsEnum, IsNotEmpty, IsOptional, IsString} from 'class-validator';
+import {IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString} from 'class-validator';
 import {EMaterialActivity, EnglishLevel} from '../types';
 
 export class CreateEnglishMaterialDto {
@@ -16,4 +16,6 @@ export class CreateEnglishMaterialDto {
   ageGroup: string;
   @IsString()
   description: string;
+  @IsString()
+  numberOfWords: string;
 }

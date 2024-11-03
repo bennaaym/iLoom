@@ -9,6 +9,7 @@ export const createClassroomContentValidation = {
     description: "",
     image: null as File | null,
     topic: "",
+    numberOfWords: "",
   },
   schema: Yup.object().shape({
     subject: Yup.string().required("Subject is required"),
@@ -20,6 +21,14 @@ export const createClassroomContentValidation = {
         const activityValue = Array.isArray(activity) ? activity[0] : activity;
         return ["reading", "story"].includes(activityValue)
           ? schema.required("Age Group is required")
+          : schema;
+      }),
+    numberOfWords: Yup.string()
+      .nullable()
+      .when("activity", (activity: string | string[], schema) => {
+        const activityValue = Array.isArray(activity) ? activity[0] : activity;
+        return ["reading", "story"].includes(activityValue)
+          ? schema.required("Number of Words is required")
           : schema;
       }),
     topic: Yup.string()

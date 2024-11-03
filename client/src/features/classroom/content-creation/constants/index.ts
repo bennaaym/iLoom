@@ -14,4 +14,5 @@ export const algorithmTopics = [
   { label: "Data Structures", value: "Data Structures" },
   { label: "Recursion", value: "Recursion" },
 ];
+export const numbers = ["150", "300", "450", "600"];
 export const subjects = Object.keys(level);

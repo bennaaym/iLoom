@@ -1,0 +1,4 @@
+Generate a set of critical thinking questions on the topic of ${topic} at a ${level} level.
+The questions should be designed to challenge the learner's understanding of ${topic} and cover concepts related to ${description}.
+Provide multiple-choice options for each question, and include the correct answer.
+Each question should include several answer choices (options) without any prefixes (such as A, B, C).

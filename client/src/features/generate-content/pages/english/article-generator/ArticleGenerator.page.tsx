@@ -38,6 +38,18 @@ const ArticleGenerator = () => {
       placeholder: "Select the article level",
     },
     {
+      id: "numberOfWords",
+      label: "Number of Words",
+      type: FormFieldType.SELECT,
+      options: [
+        { label: "150 words", value: "150" },
+        { label: "300 words", value: "300" },
+        { label: "450 words", value: "450" },
+        { label: "600 words", value: "600" },
+      ],
+      placeholder: "Select the number of words for the article",
+    },
+    {
       id: "ageGroup",
       label: "Target Age Group",
       type: FormFieldType.SELECT,
@@ -64,7 +76,7 @@ const ArticleGenerator = () => {
 
       <BaseForm
         fields={fields}
-        initialValues={{ level: "", targetAgeGroup: "", description: "" }}
+        initialValues={{ level: "", ageGroup: "", description: "", numberOfWords: "" }}
         validationSchema={articleGenerationValidationSchema}
         submitLabel="Generate Article"
         isLoading={mutation.isPending}

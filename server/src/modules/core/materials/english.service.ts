@@ -26,36 +26,24 @@ export class EnglishService {
     }
   }
 
-  async generateReading({
-    level,
-    ageGroup,
-    description
-  }: {
-    level: EnglishLevel;
-    ageGroup: string;
-    description: string;
-  }) {
+  async generateReading(prompt: string) {
     return await this.geminiService.generateJSON<ReadingActivity>(
-      englishPrompts.reading.prompt({level, ageGroup, description}),
-      englishPrompts.reading.schema
+      prompt,
+      englishPrompts.english.schema
     );
   }
 
   async generateStoryFromImage({
-    level,
-    ageGroup,
-    description,
+    prompt,
     imageUrl
   }: {
-    level: EnglishLevel;
-    ageGroup: string;
-    description: string;
+    prompt: string;
     imageUrl: string;
   }) {
     return await this.geminiService.analyzeImage<ReadingActivity>(
       imageUrl,
-      englishPrompts.story.prompt({level, ageGroup, description}),
-      englishPrompts.reading.schema
+      prompt,
+      englishPrompts.english.schema
     );
   }
 

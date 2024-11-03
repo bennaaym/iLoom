@@ -15,6 +15,8 @@ import {PdfService} from '@modules/pdf';
 import {MaterialDocument} from './material.schema';
 import {CreateAlgorithmMaterialDto} from './dtos/create-algorithm-material.dto copy';
 import {AlgorithmService} from './algorithm.service';
+import * as fs from 'fs';
+import path from 'path';
 
 @Injectable()
 export class MaterialsService {
@@ -56,6 +58,29 @@ export class MaterialsService {
     });
   }
 
+  private async replacePlaceholders(
+    promptTemplate: string,
+    replacements: Record<string, any>
+  ) {
+    return Object.keys(replacements).reduce((acc, key) => {
+      const placeholder = new RegExp(`\\\${${key}}`, 'g');
+      return acc.replace(placeholder, replacements[key]);
+    }, promptTemplate);
+  }
+
+  private async loadPromptTemplate(filename: string): Promise<string> {
+    const filePath = path.join(__dirname, 'prompts/prompt-template', filename);
+    return new Promise((resolve, reject) => {
+      fs.readFile(filePath, 'utf8', (err, data) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(data);
+        }
+      });
+    });
+  }
+
   async list(query: ListMaterialsQuery, user: UserDocument) {
     const pageOptions = lodash.pick(query, ['page', 'perPage']);
     return this.repository.paginate({
@@ -83,10 +108,19 @@ export class MaterialsService {
       fileType: image.mimetype
     });
 
-    const content = await this.englishService.generateStoryFromImage({
+    const promptTemplate = await this.loadPromptTemplate(
+      'lesson.english.story.txt'
+    );
+
+    const prompt = await this.replacePlaceholders(promptTemplate, {
       level: dto.level,
       ageGroup: dto.ageGroup,
       description: dto.description,
+      numberOfWords: dto.numberOfWords
+    });
+
+    const content = await this.englishService.generateStoryFromImage({
+      prompt,
       imageUrl
     });
 
@@ -112,11 +146,16 @@ export class MaterialsService {
 
     switch (dto.activity) {
       case EMaterialActivity.READING:
-        promise = this.englishService.generateReading({
+        const promptTemplate = await this.loadPromptTemplate(
+          'lesson.english.article.txt'
+        );
+        const prompt = await this.replacePlaceholders(promptTemplate, {
           level: dto.level,
           ageGroup: dto.ageGroup,
-          description: dto.description
+          description: dto.description,
+          numberOfWords: dto.numberOfWords
         });
+        promise = this.englishService.generateReading(prompt);
         break;
       case EMaterialActivity.SPEAKING:
         promise = this.englishService.generateSpeaking();
@@ -149,11 +188,15 @@ export class MaterialsService {
 
     switch (dto.activity) {
       case EMaterialActivity.ALGORITHM:
-        promise = this.algorithmService.generateProblem({
+        const promptTemplate = await this.loadPromptTemplate(
+          'lesson.algorithm.txt'
+        );
+        const prompt = await this.replacePlaceholders(promptTemplate, {
           level: dto.level,
           topic: dto.topic,
           description: dto.description
         });
+        promise = this.algorithmService.generateProblem(prompt);
         break;
       default:
         throw new Error(`Invalid material activity: ${dto.activity}`);

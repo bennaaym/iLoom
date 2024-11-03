@@ -1,2 +1,2 @@
-export {englishPrompts} from './english';
-export {algorithmPrompts} from './algorithm';
+export {englishPrompts} from './gemini-schema/english';
+export {algorithmPrompts} from './gemini-schema/algorithm';
