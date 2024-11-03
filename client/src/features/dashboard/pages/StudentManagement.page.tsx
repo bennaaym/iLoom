@@ -23,12 +23,18 @@ const StudentManagement = () => {
 
   return (
     <Box p={4}>
-      <Typography variant="h4" mb={2}>
+      <Typography variant="h4" mb={2} color="primary">
         Student Management
       </Typography>
       <Box display="flex" gap={4}>
-        <Box flex={1} display="flex" flexDirection="column" gap={3}>
-          <Paper sx={{ padding: 3 }}>
+        <Box
+          flex={1}
+          display="flex"
+          flexDirection="column"
+          gap={3}
+          maxWidth="500px"
+        >
+          <Paper sx={{ padding: 3 }} elevation={0}>
             <Typography variant="h6" mb={2}>
               Add Student Manually
             </Typography>
@@ -42,7 +48,7 @@ const StudentManagement = () => {
               }
             />
           </Paper>
-          <Paper sx={{ padding: 3 }}>
+          <Paper sx={{ padding: 3 }} elevation={0}>
             <Typography variant="h6" mb={2}>
               Add Students from CSV
             </Typography>
