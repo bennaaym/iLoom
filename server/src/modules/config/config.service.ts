@@ -59,6 +59,7 @@ export class ConfigService {
       secret: this.sessionSecret,
       resave: false,
       saveUninitialized: true,
+      proxy: this.env === Env.PRODUCTION,
       cookie: {
         domain: this.domain,
         sameSite: 'none' as const,
