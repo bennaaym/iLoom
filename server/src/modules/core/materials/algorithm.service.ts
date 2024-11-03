@@ -24,17 +24,9 @@ export class AlgorithmService {
     }
   }
 
-  async generateProblem({
-    level,
-    topic,
-    description
-  }: {
-    level: AlgorithmLevel;
-    topic: string;
-    description: string;
-  }) {
+  async generateProblem(prompt: string) {
     return await this.geminiService.generateJSON<ReadingActivity>(
-      algorithmPrompts.algorithm.prompt({level, topic, description}),
+      prompt,
       algorithmPrompts.algorithm.schema
     );
   }

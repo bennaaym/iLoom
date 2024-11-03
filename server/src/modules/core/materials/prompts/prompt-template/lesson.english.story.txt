@@ -1,0 +1,7 @@
+Create a creative, age-appropriate story for CEFR ${level} level English learners, specifically targeting students aged ${ageGroup}.
+The story should be inspired by the following description: "${description}", and it must include key elements from the provided image.
+Use the image to bring the setting, characters, or atmosphere to life, seamlessly integrating visual details into the narrative.
+The story should be exactly ${numberOfWords} words long, ensuring that it is neither too short nor too lengthy, and should captivate the reader's interest while maintaining clarity and readability.
+Use age-appropriate vocabulary and sentence structures to match the expected proficiency level. The story should include a clear plot with a beginning, middle, and end.
+After the story, generate at least three comprehension questions based on the narrative. Each question should have four multiple-choice options, including one correct answer and three plausible distractors.
+Follow the provided guidelines on question complexity, coherence, and relevance to ensure that the questions align with the story’s content, reading level, and the elements depicted in the image.

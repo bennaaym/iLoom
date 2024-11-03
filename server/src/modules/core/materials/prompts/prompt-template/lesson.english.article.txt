@@ -1,0 +1,6 @@
+Generate a structured and engaging reading passage for CEFR ${level} English learners, focusing on students aged ${ctx.ageGroup}. 
+The passage should cover the topic: "${description}" and be exactly ${numberOfWords} words. 
+Ensure that the text matches the comprehension level expected at this language level, using age-appropriate vocabulary and sentence structures. 
+Avoid overly complex phrases or unfamiliar terms that may be beyond the target proficiency. The text should be interesting and informative, providing value within the word limit. 
+After the passage, create at least three well-crafted comprehension questions, each with four multiple-choice options including one correct answer and three plausible distractors. 
+Follow the guidelines provided for crafting questions with age-appropriate complexity and coherence. Ensure each question directly relates to the content of the text, following principles for plausible distractors and balanced options.

@@ -26,6 +26,7 @@ export class GeminiService {
   }
 
   async generateJSON<T>(prompt: string, schema: FunctionDeclarationSchema) {
+    console.log(prompt)
     const result = await this.model.generateContent({
       contents: [
         {
@@ -47,6 +48,7 @@ export class GeminiService {
     prompt: string,
     schema: FunctionDeclarationSchema
   ) {
+    console.log(prompt)
     const fileManager = new GoogleAIFileManager(this.configService.gemini.key);
     const localImagePath = './temp_image.png';
     const response = await axios({
@@ -66,17 +68,25 @@ export class GeminiService {
       displayName: 'Jetpack drawing'
     });
 
+    const fileData = {
+      fileUri: uploadResult.file.uri,
+      mimeType: uploadResult.file.mimeType
+    };
+
     fs.unlinkSync(localImagePath);
-    const result = await this.model.generateContent([
-      'Tell me about this image.',
-      {
-        fileData: {
-          fileUri: uploadResult.file.uri,
-          mimeType: uploadResult.file.mimeType
+    const result = await this.model.generateContent({
+      contents: [
+        {
+          role: 'user',
+          parts: [{text: prompt}, {fileData}]
         }
+      ],
+      generationConfig: {
+        responseMimeType: 'application/json',
+        responseSchema: schema
       }
-    ]);
-    const newPrompt = `${prompt}\nImage description: ${result.response.text()}`;
-    return this.generateJSON(newPrompt, schema);
+    });
+
+    return JSON.parse(result.response.text()) as T;
   }
 }
