@@ -60,7 +60,12 @@ export default function ClassroomForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    mutation.mutate({ name, startDate, duration, capacity });
+    mutation.mutate({
+      name,
+      startDate: dayjs(startDate).utc().toISOString(),
+      duration,
+      capacity,
+    });
   };
 
   return (
