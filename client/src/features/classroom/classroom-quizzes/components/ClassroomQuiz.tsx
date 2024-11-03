@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { QuizSocketProvider } from "../providers";
 import { useClassroomQuiz } from "../providers/QuizSocketProvider";
 import { Box, Tooltip } from "@mui/material";
@@ -8,12 +8,15 @@ import { useClassroomMaterial } from "../../providers/ClassroomMaterialProvider"
 import { useAuth } from "@/common/providers/AuthProvider";
 import { QuizModal } from "./QuizModal";
 import { toast } from "react-toastify";
+import QuizResultModal from "./QuizResultModal";
+import AssessmentIcon from "@mui/icons-material/Assessment";
 
-export const ClassroomQuizContent = () => {
+export const ClassroomQuizContent = ({ roomId }: { roomId: string }) => {
   const { isQuizRunning, quiz, startQuiz, endQuiz, submitQuiz } =
     useClassroomQuiz();
   const { whiteboardMaterial } = useClassroomMaterial();
   const { isStudent } = useAuth();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleClick = () => {
     if (!whiteboardMaterial) return;
@@ -45,6 +48,18 @@ export const ClassroomQuizContent = () => {
           />
         </Tooltip>
       )}
+      {!isStudent() && whiteboardMaterial && (
+        <Tooltip title="View Quiz Results" placement="left">
+          <FloatingButton
+            icon={<AssessmentIcon sx={{ fontSize: 30 }} />}
+            position="absolute"
+            right="0"
+            bottom="210px"
+            bgcolor="secondary"
+            onClick={() => setIsModalOpen(true)}
+          />
+        </Tooltip>
+      )}
 
       {isStudent() && isQuizRunning && quiz && (
         <QuizModal
@@ -54,6 +69,14 @@ export const ClassroomQuizContent = () => {
           }}
         />
       )}
+      {!isStudent() && whiteboardMaterial && (
+        <QuizResultModal
+          open={isModalOpen}
+          materialId={whiteboardMaterial?.id}
+          onClose={() => setIsModalOpen(false)}
+          roomId={roomId}
+        />
+      )}
     </Box>
   );
 };
@@ -61,7 +84,7 @@ export const ClassroomQuizContent = () => {
 export const ClassroomQuiz = ({ roomId }: { roomId: string }) => {
   return (
     <QuizSocketProvider roomId={roomId}>
-      <ClassroomQuizContent />
+      <ClassroomQuizContent roomId={roomId} />
     </QuizSocketProvider>
   );
 };

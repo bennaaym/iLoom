@@ -23,4 +23,14 @@ export class ClassroomQuizzesService {
       student: user.id
     });
   }
+
+  async listQuizResults(
+    classroomId: string,
+    materialId: string,
+    user: UserDocument
+  ) {
+    return this.repository.model
+      .find({classroom: classroomId, teacher: user.id, material: materialId})
+      .populate('student', 'name email');
+  }
 }

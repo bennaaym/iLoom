@@ -6,6 +6,7 @@ import BaseForm, { FormFieldType } from "@/common/forms/BaseForm";
 import { createEnglishStoryMaterial } from "@/features/generate-content/api/materials.api";
 import { storyValidationSchema } from "@/features/generate-content/validations";
 import { useRouter } from "next/navigation";
+import { IMaterial } from "@/common/interfaces";
 
 const formFields = [
   {
@@ -57,7 +58,7 @@ const GenerateStoryFromImage: React.FC = () => {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: (data: FormData) => createEnglishStoryMaterial(data),
-    onSuccess: (data) => {
+    onSuccess: (data: IMaterial) => {
       router.push(`/materials/${data.id}`);
     },
     onError: (error: any) => { },
