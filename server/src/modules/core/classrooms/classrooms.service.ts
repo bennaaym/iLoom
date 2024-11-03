@@ -29,7 +29,12 @@ export class ClassroomsService {
 
   private buildListFilter(query: ListClassroomQuery, user: UserDocument) {
     const queryFilter = lodash.pick(query, ['status']);
-    let filter: Record<string, ExplicityAny> = {teacher: user.id};
+    let filter: Record<string, ExplicityAny> = {
+      teacher:
+        user.role !== EUserRole.STUDENT
+          ? user.id
+          : user.metadata.createdByTeacher
+    };
 
     if (queryFilter.status && queryFilter.status === 'upcoming') {
       const now = dayjs().utc().toDate();
@@ -60,22 +65,6 @@ export class ClassroomsService {
 
   async list(query: ListClassroomQuery, user: UserDocument) {
     const pageOptions = lodash.pick(query, ['page', 'perPage']);
-
-    if (user.role === EUserRole.STUDENT) {
-      if (!user.metadata.createdByTeacher) {
-        throw new NotFoundException('Teacher not found for this student');
-      }
-      const filter = {
-        ...this.buildListFilter(query, user),
-        teacher: user.metadata.createdByTeacher
-      };
-
-      return this.repository.paginate({
-        filter,
-        orderBy: {startDate: 1, endDate: 1},
-        pageOptions
-      });
-    }
 
     return this.repository.paginate({
       filter: this.buildListFilter(query, user),
