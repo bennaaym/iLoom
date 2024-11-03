@@ -26,7 +26,6 @@ export class GeminiService {
   }
 
   async generateJSON<T>(prompt: string, schema: FunctionDeclarationSchema) {
-    console.log(prompt)
     const result = await this.model.generateContent({
       contents: [
         {
@@ -48,7 +47,6 @@ export class GeminiService {
     prompt: string,
     schema: FunctionDeclarationSchema
   ) {
-    console.log(prompt)
     const fileManager = new GoogleAIFileManager(this.configService.gemini.key);
     const localImagePath = './temp_image.png';
     const response = await axios({
