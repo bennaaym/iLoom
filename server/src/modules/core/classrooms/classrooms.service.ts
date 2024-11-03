@@ -172,7 +172,7 @@ export class ClassroomsService {
     if (!classroom || !classroom.transcript)
       throw new NotFoundException('No summary found for this class');
 
-    if (classroom.isFinished)
+    if (!classroom.isFinished)
       throw new UnprocessableEntityException(
         'Cannot provide summary of an ongoing class'
       );
