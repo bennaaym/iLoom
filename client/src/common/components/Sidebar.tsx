@@ -7,7 +7,7 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import { Logo } from "./Logo";
-import { Avatar, IconButton, Stack, Typography } from "@mui/material";
+import { Avatar, IconButton, Stack, Tooltip, Typography } from "@mui/material";
 import { useAuth } from "@/common/providers/AuthProvider";
 import { IoMdExit } from "react-icons/io";
 import { gray, brand } from "../theme";
@@ -114,25 +114,34 @@ export const Sidebar = () => {
         >
           {user && (
             <Stack direction="row" gap={1} alignItems="center">
-              <Avatar
-                sx={{
-                  width: 36,
-                  height: 36,
-                  fontSize: 16,
-                  fontWeight: "800",
-                  bgcolor: "primary.main",
-                  color: "white",
-                }}
-              >
-                {user.name
-                  .split(" ")
-                  .map((value) => value.at(0)?.toUpperCase())}
-              </Avatar>
+              <Tooltip title={user.email}>
+                <Avatar
+                  sx={{
+                    width: 36,
+                    height: 36,
+                    fontSize: 16,
+                    fontWeight: "800",
+                    bgcolor: "primary.main",
+                    color: "white",
+                  }}
+                >
+                  {user.name
+                    .split(" ")
+                    .map((value) => value.at(0)?.toUpperCase())}
+                </Avatar>
+              </Tooltip>
               <Box>
                 <Typography fontWeight="800" textTransform="capitalize">
                   {user.name}
                 </Typography>
-                <Typography fontWeight="600" color={gray[400]}>
+                <Typography
+                  fontWeight="600"
+                  color={gray[400]}
+                  maxWidth="130px"
+                  whiteSpace="none"
+                  overflow="hidden"
+                  textOverflow="ellipsis"
+                >
                   {user.email}
                 </Typography>
               </Box>
