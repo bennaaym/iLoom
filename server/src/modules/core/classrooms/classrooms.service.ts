@@ -172,11 +172,7 @@ export class ClassroomsService {
     if (!classroom || !classroom.transcript)
       throw new NotFoundException('No summary found for this class');
 
-    const isClassroomEnded = dayjs(classroom.endDate)
-      .utc()
-      .isBefore(dayjs().utc());
-
-    if (!isClassroomEnded)
+    if (!classroom.isFinished)
       throw new UnprocessableEntityException(
         'Cannot provide summary of an ongoing class'
       );
