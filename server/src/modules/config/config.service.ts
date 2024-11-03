@@ -63,7 +63,7 @@ export class ConfigService {
         domain: this.domain,
         sameSite: 'none' as const,
         httpOnly: this.env === Env.PRODUCTION,
-        secure: this.databaseURI === Env.PRODUCTION,
+        secure: this.env === Env.PRODUCTION,
         maxAge: 1000 * 60 * 60 * 24
       }
     };
