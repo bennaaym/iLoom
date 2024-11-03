@@ -30,10 +30,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         ? exception.getResponse()
         : 'Internal server error';
 
-    const stack =
-      this.env !== Env.PRODUCTION
-        ? (exception as ExplicityAny).stack
-        : undefined;
+    const stack = (exception as ExplicityAny).stack;
 
     if (stack) {
       this.logger.error(stack);
@@ -47,7 +44,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
         (message as ExplicityAny)?.message ||
         message ||
         'Internal server error',
-      stack
+      stack: this.env !== Env.PRODUCTION ? stack : undefined
     };
 
     response.status(status).json(errorResponse);
