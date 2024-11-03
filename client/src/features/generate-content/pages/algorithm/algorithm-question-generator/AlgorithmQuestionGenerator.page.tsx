@@ -6,6 +6,7 @@ import BaseForm, { FormFieldType } from "@/common/forms/BaseForm";
 import { createAlgorithmMaterial } from "@/features/generate-content/api/materials.api";
 import { algorithmQuestionValidationSchema } from "@/features/generate-content/validations";
 import { useRouter } from "next/navigation";
+import { IMaterial } from "@/common/interfaces";
 
 const formFields = [
   {
@@ -50,7 +51,7 @@ const AlgorithmQuestionGenerator = () => {
   const router = useRouter();
   const mutation = useMutation({
     mutationFn: (data: Record<string, any>) => createAlgorithmMaterial(data),
-    onSuccess: (data: any) => {
+    onSuccess: (data: IMaterial) => {
       router.push(`/materials/${data.id}`);
     },
     onError: (error: any) => {},

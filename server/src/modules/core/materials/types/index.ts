@@ -37,6 +37,6 @@ export interface ReadingActivity {
   questions: {
     question: string;
     options: string[];
-    answer: string[];
+    answer: string;
   }[];
 }

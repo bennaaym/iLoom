@@ -54,17 +54,18 @@ export class ConfigService {
   }
 
   get session() {
+    const isProduction = this.env === Env.PRODUCTION;
     return {
       store: MongoStore.create({mongoUrl: this.databaseURI}),
       secret: this.sessionSecret,
       resave: false,
       saveUninitialized: true,
-      proxy: this.env === Env.PRODUCTION,
+      proxy: isProduction,
       cookie: {
         domain: this.domain,
-        sameSite: 'none' as const,
-        httpOnly: this.env === Env.PRODUCTION,
-        secure: this.env === Env.PRODUCTION,
+        sameSite: isProduction ? ('none' as const) : undefined,
+        httpOnly: isProduction,
+        secure: isProduction,
         maxAge: 1000 * 60 * 60 * 24
       }
     };
