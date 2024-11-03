@@ -104,8 +104,8 @@ const ClassroomItem = ({ classroom, onEdit }: ClassroomItemProps) => {
   };
 
   const hasClassStarted =
-    dayjs(classroom.startDate).utc().isBefore(dayjs.utc()) &&
-    dayjs(classroom.endDate).utc().isAfter(dayjs.utc());
+    dayjs(classroom.startDate).utc().isBefore(dayjs().utc()) &&
+    dayjs(classroom.endDate).utc().isAfter(dayjs().utc());
   return (
     <Fragment>
       <ListItem key={classroom.id}>
