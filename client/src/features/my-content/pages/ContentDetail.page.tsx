@@ -109,7 +109,7 @@ const ContentDetail: React.FC = () => {
             <Box textAlign="center">
               <Button
                 variant="outlined"
-                onClick={() => router.back()}
+                onClick={() => router.push("/materials")}
                 sx={{
                   "&:hover": {
                     color: "white",
