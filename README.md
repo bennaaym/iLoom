@@ -1,6 +1,7 @@
 # iLoom.ai
 
-![iloom-vercel-app-11-03-2024_10_40_PM](https://github.com/user-attachments/assets/af074d9e-1921-42ca-8b2b-3e7b256d0926)
+[![iloom-vercel-app-11-03-2024_10_40_PM](https://github.com/user-attachments/assets/af074d9e-1921-42ca-8b2b-3e7b256d0926)](https://www.youtube.com/watch?v=X40iK2Se5SM)
+[WATCH OUR DEMO VIDEO ON YOUTUBE](https://www.youtube.com/watch?v=X40iK2Se5SM)
 
 
 ## Introduction
