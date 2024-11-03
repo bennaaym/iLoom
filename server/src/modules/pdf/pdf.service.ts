@@ -1,11 +1,12 @@
 import {Injectable} from '@nestjs/common';
-import puppeteer from 'puppeteer';
+import {chromium} from 'playwright';
 
 @Injectable()
 export class PdfService {
   async htmlToPdf(html: string) {
-    const browser = await puppeteer.launch({headless: true});
-    const page = await browser.newPage();
+    const browser = await chromium.launch({headless: true});
+    const context = await browser.newContext();
+    const page = await context.newPage();
 
     await page.setContent(html);
 
