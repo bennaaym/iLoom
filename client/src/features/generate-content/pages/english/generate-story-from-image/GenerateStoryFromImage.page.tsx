@@ -35,6 +35,18 @@ const formFields = [
     placeholder: "Select Level",
   },
   {
+    id: "numberOfWords",
+    label: "Number of Words",
+    type: FormFieldType.SELECT,
+    options: [
+      { label: "150 words", value: "150" },
+      { label: "300 words", value: "300" },
+      { label: "450 words", value: "450" },
+      { label: "600 words", value: "600" },
+    ],
+    placeholder: "Select the number of words for the article",
+  },
+  {
     id: "description",
     label: "Description",
     type: FormFieldType.TEXTAREA,
@@ -51,6 +63,7 @@ const initialValues = {
   ageGroup: "",
   level: "",
   description: "",
+  numberOfWords: "",
   image: null as File | null,
 };
 
@@ -68,6 +81,7 @@ const GenerateStoryFromImage: React.FC = () => {
     const formData = new FormData();
     formData.append("level", values.level);
     formData.append("ageGroup", values.ageGroup);
+    formData.append("numberOfWords", values.numberOfWords);
     formData.append("description", values.description);
     formData.append("activity", "story");
     if (values.image) {

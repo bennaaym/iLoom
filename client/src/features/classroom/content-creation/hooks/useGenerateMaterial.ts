@@ -10,6 +10,7 @@ interface GenerateMaterialPayload {
   ageGroup?: string;
   description?: string;
   image?: File | null;
+  numberOfWords?: string;
 }
 
 export const useGenerateMaterial = () => {
@@ -24,6 +25,8 @@ export const useGenerateMaterial = () => {
             formData.append("classroom", payload.classroom);
           formData.append("level", payload.level);
           formData.append("activity", payload.activity);
+          if (payload.numberOfWords)
+            formData.append("numberOfWords", payload.numberOfWords);
           if (payload.ageGroup) formData.append("ageGroup", payload.ageGroup);
           if (payload.description)
             formData.append("description", payload.description);

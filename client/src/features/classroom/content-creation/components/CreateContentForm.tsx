@@ -66,6 +66,8 @@ export const CreateContentForm = ({ isLoading, error, onSubmit }: Props) => {
           ]
           : [];
         const ageGroups = constants.ageGroups;
+        const numberList = constants.numbers;
+
 
         const renderAdditionalFields = () => {
           if (values.subject === "english") {
@@ -92,6 +94,26 @@ export const CreateContentForm = ({ isLoading, error, onSubmit }: Props) => {
                     </Select>
                     {errors.ageGroup && touched.ageGroup && (
                       <FormHelperText error>{errors.ageGroup}</FormHelperText>
+                    )}
+                  </FormControl>
+
+                  <FormControl fullWidth>
+                    <FormLabel htmlFor="numberOfWords">Number of Words</FormLabel>
+                    <Select
+                      id="numberOfWords"
+                      name="numberOfWords"
+                      value={values.numberOfWords}
+                      onChange={handleChange}
+                      displayEmpty
+                    >
+                      {numberList.map((age) => (
+                        <MenuItem key={age} value={age}>
+                          {age}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.numberOfWords && touched.numberOfWords && (
+                      <FormHelperText error>{errors.numberOfWords}</FormHelperText>
                     )}
                   </FormControl>
 
@@ -139,6 +161,26 @@ export const CreateContentForm = ({ isLoading, error, onSubmit }: Props) => {
                       <FormHelperText error>{errors.ageGroup}</FormHelperText>
                     )}
                   </FormControl>
+
+                  <FormControl fullWidth>
+                    <FormLabel htmlFor="numberOfWords">Number of Words</FormLabel>
+                    <Select
+                      id="numberOfWords"
+                      name="numberOfWords"
+                      value={values.numberOfWords}
+                      onChange={handleChange}
+                      displayEmpty
+                    >
+                      {numberList.map((number) => (
+                        <MenuItem key={number} value={number}>
+                          {number}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    {errors.numberOfWords && touched.numberOfWords && (
+                      <FormHelperText error>{errors.numberOfWords}</FormHelperText>
+                    )}
+                  </FormControl>
                 </>
               );
             }
@@ -154,9 +196,6 @@ export const CreateContentForm = ({ isLoading, error, onSubmit }: Props) => {
                     onChange={handleChange}
                     displayEmpty
                   >
-                    <MenuItem value="" disabled>
-                      Select Topic
-                    </MenuItem>
                     {constants.algorithmTopics.map((topic) => (
                       <MenuItem key={topic.value} value={topic.value}>
                         {topic.label}
@@ -196,6 +235,8 @@ export const CreateContentForm = ({ isLoading, error, onSubmit }: Props) => {
                       setFieldValue("level", "");
                       setFieldValue("ageGroup", "");
                       setFieldValue("description", "");
+                      setFieldValue("numberOfWords", "");
+                      setFieldValue("topic", "");
                       setFieldValue("image", null);
                       setShowInfo(false);
                     }}
@@ -250,6 +291,7 @@ export const CreateContentForm = ({ isLoading, error, onSubmit }: Props) => {
                         handleChange(event);
                         setFieldValue("ageGroup", "");
                         setFieldValue("description", "");
+                        setFieldValue("numberOfWords", "");
                         setFieldValue("image", null);
                         setShowInfo(false);
                       }}
